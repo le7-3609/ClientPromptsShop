@@ -1,0 +1,38 @@
+<div class="register-container">
+    <p-card header="Create Account" subheader="Join us by filling out the details below">
+        <div class="form-grid">
+              
+            <p-floatlabel variant="on" class="form-field">
+                <input pInputText id="Email" [(ngModel)]="email" autocomplete="off" />
+                <label for="Email">Email Address</label>
+            </p-floatlabel>
+
+            <div class="name-row">
+                <p-floatlabel variant="on" class="form-field">
+                    <input pInputText id="FirstName" [(ngModel)]="firstName" autocomplete="off" />
+                    <label for="FirstName">First Name</label>
+                </p-floatlabel>
+
+                <p-floatlabel variant="on" class="form-field">
+                    <input pInputText id="LastName" [(ngModel)]="lastName" autocomplete="off" />
+                    <label for="LastName">Last Name</label>
+                </p-floatlabel>
+            </div>
+
+            <p-floatlabel variant="on" class="form-field">
+                <input pInputText id="Phone" [(ngModel)]="phone" autocomplete="off" />
+                <label for="Phone">Phone Number</label>
+            </p-floatlabel>
+
+            <p-floatlabel variant="on" class="form-field">
+                <p-password [(ngModel)]="password" [toggleMask]="true" [feedback]="true" />
+                <label for="Password">Password</label>
+            </p-floatlabel>
+
+            <div class="button-container">
+                <p-button label="Register Now" class="submit-btn" [raised]="true" />
+            </div>
+            
+        </div>
+    </p-card>
+</div>

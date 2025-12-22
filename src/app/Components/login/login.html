@@ -1,0 +1,43 @@
+<div class="login-container">
+    <p-card header="Log In" subheader="Join us by filling out the details below">
+        <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()" class="form-grid">
+            <div>
+                <p-floatlabel variant="on" class="form-field">
+                    <input pInputText id="loginEmail" formControlName="email"  autocomplete="off" [invalid]="isInvalid('email')"/>
+                    <label for="loginEmail">Email Address</label>
+                </p-floatlabel>
+                
+                @if (loginForm.get('email')?.invalid && (loginForm.get('email')?.dirty || formSubmitted)) {
+                    <p-message severity="error" size="small" variant="simple">
+                        @if (loginForm.get('email')?.errors?.['required']) {
+                            Email is required.
+                        } @else if (loginForm.get('email')?.errors?.['email']) {
+                            Please enter a valid email.
+                        }
+                    </p-message>
+                }
+            </div>
+
+           <div>
+                <p-floatlabel variant="on" class="form-field">
+                    <p-password formControlName="password" [toggleMask]="true" [feedback]="false" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}"[invalid]="isInvalid('password')"/>
+                    <label for="loginPassword">Password</label>
+                </p-floatlabel>
+
+                @if (isInvalid('password')) {
+                    <p-message severity="error" size="small" variant="simple">
+                         @if (loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || formSubmitted)) {
+                            Password is required.
+                        } @else if (loginForm.get('password')?.errors?.['minlength']) {
+                            Password must be at least 6 characters.
+                        }
+                    </p-message>
+                }
+            </div>
+
+<div class="button-container">
+    <p-button label="Log In" type="submit" class="submit-btn" [raised]="true" [disabled]="loginForm.invalid" />
+</div>
+        </form>
+    </p-card>
+</div>

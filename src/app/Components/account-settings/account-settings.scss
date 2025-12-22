@@ -1,0 +1,134 @@
+$bg-color: #f9f5ff;
+$primary-purple: #8139eb;
+$accent-purple: #F6E8FE;
+$shadow-color: #9d58f51a;
+$error-red: #ff0000;
+.account-settings-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: $bg-color;
+    padding: 20px;
+    ::ng-deep .p-card {
+        width: 100%;
+        max-width: 480px;
+        border-radius: 12px;
+        box-shadow: 0 8px 30px $shadow-color;
+        border: 1px solid $primary-purple;
+        background-color: white;
+        .p-card-title {
+            font-weight: 600;
+            font-size: 1.8rem;
+        }
+    }
+}
+
+.form-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 20px 0;
+}
+
+.name-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.form-field {
+    width: 100%;
+    input, .p-password, ::ng-deep .p-inputtext {
+        width: 100% !important;
+        border-color: $primary-purple !important; 
+        &:focus {
+            border-color: $primary-purple !important;
+            box-shadow: 0 0 0 0.2rem $shadow-color !important;
+        }
+    }
+}
+
+.button-container {
+    margin-top: 10px;
+    ::ng-deep .p-button {
+        width: 100%;
+        background: linear-gradient(135deg, $primary-purple 0%, #bd00cb 100%);
+        border: none;
+        padding: 14px;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        &:hover {
+            background: $primary-purple;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px $shadow-color;
+        }
+    }
+}
+
+.strength-container {
+    margin-top: -10px; 
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    .strength-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.85rem;
+        color: $primary-purple;
+    }
+    ::ng-deep .p-progressbar {
+        height: 6px;
+        background-color: $accent-purple;
+        border-radius: 10px;
+    }
+    ::ng-deep .p-button {
+            background-color: white;
+        &:hover {
+            background-color: $accent-purple;
+        }
+    } 
+}
+
+::ng-deep .p-floatlabel label {
+    color: $primary-purple !important;
+    left: 0.75rem;
+}
+
+::ng-deep .p-message {
+    margin-top: 4px;
+    .p-message-text {
+        font-size: 0.7rem;
+        font-weight: 500;
+        color: $error-red !important;
+    }
+    &.p-message-error {
+        background: transparent !important;
+        border: none !important;
+        padding: 0 0 0 4px !important;
+    }
+}
+
+::ng-deep .p-floatlabel {
+    input.ng-invalid.ng-dirty {
+        &, &:focus {
+            border-color: $error-red !important;
+            box-shadow: 0 0 0 0.2rem rgba(255, 0, 0, 0.15) !important;
+        }
+        ~ label {
+            color: $error-red !important;
+        }
+    }
+    .p-password.ng-invalid.ng-dirty {
+        .p-password-input {
+            &, &:focus {
+                border-color: $error-red !important;
+                box-shadow: 0 0 0 0.2rem rgba(255, 0, 0, 0.15) !important;
+            }
+        }
+        ~ label {
+            color: $error-red !important;
+        }
+    }
+}

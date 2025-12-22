@@ -1,0 +1,78 @@
+<div class="account-settings-container">
+    <p-card header="Hi name🪻" subheader="You should change your details below">
+        <form [formGroup]="settingsForm" (ngSubmit)="onRegisterSubmit()" class="form-grid">
+            <div>
+                <p-floatlabel variant="on" class="form-field">
+                    <input pInputText id="Email" formControlName="email" autocomplete="off"
+                        [invalid]="isInvalid('email')" />
+                    <label for="Email">Email Address</label>
+                </p-floatlabel>
+
+                @if (settingsForm.get('email')?.invalid && (settingsForm.get('email')?.dirty ||formSubmitted)) {
+                <p-message severity="error" size="small" variant="simple">
+                    @if (settingsForm.get('email')?.errors?.['email']) {
+                    Please enter a valid email.
+                    }
+                </p-message>
+                }
+            </div>
+
+            <div class="name-row">
+                <p-floatlabel variant="on" class="form-field">
+                    <input pInputText id="FirstName" formControlName="firstName" />
+                    <label for="FirstName">First Name</label>
+                </p-floatlabel>
+                <p-floatlabel variant="on" class="form-field">
+                    <input pInputText id="LastName" formControlName="lastName" />
+                    <label for="LastName">Last Name</label>
+                </p-floatlabel>
+            </div>  
+
+            <div>
+                <p-floatlabel variant="on" class="form-field">
+                    <input pInputText id="Phone" formControlName="phone" autocomplete="off"
+                        [invalid]="isInvalid('phone')" />
+                    <label for="Phone">Phone Number</label>
+                </p-floatlabel>
+
+                @if (settingsForm.get('phone')?.invalid && (settingsForm.get('phone')?.dirty ||formSubmitted)) {
+                <p-message severity="error" size="small" variant="simple">
+                    @if (settingsForm.get('phone')?.errors?.['pattern']) {
+                    Please enter a valid phone number.
+                    }
+                </p-message>
+                }
+            </div>
+
+            <div>
+                <p-floatlabel variant="on" class="form-field">
+                    <p-password formControlName="password" [toggleMask]="true" [feedback]="false"
+                        [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" [invalid]="isInvalid('password')" />
+                    <label for="loginPassword">Password</label>
+                </p-floatlabel>
+
+                @if (settingsForm.get('password')?.invalid && (settingsForm.get('password')?.dirty ||formSubmitted)) {
+                <p-message severity="error" size="small" variant="simple">
+                    @if (settingsForm.get('password')?.errors?.['minlength']) {
+                    Password must be at least 6 characters.
+                    }
+                </p-message>
+                }
+            </div>
+
+            <div class="strength-container">
+                <div class="strength-header">
+                    <span>Password Strength</span>
+                    <p-button label="Check Strength" (onClick)="checkPasswordStrength()" type="button" [text]="true"
+                        [style]="{'color': '#9D58F5', 'padding': '0'}" />
+                </div>
+                <p-progressbar [value]="passwordStrengthValue" [showValue]="false" [color]="strengthColor" />
+            </div>
+
+            <div class="button-container">
+                <p-button label="Create Account" type="submit" class="submit-btn" [raised]="true"
+                    [disabled]="settingsForm.invalid" />
+            </div>
+        </form>
+    </p-card>
+</div>

@@ -1,0 +1,167 @@
+<div class="auth-container">
+    <p-card>
+        <p-tabs value="0">
+            <p-tablist>
+                <p-tab value="0">Log In</p-tab>
+                <p-tab value="1">Register</p-tab>
+            </p-tablist>
+
+            <p-tabpanels>
+                <p-tabpanel value="0">
+                    <form [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()" class="form-grid">
+                        <div>
+                            <p-floatlabel variant="on" class="form-field">
+                                <input pInputText id="loginEmail" formControlName="email" autocomplete="off"
+                                    [invalid]="isInvalid('email')" />
+                                <label for="loginEmail">Email Address</label>
+                            </p-floatlabel>
+
+                            @if (loginForm.get('email')?.invalid && (loginForm.get('email')?.dirty || formSubmitted)) {
+                            <p-message severity="error" size="small" variant="simple">
+                                @if (loginForm.get('email')?.errors?.['required']) {
+                                Email is required.
+                                } @else if (loginForm.get('email')?.errors?.['email']) {
+                                Please enter a valid email.
+                                }
+                            </p-message>
+                            }
+                        </div>
+
+                        <div>
+                            <p-floatlabel variant="on" class="form-field">
+                                <p-password formControlName="password" [toggleMask]="true" [feedback]="false"
+                                    [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" [invalid]="isInvalid('password')" />
+                                <label for="loginPassword">Password</label>
+                            </p-floatlabel>
+
+                            @if (loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty ||formSubmitted)) {
+                            <p-message severity="error" size="small" variant="simple">
+                                @if(loginForm.get('password')?.errors?.['required']) {
+                                    Password is required.
+                                } @else if (loginForm.get('password')?.errors?.['minlength']) {
+                                    Password must be at least 6 characters.
+                                }
+                            </p-message>
+                            }
+                        </div>
+
+                        <div class="button-container">
+                            <p-button label="Log In" type="submit" class="submit-btn" [raised]="true"[disabled]="loginForm.invalid" />
+                        </div>
+                    </form>
+
+                    <p-divider align="center">
+                        <span class="divider-text">Or Continue with </span>
+                    </p-divider>
+                    <div class="social-auth-row">
+                        <button class="custom-social-btn" (click)="signInWithGoogle()">
+                            <img src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg" alt="Google">
+                            <span>Continue with Google</span>
+                        </button>
+
+                        <button class="custom-social-btn" (click)="signInWithMicrosoft()">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="MS">
+                            <span>Continue with Microsoft</span>
+                        </button>
+                    </div>
+                </p-tabpanel>
+
+                <p-tabpanel value="1">
+                    <form [formGroup]="registerForm" (ngSubmit)="onRegisterSubmit()" class="form-grid">
+                        <div>
+                            <p-floatlabel variant="on" class="form-field">
+                                <input pInputText id="registerEmail" formControlName="email" autocomplete="off" [invalid]="isInvalid('email')" />
+                                <label for="registerEmail">Email Address</label>
+                            </p-floatlabel>
+
+                            @if (registerForm.get('email')?.invalid && (registerForm.get('email')?.dirty ||formSubmitted)) {
+                            <p-message severity="error" size="small" variant="simple">
+                                @if (registerForm.get('email')?.errors?.['required']) {
+                                Email is required.
+                                } @else if (registerForm.get('email')?.errors?.['email']) {
+                                Please enter a valid email.
+                                }
+                            </p-message>
+                            }
+                        </div>
+
+                        <div class="name-row">
+                            <p-floatlabel variant="on" class="form-field">
+                                <input pInputText id="registerFirstName" formControlName="firstName" />
+                                <label for="registerFirstName">First Name</label>
+                            </p-floatlabel>
+                            <p-floatlabel variant="on" class="form-field">
+                                <input pInputText id="registerLastName" formControlName="lastName" />
+                                <label for="registerLastName">Last Name</label>
+                            </p-floatlabel>
+                        </div>
+
+                        <div>
+                            <p-floatlabel variant="on" class="form-field">
+                                <input pInputText id="registerPhone" formControlName="phone" autocomplete="off" [invalid]="isInvalid('phone')" />
+                                <label for="registerPhone">Phone Number</label>
+                            </p-floatlabel>
+
+                            @if (registerForm.get('phone')?.invalid && (registerForm.get('phone')?.dirty ||formSubmitted)) {
+                            <p-message severity="error" size="small" variant="simple">
+                                @if (registerForm.get('phone')?.errors?.['pattern']) {
+                                Please enter a valid phone number.
+                                }
+                            </p-message>
+                            }
+                        </div>
+
+                        <div>
+                            <p-floatlabel variant="on" class="form-field">
+                                <p-password formControlName="password" [toggleMask]="true" [feedback]="false"
+                                    [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}"
+                                    [invalid]="isInvalid('password')" />
+                                <label for="loginPassword">Password</label>
+                            </p-floatlabel>
+
+                            @if (registerForm.get('password')?.invalid && (registerForm.get('password')?.dirty ||formSubmitted)) {
+                            <p-message severity="error" size="small" variant="simple">
+                                @if(registerForm.get('password')?.errors?.['required']) {
+                                    Password is required.
+                                } @else if (registerForm.get('password')?.errors?.['minlength']) {
+                                    Password must be at least 6 characters.
+                                }
+                            </p-message>
+                            }
+                        </div>
+
+                        <div class="strength-container">
+                            <div class="strength-header">
+                                <span>Password Strength</span>
+                                <p-button label="Check Strength" (onClick)="checkPasswordStrength()" type="button"
+                                    [text]="true" [style]="{'color': '#9D58F5', 'padding': '0'}" />
+                            </div>
+                            <p-progressbar [value]="passwordStrengthValue" [showValue]="false"
+                                [color]="strengthColor" />
+                        </div>
+
+                        <div class="button-container">
+                            <p-button label="Create Account" type="submit" class="submit-btn" [raised]="true"
+                                [disabled]="registerForm.invalid" />
+                        </div>
+                    </form>
+
+                    <p-divider align="center">
+                        <span class="divider-text">Or Continue with </span>
+                    </p-divider>
+                    <div class="social-auth-row">
+                        <button class="custom-social-btn" (click)="signInWithGoogle()">
+                            <img src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/24px.svg" alt="Google">
+                            <span>Continue with Google</span>
+                        </button>
+
+                        <button class="custom-social-btn" (click)="signInWithMicrosoft()">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="MS">
+                            <span>Continue with Microsoft</span>
+                        </button>
+                    </div>
+                </p-tabpanel>
+            </p-tabpanels>
+        </p-tabs>
+    </p-card>
+</div>
