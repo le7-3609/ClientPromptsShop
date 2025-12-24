@@ -1,0 +1,111 @@
+$bg-color: #f9f5ff;
+$primary-purple: #8139eb;
+$accent-purple: #F6E8FE;
+$shadow-color: #9d58f51a;
+.shop-layout {
+    direction: rtl;
+    background-color: #F6E8FE;
+    min-height: 100vh;
+    padding: 20px;
+
+    // עיצוב ה-Header של ה-DataView
+    ::ng-deep .p-dataview-header {
+        background: white !important;
+        border: 1px solid #C4B6FD !important;
+        border-radius: 12px 12px 0 0;
+        padding: 15px;
+        margin-bottom: 2px;
+    }
+}
+
+.flex-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .controls { display: flex; gap: 10px; align-items: center; }
+}
+
+.grid-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px ;
+}
+
+.sub-category-card {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #C4B6FD;
+    box-shadow: 0 8px 25px rgba(157, 88, 245, 0.08);
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.2s;
+
+    &:hover { transform: translateY(-0.5px); }
+
+    .image-container img {
+        width: 100%;
+        height: 160px;
+        object-fit: cover;
+    }
+
+    .card-info {
+        padding: 20px;
+        h3 { color: #3b004d; font-size: 1.2rem; margin-bottom: 10px; }
+        .price-display { color: #9D58F5; font-weight: 700; margin-bottom: 10px; }
+    }
+}
+
+// עיצוב רשימה (List)
+.product-row-item {
+    background: white;
+    padding: 15px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #F6E8FE;
+    
+    .item-name { color: #3b004d; font-weight: 600; }
+    .item-price { color: #9D58F5; font-weight: 700; }
+}
+
+.p-button, .add-btn, .action-icon-btn {
+    background: linear-gradient(135deg, #9D58F5 0%, #C64BF1 100%) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 8px 20px;
+    cursor: pointer;
+}
+
+.action-icon-btn {
+    width: 35px;
+    height: 35px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.p-button, .add-btn {
+    background: linear-gradient(135deg, #9D58F5 0%, #C64BF1 100%);
+    border: none;
+    color: white;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    &:hover {
+            background: $primary-purple;
+            border: $primary-purple;
+            box-shadow: 0 4px 12px $shadow-color;
+        }
+}
+
+.add-btn {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 50%;
+}

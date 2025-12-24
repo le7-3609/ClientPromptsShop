@@ -1,4 +1,4 @@
-import { Component, OnInit ,inject} from '@angular/core';
+import { Component ,inject} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -25,7 +25,7 @@ import { SocialAuthService, GoogleLoginProvider, MicrosoftLoginProvider } from "
   styleUrl: './auth.scss',
   providers: [MessageService]
 })
-export class AuthComponent implements OnInit {
+export class Auth{
   messageService = inject(MessageService);
   formSubmitted: boolean = false;
   loginForm!: FormGroup;

@@ -1,22 +1,21 @@
 import {
+  BaseModelHolder
+} from "./chunk-MG746CQT.js";
+import {
+  Fluid
+} from "./chunk-6VOFK6TE.js";
+import {
   NgControl
 } from "./chunk-A3PXF4WK.js";
 import {
-  Fluid
-} from "./chunk-LLTMO67N.js";
-import {
-  BaseComponent,
   PARENT_INSTANCE
-} from "./chunk-K7PYJ7TE.js";
+} from "./chunk-22JUN6XD.js";
 import {
   Bind
-} from "./chunk-2LAI32GG.js";
+} from "./chunk-BBWYURB2.js";
 import {
   BaseStyle
-} from "./chunk-JUOY3MMF.js";
-import {
-  s2 as s
-} from "./chunk-3KC5H6AP.js";
+} from "./chunk-RJV3IBKQ.js";
 import {
   Directive,
   HostListener,
@@ -30,7 +29,6 @@ import {
   inject,
   input,
   setClassMetadata,
-  signal,
   ɵɵHostDirectivesFeature,
   ɵɵInheritDefinitionFeature,
   ɵɵProvidersFeature,
@@ -47,37 +45,6 @@ import {
   __spreadProps,
   __spreadValues
 } from "./chunk-WDMUDEB6.js";
-
-// node_modules/primeng/fesm2022/primeng-basemodelholder.mjs
-var BaseModelHolder = class _BaseModelHolder extends BaseComponent {
-  modelValue = signal(void 0, ...ngDevMode ? [{
-    debugName: "modelValue"
-  }] : []);
-  $filled = computed(() => s(this.modelValue()), ...ngDevMode ? [{
-    debugName: "$filled"
-  }] : []);
-  writeModelValue(value) {
-    this.modelValue.set(value);
-  }
-  static ɵfac = /* @__PURE__ */ (() => {
-    let ɵBaseModelHolder_BaseFactory;
-    return function BaseModelHolder_Factory(__ngFactoryType__) {
-      return (ɵBaseModelHolder_BaseFactory || (ɵBaseModelHolder_BaseFactory = ɵɵgetInheritedFactory(_BaseModelHolder)))(__ngFactoryType__ || _BaseModelHolder);
-    };
-  })();
-  static ɵdir = ɵɵdefineDirective({
-    type: _BaseModelHolder,
-    features: [ɵɵInheritDefinitionFeature]
-  });
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(BaseModelHolder, [{
-    type: Directive,
-    args: [{
-      standalone: true
-    }]
-  }], null, null);
-})();
 
 // node_modules/@primeuix/styles/dist/inputtext/index.mjs
 var style = "\n    .p-inputtext {\n        font-family: inherit;\n        font-feature-settings: inherit;\n        font-size: 1rem;\n        color: dt('inputtext.color');\n        background: dt('inputtext.background');\n        padding-block: dt('inputtext.padding.y');\n        padding-inline: dt('inputtext.padding.x');\n        border: 1px solid dt('inputtext.border.color');\n        transition:\n            background dt('inputtext.transition.duration'),\n            color dt('inputtext.transition.duration'),\n            border-color dt('inputtext.transition.duration'),\n            outline-color dt('inputtext.transition.duration'),\n            box-shadow dt('inputtext.transition.duration');\n        appearance: none;\n        border-radius: dt('inputtext.border.radius');\n        outline-color: transparent;\n        box-shadow: dt('inputtext.shadow');\n    }\n\n    .p-inputtext:enabled:hover {\n        border-color: dt('inputtext.hover.border.color');\n    }\n\n    .p-inputtext:enabled:focus {\n        border-color: dt('inputtext.focus.border.color');\n        box-shadow: dt('inputtext.focus.ring.shadow');\n        outline: dt('inputtext.focus.ring.width') dt('inputtext.focus.ring.style') dt('inputtext.focus.ring.color');\n        outline-offset: dt('inputtext.focus.ring.offset');\n    }\n\n    .p-inputtext.p-invalid {\n        border-color: dt('inputtext.invalid.border.color');\n    }\n\n    .p-inputtext.p-variant-filled {\n        background: dt('inputtext.filled.background');\n    }\n\n    .p-inputtext.p-variant-filled:enabled:hover {\n        background: dt('inputtext.filled.hover.background');\n    }\n\n    .p-inputtext.p-variant-filled:enabled:focus {\n        background: dt('inputtext.filled.focus.background');\n    }\n\n    .p-inputtext:disabled {\n        opacity: 1;\n        background: dt('inputtext.disabled.background');\n        color: dt('inputtext.disabled.color');\n    }\n\n    .p-inputtext::placeholder {\n        color: dt('inputtext.placeholder.color');\n    }\n\n    .p-inputtext.p-invalid::placeholder {\n        color: dt('inputtext.invalid.placeholder.color');\n    }\n\n    .p-inputtext-sm {\n        font-size: dt('inputtext.sm.font.size');\n        padding-block: dt('inputtext.sm.padding.y');\n        padding-inline: dt('inputtext.sm.padding.x');\n    }\n\n    .p-inputtext-lg {\n        font-size: dt('inputtext.lg.font.size');\n        padding-block: dt('inputtext.lg.padding.y');\n        padding-inline: dt('inputtext.lg.padding.x');\n    }\n\n    .p-inputtext-fluid {\n        width: 100%;\n    }\n";
@@ -389,10 +356,9 @@ var InputTextModule = class _InputTextModule {
 })();
 
 export {
-  BaseModelHolder,
   InputTextStyle,
   InputTextClasses,
   InputText,
   InputTextModule
 };
-//# sourceMappingURL=chunk-KYUQSBR7.js.map
+//# sourceMappingURL=chunk-JMBO5TFZ.js.map

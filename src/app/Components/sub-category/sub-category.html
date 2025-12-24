@@ -1,0 +1,31 @@
+<p-toast></p-toast>
+<div class="sub-category-header" *ngIf="currentSubCategory">
+    <div class="flex-header-info">
+        <img [src]="currentSubCategory.ImageUrl" class="sub-cat-img">
+        <div class="text-info">
+            <h1>{{ currentSubCategory.SubCategoryName }}</h1>
+            <p>{{ currentSubCategory.SubCategoryDescription }}</p>
+        </div>
+    </div>
+</div>
+
+<p-dataview #dv [value]="products" layout="list">
+    <ng-template #list let-items>
+        <div class="list-layout">
+            @for (item of items; track item.ProductId) {
+            <div class="product-selection-row">
+                <p-radiobutton name="productGroup" [value]="item" [(ngModel)]="selectedProduct">
+                </p-radiobutton>
+
+                <div class="product-details">
+                    <span class="name">{{ item.ProductName }}</span>
+                    <span class="price">{{ item.Price }} ₪</span>
+                </div>
+            </div>
+            }
+        </div>
+    </ng-template>
+</p-dataview>
+<div class="button-container">
+    <p-button label="Add to Cart" [disabled]="!selectedProduct" (click)="addToCart()" />
+</div>

@@ -4,7 +4,7 @@ import {
   PrimeNG,
   S,
   base
-} from "./chunk-JUOY3MMF.js";
+} from "./chunk-RJV3IBKQ.js";
 import {
   C2 as C,
   F,
@@ -16,7 +16,7 @@ import {
   s2 as s,
   s3 as s2,
   w2 as w
-} from "./chunk-3KC5H6AP.js";
+} from "./chunk-PMDYBY2Y.js";
 import {
   isPlatformServer
 } from "./chunk-G6MZKP73.js";
@@ -573,4 +573,4 @@ export {
   PARENT_INSTANCE,
   BaseComponent
 };
-//# sourceMappingURL=chunk-K7PYJ7TE.js.map
+//# sourceMappingURL=chunk-22JUN6XD.js.map

@@ -36,6 +36,9 @@ function P(t2, e) {
     [e].flat().filter(Boolean).forEach((n2) => n2.split(" ").forEach(o));
   }
 }
+function dt(t2) {
+  typeof t2 == "string" ? P(document.body, t2 || "p-overflow-hidden") : (t2 != null && t2.variableName && document.body.style.removeProperty(t2.variableName), P(document.body, (t2 == null ? void 0 : t2.className) || "p-overflow-hidden"));
+}
 function x(t2) {
   for (let e of document == null ? void 0 : document.styleSheets) try {
     for (let o of e == null ? void 0 : e.cssRules) for (let n2 of o == null ? void 0 : o.style) if (t2.test(n2)) return { name: n2, value: o.style.getPropertyValue(n2).trim() };
@@ -183,6 +186,18 @@ function U(t2, e = {}, ...o) {
     return A(n2, e), n2.append(...o), n2;
   }
 }
+function ht(t2, e) {
+  if (t2) {
+    t2.style.opacity = "0";
+    let o = +/* @__PURE__ */ new Date(), n2 = "0", r = function() {
+      n2 = `${+t2.style.opacity + ((/* @__PURE__ */ new Date()).getTime() - o) / e}`, t2.style.opacity = n2, o = +/* @__PURE__ */ new Date(), +n2 < 1 && ("requestAnimationFrame" in window ? requestAnimationFrame(r) : setTimeout(r, 16));
+    };
+    r();
+  }
+}
+function Y(t2, e) {
+  return c(t2) ? Array.from(t2.querySelectorAll(e)) : [];
+}
 function z(t2, e) {
   return c(t2) ? t2.matches(e) ? t2 : t2.querySelector(e) : null;
 }
@@ -195,12 +210,31 @@ function Q(t2, e) {
     return isNaN(o) ? o === "true" || o === "false" ? o === "true" : o : +o;
   }
 }
+function b(t2, e = "") {
+  let o = Y(t2, `button:not([tabindex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden])${e},
+            [href]:not([tabindex = "-1"]):not([style*="display:none"]):not([hidden])${e},
+            input:not([tabindex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden])${e},
+            select:not([tabindex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden])${e},
+            textarea:not([tabindex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden])${e},
+            [tabIndex]:not([tabIndex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden])${e},
+            [contenteditable]:not([tabIndex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden])${e}`), n2 = [];
+  for (let r of o) getComputedStyle(r).display != "none" && getComputedStyle(r).visibility != "hidden" && n2.push(r);
+  return n2;
+}
+function vt(t2, e) {
+  let o = b(t2, e);
+  return o.length > 0 ? o[0] : null;
+}
 function Tt(t2) {
   if (t2) {
     let e = t2.offsetHeight, o = getComputedStyle(t2);
     return e -= parseFloat(o.paddingTop) + parseFloat(o.paddingBottom) + parseFloat(o.borderTopWidth) + parseFloat(o.borderBottomWidth), e;
   }
   return 0;
+}
+function Lt(t2, e) {
+  let o = b(t2, e);
+  return o.length > 0 ? o[o.length - 1] : null;
 }
 function K(t2) {
   if (t2) {
@@ -220,12 +254,19 @@ function C(t2, e) {
   }
   return 0;
 }
+function Mt() {
+  if (window.getSelection) return window.getSelection().toString();
+  if (document.getSelection) return document.getSelection().toString();
+}
 function Rt(t2) {
   if (t2) {
     let e = t2.offsetWidth, o = getComputedStyle(t2);
     return e -= parseFloat(o.paddingLeft) + parseFloat(o.paddingRight) + parseFloat(o.borderLeftWidth) + parseFloat(o.borderRightWidth), e;
   }
   return 0;
+}
+function et(t2) {
+  return !!(t2 && t2.offsetParent != null);
 }
 function qt() {
   return typeof window == "undefined" || !window.matchMedia ? false : window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -244,6 +285,15 @@ function Zt(t2) {
   var e;
   t2 && ("remove" in Element.prototype ? t2.remove() : (e = t2.parentNode) == null || e.removeChild(t2));
 }
+function Gt(t2, e) {
+  let o = H(t2);
+  if (o) o.removeChild(e);
+  else throw new Error("Cannot remove " + e + " from " + t2);
+}
+function Kt(t2, e) {
+  let o = getComputedStyle(t2).getPropertyValue("borderTopWidth"), n2 = o ? parseFloat(o) : 0, r = getComputedStyle(t2).getPropertyValue("paddingTop"), i3 = r ? parseFloat(r) : 0, l3 = t2.getBoundingClientRect(), s4 = e.getBoundingClientRect().top + document.body.scrollTop - (l3.top + document.body.scrollTop) - n2 - i3, a2 = t2.scrollTop, u2 = t2.clientHeight, p3 = C(e);
+  s4 < 0 ? t2.scrollTop = a2 + s4 : s4 + p3 > u2 && (t2.scrollTop = a2 + s4 - u2 + p3);
+}
 function _t(t2, e = "", o) {
   c(t2) && o !== null && o !== void 0 && t2.setAttribute(e, o);
 }
@@ -256,14 +306,14 @@ function te(t2, e, o = null, n2) {
 function l(e) {
   return e == null || e === "" || Array.isArray(e) && e.length === 0 || !(e instanceof Date) && typeof e == "object" && Object.keys(e).length === 0;
 }
-function b(e, t2, n2 = /* @__PURE__ */ new WeakSet()) {
+function b2(e, t2, n2 = /* @__PURE__ */ new WeakSet()) {
   if (e === t2) return true;
   if (!e || !t2 || typeof e != "object" || typeof t2 != "object" || n2.has(e) || n2.has(t2)) return false;
   n2.add(e).add(t2);
   let o = Array.isArray(e), r = Array.isArray(t2), u2, f2, T2;
   if (o && r) {
     if (f2 = e.length, f2 != t2.length) return false;
-    for (u2 = f2; u2-- !== 0; ) if (!b(e[u2], t2[u2], n2)) return false;
+    for (u2 = f2; u2-- !== 0; ) if (!b2(e[u2], t2[u2], n2)) return false;
     return true;
   }
   if (o != r) return false;
@@ -276,11 +326,11 @@ function b(e, t2, n2 = /* @__PURE__ */ new WeakSet()) {
   let R2 = Object.keys(e);
   if (f2 = R2.length, f2 !== Object.keys(t2).length) return false;
   for (u2 = f2; u2-- !== 0; ) if (!Object.prototype.hasOwnProperty.call(t2, R2[u2])) return false;
-  for (u2 = f2; u2-- !== 0; ) if (T2 = R2[u2], !b(e[T2], t2[T2], n2)) return false;
+  for (u2 = f2; u2-- !== 0; ) if (T2 = R2[u2], !b2(e[T2], t2[T2], n2)) return false;
   return true;
 }
 function y2(e, t2) {
-  return b(e, t2);
+  return b2(e, t2);
 }
 function c2(e) {
   return typeof e == "function" && "call" in e && "apply" in e;
@@ -315,6 +365,15 @@ function k2(e, t2, n2) {
 function i(e, t2 = true) {
   return e instanceof Object && e.constructor === Object && (t2 || Object.keys(e).length !== 0);
 }
+function M(e, t2) {
+  let n2 = -1;
+  if (s(e)) try {
+    n2 = e.findLastIndex(t2);
+  } catch (o) {
+    n2 = e.lastIndexOf([...e].reverse().find(t2));
+  }
+  return n2;
+}
 function m(e, ...t2) {
   return c2(e) ? e(...t2) : e;
 }
@@ -341,6 +400,9 @@ function C2(e, t2 = true) {
 function z2(e) {
   return s(e) && !isNaN(e);
 }
+function J(e = "") {
+  return s(e) && e.length === 1 && !!e.match(/\S| /);
+}
 function G(e, t2) {
   if (t2) {
     let n2 = t2.test(e);
@@ -348,7 +410,7 @@ function G(e, t2) {
   }
   return false;
 }
-function Y(e) {
+function Y2(e) {
   return e && e.replace(/\/\*(?:(?!\*\/)[\s\S])*\*\/|[\r\n\t]+/g, "").replace(/ {2,}/g, " ").replace(/ ([{:}]) /g, "$1").replace(/([;,]) /g, "$1").replace(/ !/g, "!").replace(/: /g, ":").trim();
 }
 function X(e) {
@@ -458,8 +520,12 @@ export {
   R,
   W,
   P,
+  dt,
   x,
   w,
+  h,
+  k,
+  $,
   V,
   D,
   v,
@@ -468,38 +534,49 @@ export {
   ut,
   A,
   U,
+  ht,
   z,
   bt,
   Q,
+  b,
+  vt,
   Tt,
+  Lt,
   K,
   C,
+  Mt,
   Rt,
+  et,
   qt,
   Yt,
   Qt,
   Zt,
+  Gt,
+  Kt,
   _t,
   te,
   s3 as s,
   w2,
   l,
+  y2 as y,
   c2 as c,
   s as s2,
   p,
-  k2 as k,
+  k2,
   i,
+  M,
   m,
   a,
   g,
   F,
   C2,
   z2,
+  J,
   G,
-  Y,
+  Y2 as Y,
   X,
   re,
   oe,
   s2 as s3
 };
-//# sourceMappingURL=chunk-3KC5H6AP.js.map
+//# sourceMappingURL=chunk-PMDYBY2Y.js.map

@@ -1,0 +1,98 @@
+$primary-purple: #8139eb;
+$accent-purple: #F6E8FE;
+$shadow-color: #9d58f51a;
+$dark-text: #3b004d;
+
+.shop-layout {
+    direction: rtl;
+    background-color: #f9f5ff;
+    padding: 20px;
+}
+
+.sub-category-header {
+    display: flex;
+    gap: 25px;
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    border: 1px solid $primary-purple;
+    border-right: 6px solid $primary-purple;
+    box-shadow: 0 8px 30px $shadow-color;
+    margin-bottom: 30px;
+    align-items: center;
+    
+    .sub-cat-img {
+        width: 140px;
+        height: 140px;
+        border-radius: 12px;
+        object-fit: cover;
+    }
+
+    .text-info {
+        h1 { color: $dark-text; font-size: 2rem; margin: 0; }
+        p { color: #555; margin-top: 10px; font-size: 1.1rem; }
+    }
+}
+
+.product-selection-row {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background: white;
+    border-bottom: 1px solid $accent-purple;
+    transition: all 0.2s ease;
+
+    &.selected {
+        background-color: $accent-purple;
+        border-right: 4px solid $primary-purple;
+    }
+
+    .product-details {
+        flex-grow: 1;
+        margin-right: 20px;
+        .name { font-weight: 600; color: $dark-text; font-size: 1.1rem; }
+    }
+
+    .price-section {
+        color: $primary-purple;
+        font-weight: 700;
+        font-size: 1.2rem;
+        margin-left: 20px;
+    }
+}
+
+.footer-actions {
+    margin-top: 20px;
+    text-align: left;
+    
+    ::ng-deep .p-button {
+        width: 250px;
+        background: linear-gradient(135deg, $primary-purple 0%, #bd00cb 100%) !important;
+        font-size: 1.1rem !important;
+        height: 50px !important;
+    }
+}
+
+::ng-deep .p-radiobutton .p-radiobutton-box.p-highlight {
+    background: $primary-purple !important;
+    border-color: $primary-purple !important;
+}
+
+
+.button-container {
+    ::ng-deep .p-button {
+        width: 30%;
+        background: linear-gradient(135deg, $primary-purple 0%, #bd00cb 100%);
+        border: none;
+        padding: 14px;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+
+        &:hover {
+            background: $primary-purple;
+            border: $primary-purple;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px $shadow-color;
+        }
+    }
+}

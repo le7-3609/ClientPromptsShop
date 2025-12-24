@@ -86,7 +86,7 @@ $error-red: #ff0000;
         &:hover {
             background: $primary-purple;
             border: $primary-purple;
-            transform: translateY(-1px);
+            transform: translateY(-0.5px);
             box-shadow: 0 4px 12px $shadow-color;
         }
     }

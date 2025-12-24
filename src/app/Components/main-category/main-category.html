@@ -1,0 +1,74 @@
+<div class="register-container shop-layout">
+    <div class="content-wrapper">
+
+        <div class="page-title-section">
+            <h1>{{ mainCategoryName }}</h1>
+            <p>בחר קטגוריה כדי לצפות במוצרים שלנו</p>
+        </div>
+
+        <p-dataview #dv [value]="subCategories" [layout]="layout" [paginator]="true" [rows]="6" [sortField]="sortField"
+            [sortOrder]="sortOrder">
+
+            <ng-template #header>
+                <div class="flex-header">
+                    <div></div>
+                    <div class="controls">
+                        <p-select [options]="sortOptions" placeholder="מיון לפי" (onChange)="onSortChange($event)"
+                            styleClass="sort-select" />
+
+                        <p-selectbutton [(ngModel)]="layout" [options]="['list', 'grid']" [allowEmpty]="false">
+                            <ng-template #item let-item>
+                                <i class="pi"
+                                    [ngClass]="{ 'pi-bars': item === 'list', 'pi-table': item === 'grid' }"></i>
+                            </ng-template>
+                        </p-selectbutton>
+                    </div>
+                </div>
+            </ng-template>
+
+            <ng-template #grid let-items>
+                <div class="grid-layout">
+                    @for (item of items; track item.SubCategoryId) {
+                    <div class="sub-category-card">
+                        <div class="image-container">
+                            <img [src]="item.ImageUrl" [alt]="item.SubCategoryName">
+                        </div>
+                        <div class="card-info">
+                            <h3>{{ item.SubCategoryName }}</h3>
+                            <p>{{ item.SubCategoryDescription }}</p>
+
+                        <div class="item-actions">
+                            <button pButton class="p-button">פרטים נוספים</button>
+                        </div>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </ng-template>
+
+            <ng-template #list let-items>
+                <div class="list-container">
+                    @for (item of items; track item.SubCategoryId) {
+                    <div class="product-row-item">
+                        <div class="item-main-content">
+                            <div class="list-image-wrapper">
+                                <img [src]="item.ImageUrl" [alt]="item.SubCategoryName">
+                            </div>
+
+                            <div class="item-text-details">
+                                <span class="item-name">{{ item.SubCategoryName }}</span>
+                                <p class="item-description">{{ item.SubCategoryDescription }}</p>
+                            </div>
+                        </div>
+
+                        <div class="item-actions">
+                            <button pButton class="p-button">פרטים נוספים</button>
+                        </div>
+                    </div>
+                    }
+                </div>
+            </ng-template>
+
+        </p-dataview>
+    </div>
+</div>

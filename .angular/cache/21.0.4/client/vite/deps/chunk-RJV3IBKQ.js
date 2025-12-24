@@ -1,6 +1,6 @@
 import {
   FilterMatchMode
-} from "./chunk-QQXIDO3D.js";
+} from "./chunk-YQ46CBXX.js";
 import {
   A,
   G,
@@ -14,7 +14,7 @@ import {
   s,
   s2,
   z2 as z
-} from "./chunk-3KC5H6AP.js";
+} from "./chunk-PMDYBY2Y.js";
 import {
   DOCUMENT,
   Injectable,
@@ -133,6 +133,11 @@ function le(e, t) {
   }
   return e;
 }
+var rr = (e) => {
+  var a2;
+  let t = S.getTheme(), r = ue(t, e, void 0, "variable"), s3 = (a2 = r == null ? void 0 : r.match(/--[\w-]+/g)) == null ? void 0 : a2[0], i2 = ue(t, e, void 0, "value");
+  return { name: s3, variable: r, value: i2 };
+};
 var E = (...e) => ue(S.getTheme(), ...e);
 var ue = (e = {}, t, r, s3) => {
   if (t) {
@@ -898,6 +903,7 @@ function providePrimeNG(...features) {
 
 export {
   N,
+  rr,
   S,
   base,
   BaseStyle,
@@ -906,4 +912,4 @@ export {
   PRIME_NG_CONFIG,
   providePrimeNG
 };
-//# sourceMappingURL=chunk-JUOY3MMF.js.map
+//# sourceMappingURL=chunk-RJV3IBKQ.js.map

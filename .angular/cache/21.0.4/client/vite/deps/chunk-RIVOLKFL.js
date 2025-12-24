@@ -1,14 +1,14 @@
 import {
   BaseComponent,
   PARENT_INSTANCE
-} from "./chunk-K7PYJ7TE.js";
+} from "./chunk-22JUN6XD.js";
 import {
   Bind,
   BindModule
-} from "./chunk-2LAI32GG.js";
+} from "./chunk-BBWYURB2.js";
 import {
   BaseStyle
-} from "./chunk-JUOY3MMF.js";
+} from "./chunk-RJV3IBKQ.js";
 import {
   P,
   Qt,
@@ -17,7 +17,7 @@ import {
   qt,
   te,
   w
-} from "./chunk-3KC5H6AP.js";
+} from "./chunk-PMDYBY2Y.js";
 import {
   CommonModule
 } from "./chunk-G6MZKP73.js";
@@ -1418,6 +1418,7 @@ var MotionModule = class _MotionModule {
 
 export {
   Motion,
+  MotionDirective,
   MotionModule
 };
-//# sourceMappingURL=chunk-4UPELPRX.js.map
+//# sourceMappingURL=chunk-RIVOLKFL.js.map

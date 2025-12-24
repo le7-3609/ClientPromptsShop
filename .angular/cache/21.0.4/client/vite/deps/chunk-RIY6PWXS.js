@@ -1,9 +1,13 @@
 import {
   BaseComponent
-} from "./chunk-K7PYJ7TE.js";
+} from "./chunk-22JUN6XD.js";
 import {
+  rr
+} from "./chunk-RJV3IBKQ.js";
+import {
+  dt,
   x
-} from "./chunk-3KC5H6AP.js";
+} from "./chunk-PMDYBY2Y.js";
 import {
   isPlatformBrowser
 } from "./chunk-G6MZKP73.js";
@@ -708,6 +712,9 @@ var DomHandler = class _DomHandler {
                 [contenteditable]:not([tabIndex = "-1"]):not([disabled]):not([style*="display:none"]):not([hidden])${selector}`) : false;
   }
 };
+function unblockBodyScroll() {
+  dt({ variableName: rr("scrollbar.width").name });
+}
 var ConnectedOverlayScrollHandler = class {
   element;
   listener;
@@ -830,7 +837,8 @@ var AutoFocusModule = class _AutoFocusModule {
 
 export {
   DomHandler,
+  unblockBodyScroll,
   ConnectedOverlayScrollHandler,
   AutoFocus
 };
-//# sourceMappingURL=chunk-MLUPYYON.js.map
+//# sourceMappingURL=chunk-RIY6PWXS.js.map
