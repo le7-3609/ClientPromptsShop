@@ -1,3 +1,5 @@
+// ... המשתנים נשארים אותו דבר ...
+$bg-color: #f9f5ff;
 $primary-purple: #8139eb;
 $accent-purple: #F6E8FE;
 $shadow-color: #9d58f51a;
@@ -5,7 +7,7 @@ $dark-text: #3b004d;
 
 .shop-layout {
     direction: rtl;
-    background-color: #f9f5ff;
+    background-color: $bg-color;
     padding: 20px;
 }
 
@@ -21,17 +23,45 @@ $dark-text: #3b004d;
     margin-bottom: 30px;
     align-items: center;
     
-    .sub-cat-img {
+    // איחוד הגדרות לתמונה ולגרדיאנט כדי לשמור על גודל אחיד
+    .sub-cat-img, .placeholder-gradient {
         width: 140px;
         height: 140px;
         border-radius: 12px;
+        flex-shrink: 0; // מונע מהתמונה להתכווץ אם יש הרבה טקסט
+    }
+
+    .sub-cat-img {
         object-fit: cover;
+    }
+
+    // הוספת העיצוב לגרדיאנט והאייקון
+    .placeholder-gradient {
+        background: linear-gradient(135deg, $primary-purple 0%, #bd00cb 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 15px $shadow-color;
+
+        .sparkles-icon {
+            font-size: 3rem;
+            color: white;
+            opacity: 0.9;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+            animation: sparkle-float 3s infinite ease-in-out;
+        }
     }
 
     .text-info {
         h1 { color: $dark-text; font-size: 2rem; margin: 0; }
         p { color: #555; margin-top: 10px; font-size: 1.1rem; }
     }
+}
+
+// אנימציה עדינה לאייקון כדי להוסיף חיים לדף
+@keyframes sparkle-float {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-5px) scale(1.1); }
 }
 
 .product-selection-row {

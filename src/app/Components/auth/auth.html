@@ -113,10 +113,10 @@
 
                         <div>
                             <p-floatlabel variant="on" class="form-field">
-                                <p-password formControlName="password" [toggleMask]="true" [feedback]="false"
+                                <p-password id="registerPassword" formControlName="password" [toggleMask]="true" [feedback]="false"
                                     [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}"
                                     [invalid]="isInvalid('password')" />
-                                <label for="loginPassword">Password</label>
+                                <label for="registerPassword">Password</label>
                             </p-floatlabel>
 
                             @if (registerForm.get('password')?.invalid && (registerForm.get('password')?.dirty ||formSubmitted)) {

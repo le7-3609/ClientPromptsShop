@@ -1,0 +1,46 @@
+<div class="menu-container">
+    <p-menubar [model]="items">
+        <ng-template pTemplate="start">
+            <div style="display: flex; align-items: center; cursor: pointer;">
+                <img src="icon.png" alt="icon"
+                    style="height: 50px; width: auto; margin-right: 15px; border-radius: 50%;">
+                <span class="brand-name">Click-Site</span>
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="end">
+            <div class="user-trigger" (click)="profileMenu.toggle($event)" style="cursor: pointer;">
+                
+                <ng-container *ngIf="userService.currentUser() as user; else noUser">
+                    <p-avatar [label]="(user.firstName.charAt(0) || 'U').toUpperCase()" 
+                              shape="circle"
+                              class="purple-avatar"></p-avatar>
+                </ng-container>
+
+                <ng-template #noUser>
+                    <p-avatar icon="pi pi-user" shape="circle" class="purple-avatar"></p-avatar>
+                </ng-template>
+
+                <p-menu #profileMenu [model]="itemsForProfile()" [popup]="true">
+                    <ng-template pTemplate="item" let-item>
+                        <ng-container *ngIf="item.label === 'UserHeader' && userService.currentUser(); else profileLink">
+                            <div class="profile-header" style="padding: 10px;">
+                                <div class="name" style="font-weight: bold;">{{userService.currentUser()?.firstName}}</div>
+                                <div class="email" style="font-size: 0.8em; color: gray;">{{userService.currentUser()?.email}}</div>
+                            </div>
+                        </ng-container>
+                        <ng-template #profileLink>
+                            <a [routerLink]="item.routerLink" class="p-menuitem-link">
+                                <span [class]="item.icon" class="p-menuitem-icon"></span>
+                                <span class="p-menuitem-text" [class.danger]="item.label === 'Logout'"> {{item.label}} </span>
+                            </a>
+                        </ng-template>
+                    </ng-template>
+                </p-menu>
+            </div>
+        </ng-template>
+    </p-menubar>
+</div>
+
+<p-toast></p-toast>
+<p-confirmDialog key="logoutConfirm"></p-confirmDialog>

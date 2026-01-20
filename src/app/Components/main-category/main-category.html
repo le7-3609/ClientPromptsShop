@@ -3,7 +3,7 @@
 
         <div class="page-title-section">
             <h1>{{ mainCategoryName }}</h1>
-            <p>בחר קטגוריה כדי לצפות במוצרים שלנו</p>
+            <p>Choose a sub-category to view our products</p>
         </div>
 
         <p-dataview #dv [value]="subCategories" [layout]="layout" [paginator]="true" [rows]="6" [sortField]="sortField"
@@ -13,7 +13,7 @@
                 <div class="flex-header">
                     <div></div>
                     <div class="controls">
-                        <p-select [options]="sortOptions" placeholder="מיון לפי" (onChange)="onSortChange($event)"
+                        <p-select [options]="sortOptions" placeholder="Sort by" (onChange)="onSortChange($event)"
                             styleClass="sort-select" />
 
                         <p-selectbutton [(ngModel)]="layout" [options]="['list', 'grid']" [allowEmpty]="false">
@@ -38,7 +38,7 @@
                             <p>{{ item.SubCategoryDescription }}</p>
 
                         <div class="item-actions">
-                            <button pButton class="p-button">פרטים נוספים</button>
+                            <button pButton class="p-button">More details</button>
                         </div>
                         </div>
                     </div>
@@ -62,13 +62,12 @@
                         </div>
 
                         <div class="item-actions">
-                            <button pButton class="p-button">פרטים נוספים</button>
+                            <button pButton class="p-button">More details</button>
                         </div>
                     </div>
                     }
                 </div>
             </ng-template>
-
         </p-dataview>
     </div>
 </div>

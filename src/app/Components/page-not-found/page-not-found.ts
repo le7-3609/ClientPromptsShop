@@ -10,10 +10,10 @@ import { Router } from '@angular/router';
   templateUrl: './page-not-found.html',
   styleUrl: './page-not-found.scss'
 })
-export class NotFoundComponent {
+export class PageNotFound {
   constructor(private router: Router) {}
 
   goHome() {
-    this.router.navigate(['/']);
+    this.router.navigate(['/home']); 
   }
 }

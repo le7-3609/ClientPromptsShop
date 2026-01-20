@@ -4,14 +4,14 @@ $accent-purple: #F6E8FE;
 $shadow-color: #9d58f51a;
 .shop-layout {
     direction: rtl;
-    background-color: #F6E8FE;
+    background-color: $bg-color;
     min-height: 100vh;
     padding: 20px;
 
     // עיצוב ה-Header של ה-DataView
     ::ng-deep .p-dataview-header {
         background: white !important;
-        border: 1px solid #C4B6FD !important;
+        border: 1px solid $primary-purple !important;
         border-radius: 12px 12px 0 0;
         padding: 15px;
         margin-bottom: 2px;
@@ -35,8 +35,8 @@ $shadow-color: #9d58f51a;
 .sub-category-card {
     background: white;
     border-radius: 12px;
-    border: 1px solid #C4B6FD;
-    box-shadow: 0 8px 25px rgba(157, 88, 245, 0.08);
+    border: 1px solid $primary-purple;
+    box-shadow: 0 8px 25px $shadow-color;
     overflow: hidden;
     text-align: center;
     transition: transform 0.2s;
@@ -52,25 +52,24 @@ $shadow-color: #9d58f51a;
     .card-info {
         padding: 20px;
         h3 { color: #3b004d; font-size: 1.2rem; margin-bottom: 10px; }
-        .price-display { color: #9D58F5; font-weight: 700; margin-bottom: 10px; }
+        .price-display { color: $primary-purple; font-weight: 700; margin-bottom: 10px; }
     }
 }
 
-// עיצוב רשימה (List)
 .product-row-item {
     background: white;
     padding: 15px 25px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #F6E8FE;
+    border-bottom: 1px solid $accent-purple;
     
     .item-name { color: #3b004d; font-weight: 600; }
-    .item-price { color: #9D58F5; font-weight: 700; }
+    .item-price { color: $primary-purple; font-weight: 700; }
 }
 
 .p-button, .add-btn, .action-icon-btn {
-    background: linear-gradient(135deg, #9D58F5 0%, #C64BF1 100%) !important;
+    background: linear-gradient(135deg, $primary-purple 0%, #C64BF1 100%) !important;
     color: white !important;
     border: none !important;
     border-radius: 8px !important;
@@ -88,7 +87,7 @@ $shadow-color: #9d58f51a;
 }
 
 .p-button, .add-btn {
-    background: linear-gradient(135deg, #9D58F5 0%, #C64BF1 100%);
+    background: linear-gradient(135deg, $primary-purple 0%, #C64BF1 100%);
     border: none;
     color: white;
     border-radius: 8px;

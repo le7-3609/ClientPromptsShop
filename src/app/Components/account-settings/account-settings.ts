@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { DividerModule } from 'primeng/divider';
 import { MessageService } from 'primeng/api';
 import { ProgressBar } from "primeng/progressbar";
+import { UserService } from '../../Services/user-service';
 
 @Component({
   selector: 'app-account-settings',
@@ -26,6 +27,7 @@ imports: [
   providers: [MessageService]
 })
 export class AccountSettings {
+  userService = inject(UserService);
   messageService = inject(MessageService);
   formSubmitted: boolean = false;
   settingsForm!: FormGroup;
@@ -33,28 +35,52 @@ export class AccountSettings {
   passwordStrengthValue: number = 0;
   strengthColor: string = '#C4B6FD';
 
-checkPasswordStrength() {
-    // כאן תבצעי בעתיד את הקריאה ל-DB. כרגע זה סימולציה של הערך המוחזר (0-4)
-    const mockDbResult = 2; // נניח שהחזיר 2
-    this.passwordStrengthValue = mockDbResult * 25;
+  checkPasswordStrength() {
+    const pwd = this.settingsForm.get('password')?.value;
+    if (!pwd) return;
 
-    if (mockDbResult <= 1) {
+    this.userService.checkStrength(pwd).subscribe({
+      next: (result) => {
+        console.log('Result:', result);
+        const score = result.strength;
+        this.passwordStrengthValue = score * 25;
+        this.updateStrengthColor(score);
+      },
+      error: (err) => {
+        console.error('Error checking password strength:', err);
+      }
+    });
+  }
+
+  updateStrengthColor(score: number) {
+    if (score <= 1) {
       this.strengthColor = '#C64BF1'; 
-    } else if (mockDbResult === 2 || mockDbResult === 3) {
+    } else if (score === 2 || score === 3) {
       this.strengthColor = '#9D58F5'; 
     } else {
       this.strengthColor = '#8139EB'; 
-    }
+    }           
   }
 
   ngOnInit() {
+    const user = this.userService.currentUser();
+
     this.settingsForm = new FormGroup({
-      email: new FormControl('', [Validators.email]),
-      firstName: new FormControl(''),
-      lastName: new FormControl(''),
-      phone: new FormControl('', Validators.pattern('^[0-9]{10}$')),
-      password: new FormControl('', [Validators.minLength(6)])
+      email: new FormControl('', [Validators.required, Validators.email]),
+      firstName: new FormControl('', [Validators.required]),
+      lastName: new FormControl('', [Validators.required]),
+      phone: new FormControl('', [Validators.required, Validators.pattern('^[0-9]{10}$')]),
+      password: new FormControl('', [Validators.minLength(6)]) // סיסמה אינה חובה בעדכון אלא אם רוצים לשנות
     });
+
+    if (user) {
+      this.settingsForm.patchValue({
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        phone: user.phone
+      });
+    }
   }
   isInvalid(controlName: string) {
         const control = this.settingsForm.get(controlName);
@@ -62,12 +88,19 @@ checkPasswordStrength() {
   }
   onRegisterSubmit() {
     this.formSubmitted = true;
-    if (this.settingsForm.valid) {
+    const user = this.userService.currentUser();
+
+    if (this.settingsForm.valid && user) {
       console.log('Form Data:', this.settingsForm.value);
-      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Form is submitted', life: 3000 });
-      this.settingsForm.reset();
-      this.formSubmitted = false;
-      // כאן תשלחי את הנתונים ל-API שלך
+     this.userService.updateUser(user.userId, this.settingsForm.value).subscribe({
+        next: (updatedUser) => {
+          this.messageService.add({ severity: 'success', summary: 'Updated', detail: 'Profile updated successfully' });
+          this.formSubmitted = false;
+        },
+        error: (err) => {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Update failed' });
+        }
+      });
     } else {
       console.log('Form is invalid');
     }

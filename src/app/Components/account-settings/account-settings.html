@@ -1,5 +1,6 @@
 <div class="account-settings-container">
-    <p-card header="Hi name🪻" subheader="You should change your details below">
+    <p-card [header]="'Hi ' + (userService.currentUser()?.firstName || 'Guest') + ' 🪻'"
+        subheader="You can change your details below">
         <form [formGroup]="settingsForm" (ngSubmit)="onRegisterSubmit()" class="form-grid">
             <div>
                 <p-floatlabel variant="on" class="form-field">
@@ -26,7 +27,7 @@
                     <input pInputText id="LastName" formControlName="lastName" />
                     <label for="LastName">Last Name</label>
                 </p-floatlabel>
-            </div>  
+            </div>
 
             <div>
                 <p-floatlabel variant="on" class="form-field">

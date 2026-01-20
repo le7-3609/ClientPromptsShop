@@ -25,7 +25,7 @@ import { ToastModule } from 'primeng/toast';
   providers: [MessageService]
 })
 export class SubCategory {
-  mainCategoryName: string = 'המוצרים שלנו';
+  mainCategoryName: string = 'Our Products';
   products: ProductModel[] = [];
   selectedProduct: ProductModel | null = null;
   currentSubCategory: SubCategoryModel | null = null;
@@ -36,20 +36,17 @@ export class SubCategory {
 
   addToCart() {
     if (this.selectedProduct) {
-      this.messageService.add({ severity: 'success', summary: 'מוצר נוסף לסל', detail: `המוצר ${this.selectedProduct.ProductName} נוסף לסל בהצלחה!`, life: 1500 });
-      console.log('מוצר נוסף לסל:', this.selectedProduct);
+      this.messageService.add({ severity: 'success', summary: 'Product added to cart', detail: `The product ${this.selectedProduct.productName} has been added to the cart successfully!`, life: 1500 });
+      console.log('Product added to cart:', this.selectedProduct);
     }
   }
 
   async ngOnInit() {
     try {
-      // 1. נניח שאנחנו מושכים את הקטגוריות (במציאות תשלחי ID לסרביס)
       const categories = await this.subCategoryService.getSubCategories();
 
-      // לצורך הדוגמה, ניקח את הראשונה. בחיבור ל-DB זה יגיע לפי ה-ID שנבחר
       this.currentSubCategory = categories[0];
 
-      // 2. משיכת המוצרים
       this.products = await this.productService.getProducts();
     } catch (error) {
       console.error('Error loading data:', error);

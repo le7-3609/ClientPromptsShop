@@ -1,31 +1,54 @@
 <p-toast></p-toast>
+
 <div class="sub-category-header" *ngIf="currentSubCategory">
     <div class="flex-header-info">
-        <img [src]="currentSubCategory.ImageUrl" class="sub-cat-img">
+        <ng-container *ngIf="currentSubCategory.imageUrl; else noImage">
+            <img [src]="currentSubCategory.imageUrl" 
+                 class="sub-cat-img" 
+                 (error)="currentSubCategory.imageUrl = ''"
+                 alt="Subcategory Image">
+        </ng-container>
+
+        <ng-template #noImage>
+            <div class="placeholder-gradient">
+                <i class="pi pi-sparkles sparkles-icon"></i>
+            </div>
+        </ng-template>
+
         <div class="text-info">
-            <h1>{{ currentSubCategory.SubCategoryName }}</h1>
-            <p>{{ currentSubCategory.SubCategoryDescription }}</p>
+            <h1>{{ currentSubCategory.subCategoryName }}</h1>
+            <p>{{ currentSubCategory.subCategoryDescription }}</p>
         </div>
     </div>
 </div>
 
-<p-dataview #dv [value]="products" layout="list">
-    <ng-template #list let-items>
+<p-dataView #dv [value]="products" layout="list">
+    <ng-template pTemplate="list" let-items>
         <div class="list-layout">
-            @for (item of items; track item.ProductId) {
-            <div class="product-selection-row">
-                <p-radiobutton name="productGroup" [value]="item" [(ngModel)]="selectedProduct">
-                </p-radiobutton>
+            @for (item of items; track item.productId) {
+                <div class="product-selection-row" [class.selected]="selectedProduct === item">
+                    <p-radiobutton name="productGroup" 
+                                   [value]="item" 
+                                   [(ngModel)]="selectedProduct">
+                    </p-radiobutton>
 
-                <div class="product-details">
-                    <span class="name">{{ item.ProductName }}</span>
-                    <span class="price">{{ item.Price }} ₪</span>
+                    <div class="product-details">
+                        <span class="name">{{ item.productName }}</span>
+                    </div>
+                    
+                    <div class="price-section">
+                        <span class="price">{{ item.price }} ₪</span>
+                    </div>
                 </div>
-            </div>
             }
         </div>
     </ng-template>
-</p-dataview>
+</p-dataView>
+
 <div class="button-container">
-    <p-button label="Add to Cart" [disabled]="!selectedProduct" (click)="addToCart()" />
+    <p-button label="Add to Cart" 
+              icon="pi pi-shopping-cart"
+              [disabled]="!selectedProduct" 
+              (click)="addToCart()">
+    </p-button>
 </div>

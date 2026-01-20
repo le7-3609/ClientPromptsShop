@@ -32,7 +32,8 @@
               }
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/primeicons/primeicons.css"
             ]
           },
           "configurations": {
@@ -66,10 +67,12 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular/build:dev-server",
-          "options": {
-          "port": 5000
-          },
+            "builder": "@angular/build:dev-server",
+            "options": {
+              "proxyConfig": "proxy.conf.json",
+              "port": 5000,
+              "ssl": false
+            },
           "configurations": {
             "production": {
               "buildTarget": "client:build:production"

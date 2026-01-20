@@ -1,8 +1,8 @@
 
 export class SubCategoryModel{
-    SubCategoryId!: Number;
-    MainCategoryId!:Number;
-    SubCategoryName!:string;
-    ImageUrl!:string;
-    SubCategoryDescription!:string;
+    subCategoryId!: Number;
+    mainCategoryId!:Number;
+    subCategoryName!:string;
+    imageUrl?: string | null;
+    subCategoryDescription!:string;
 }
