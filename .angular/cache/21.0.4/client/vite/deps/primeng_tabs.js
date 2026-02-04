@@ -1,19 +1,19 @@
 import {
-  ChevronLeftIcon,
-  ChevronRightIcon
-} from "./chunk-UCBT6JZE.js";
-import {
   Ripple,
   RippleModule
 } from "./chunk-JHCQQPQT.js";
 import {
-  BaseComponent,
-  PARENT_INSTANCE
-} from "./chunk-U7SKQ7FA.js";
+  ChevronLeftIcon,
+  ChevronRightIcon
+} from "./chunk-VWDISRDO.js";
 import {
   Bind,
   BindModule
 } from "./chunk-RRKVMRSH.js";
+import {
+  BaseComponent,
+  PARENT_INSTANCE
+} from "./chunk-U7SKQ7FA.js";
 import {
   BaseStyle
 } from "./chunk-AC7LTVVR.js";

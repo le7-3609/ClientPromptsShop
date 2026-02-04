@@ -11,7 +11,8 @@ import { CommonModule } from '@angular/common';
 import { DividerModule } from 'primeng/divider';
 import { MessageService } from 'primeng/api';
 import { ProgressBar } from "primeng/progressbar";
-import { UserService } from '../../Services/user-service';
+import { UserService } from '../../Services/UserService/user-service';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-account-settings',
@@ -19,7 +20,7 @@ imports: [
     CommonModule, ReactiveFormsModule, ButtonModule,
     InputTextModule, PasswordModule, CardModule,
     FloatLabel, TabsModule, DividerModule,
-    Message,
+    Message,ToastModule,
     ProgressBar
 ],  templateUrl: './account-settings.html',
   styleUrl: './account-settings.scss',
@@ -94,11 +95,11 @@ export class AccountSettings {
       console.log('Form Data:', this.settingsForm.value);
      this.userService.updateUser(user.userId, this.settingsForm.value).subscribe({
         next: (updatedUser) => {
-          this.messageService.add({ severity: 'success', summary: 'Updated', detail: 'Profile updated successfully' });
+          this.messageService.add({ severity: 'success', summary: 'Updated', detail: 'Profile updated successfully',life: 3000  });
           this.formSubmitted = false;
         },
         error: (err) => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Update failed' });
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Update failed' ,life: 3000 });
         }
       });
     } else {

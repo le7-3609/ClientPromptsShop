@@ -1,6 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { ProductModel } from '../../Models/product-model';
-import { ProductService } from '../../Services/product-service';
+import { ProductService } from '../../Services/productService/product-service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DataViewModule } from 'primeng/dataview';
@@ -9,10 +9,11 @@ import { ButtonModule } from 'primeng/button';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { SelectModule } from 'primeng/select';
 import { RadioButtonModule } from 'primeng/radiobutton';
-import { SubCategoryService } from '../../Services/sub-category-service';
+import { SubCategoryService } from '../../Services/subCategoryService/sub-category-service';
 import { SubCategoryModel } from '../../Models/sub-category-model';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -30,6 +31,8 @@ export class SubCategory {
   selectedProduct: ProductModel | null = null;
   currentSubCategory: SubCategoryModel | null = null;
 
+  private cdr = inject(ChangeDetectorRef);
+  private route = inject(ActivatedRoute);
   private productService = inject(ProductService);
   private subCategoryService = inject(SubCategoryService);
   private messageService = inject(MessageService);
@@ -41,15 +44,16 @@ export class SubCategory {
     }
   }
 
-  async ngOnInit() {
-    try {
-      const categories = await this.subCategoryService.getSubCategories();
-
-      this.currentSubCategory = categories[0];
-
-      this.products = await this.productService.getProducts();
-    } catch (error) {
-      console.error('Error loading data:', error);
-    }
+  ngOnInit() {
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('SubId');
+      if (id) {
+        this.productService.getProductsBySubCategoryId(+id).then(data => {
+          this.products = [...data]; 
+          this.cdr.detectChanges(); 
+          console.log(this.products)
+        });
+      }
+    });
   }
 }

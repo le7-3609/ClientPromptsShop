@@ -1,0 +1,382 @@
+@use 'sass:color';
+$bg-color: #f9f5ff;
+$primary-purple: #8139eb;
+$accent-purple: #F6E8FE;
+$shadow-color: rgba(157, 88, 245, 0.2);
+$grad: linear-gradient(135deg, $primary-purple 0%, #bd00cb 100%);
+$grad-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(249, 245, 255, 0.65) 100%);
+$text-main: #4a4a4a;
+
+@keyframes revealUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideTop {
+  from {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes spinIn {
+  from {
+    opacity: 0;
+    transform: rotate(-10deg) scale(0.8);
+  }
+
+  to {
+    opacity: 1;
+    transform: rotate(0) scale(1);
+  }
+}
+
+.home-wrapper {
+  background-color: $bg-color;
+  background-image: radial-gradient(circle at 10% 20%, rgba(129, 57, 235, 0.05) 0%, transparent 40%);
+  min-height: 100vh;
+  padding: 40px 20px;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  direction: rtl;
+  overflow-x: hidden;
+
+  .reveal-up,
+  .slide-right,
+  .slide-left,
+  .slide-top,
+  .zoom-in,
+  .fade-in,
+  .spin-in {
+    opacity: 0;
+    animation-fill-mode: forwards !important;
+    animation-delay: var(--delay, 0s);
+  }
+
+  .reveal-up {
+    animation: revealUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .slide-right {
+    animation: slideRight 0.8s ease;
+  }
+
+  .slide-left {
+    animation: slideLeft 0.8s ease;
+  }
+
+  .slide-top {
+    animation: slideTop 0.8s ease;
+  }
+
+  .zoom-in {
+    animation: zoomIn 0.6s ease-out;
+  }
+
+  .fade-in {
+    animation: fadeIn 1.2s ease;
+  }
+
+  .spin-in {
+    animation: spinIn 0.8s ease-out;
+  }
+
+  .fade-out {
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+
+  .hero {
+    text-align: center;
+    padding: 60px 0;
+
+    h1 {
+      background: $grad;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .greeting {
+      color: $primary-purple;
+      font-size: 1.3rem;
+      font-weight: 500;
+    }
+  }
+
+  .underline {
+    width: 60px;
+    height: 4px;
+    background: $grad;
+    margin: 20px auto;
+    border-radius: 10px;
+  }
+
+  .glass-panel {
+    background: $grad-glass;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 24px;
+    box-shadow: 0 10px 30px $shadow-color;
+  }
+
+  .info-card {
+    @extend .glass-panel;
+    max-width: 1000px;
+    margin: 0 auto 40px;
+    padding: clamp(20px, 5vw, 50px);
+  }
+
+  .stats-card {
+    @extend .glass-panel;
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    text-align: center;
+  }
+
+  h2 {
+    color: $primary-purple;
+    font-size: 1.7rem;
+    border-right: 4px solid $primary-purple;
+    padding-right: 15px;
+    margin: 35px 0 20px;
+  }
+
+  .visual-store {
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+
+      @media (max-width: 992px) {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feature-card {
+      @extend .glass-panel;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 30px 20px;
+      transition: all 0.4s ease;
+
+      &:hover {
+        transform: translateY(-8px);
+        background: white;
+
+        .icon-circle {
+          background: $grad;
+          color: white;
+        }
+      }
+
+      .icon-circle {
+        width: 50px;
+        height: 50px;
+        background: white;
+        color: $primary-purple;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 15px;
+        font-size: 1.5rem;
+        box-shadow: 0 4px 10px $shadow-color;
+      }
+
+      .step-badge {
+        background: $accent-purple;
+        color: $primary-purple;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        margin-bottom: 15px;
+      }
+    }
+  }
+
+  .benefits-list {
+    list-style: none;
+    padding: 0;
+
+    li {
+      background: $accent-purple;
+      margin-bottom: 12px;
+      padding: 15px;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      color: $text-main;
+    }
+
+    i {
+      color: $primary-purple;
+      font-size: 1.2rem;
+    }
+  }
+
+  .portfolio-section {
+    padding: 80px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 40px;
+
+      .section-title {
+        font-size: 2rem;
+        color: $primary-purple;
+        margin-bottom: 10px;
+      }
+    }
+
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 25px;
+
+      @media (max-width: 992px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      @media (max-width: 600px) {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .portfolio-item {
+      @extend .glass-panel;
+      aspect-ratio: 1 / 1;
+      position: relative;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+      }
+
+      .overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba($primary-purple, 0.8), transparent);
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding: 20px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+
+        span {
+          color: white;
+          font-weight: 600;
+        }
+      }
+
+      &:hover {
+        img {
+          transform: scale(1.1);
+        }
+
+        .overlay {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  ::ng-deep .home-btn .p-button {
+    color: white !important;
+    background: $grad !important;
+    border: none !important;
+    padding: 12px 40px !important;
+    border-radius: 50px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 10px 25px rgba(129, 57, 235, 0.2) !important;
+
+    &:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 15px 30px rgba(129, 57, 235, 0.3) !important;
+    }
+  }
+}
+
+.faq-section {
+  max-width: 800px;
+  margin: 60px auto;
+  padding: 0 20px;
+
+  ::ng-deep .p-accordion-header-link {
+    background: white !important;
+    border-radius: 12px !important;
+    margin-bottom: 10px;
+    color: $primary-purple !important;
+  }
+}

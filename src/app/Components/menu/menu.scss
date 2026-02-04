@@ -3,51 +3,58 @@ $primary-purple: #8139eb;
 $accent-purple: #F6E8FE;
 $shadow-color: rgba(157, 88, 245, 0.2);
 $grad: linear-gradient(135deg, $primary-purple 0%, #bd00cb 100%);
-
-.menu-container{
-    background-color: $bg-color;
-    padding: 5px 7px;
-    box-shadow: 0 8px 30px $shadow-color;
-}
-a{
-    text-decoration: none!important;
-    color: inherit!important;
+$grad-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(249, 245, 255, 0.65) 100%);
+.menu-container {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 4px 4px 0 4px; 
+    background: transparent !important; 
+    box-shadow: none !important;
 }
 
 :host ::v-deep .p-menubar {
-    border:#bd00cb, 1px solid;  
-    background-color: white; 
-    border-radius: 12px;
-    padding: 0.5rem 1.5rem;
+    width: 100%; 
+    margin: 0 auto;
+    background: $grad-glass !important; 
+    backdrop-filter: blur(14px) saturate(180%);
+    -webkit-backdrop-filter: blur(14px) saturate(180%);
+    
+    border: 1px solid rgba(255, 255, 255, 0.4) !important; 
+    border-radius: 20px;
+    padding: 0.6rem 1.8rem;
+    box-shadow: 0 10px 30px $shadow-color !important;
     display: flex;
     align-items: center;
-    position: relative;
 
-    /* מרכוז ה-Items (Home, Catalog וכו') */
     .p-menubar-root-list {
         margin: 0 auto;
-        display: flex;
-        gap: 8px;
+        gap: 12px;
     }
 
-    
     .p-menuitem-link {
-        text-decoration: none !important;
+        background: transparent !important;
+        border-radius: 12px;
+        transition: all 0.3s ease;
         padding: 0.6rem 1.2rem;
-        border-radius: 8px;
-        transition: all 0.2s ease;
 
         &:hover {
-            background-color: $accent-purple !important;
-            .p-menuitem-text { color: $primary-purple !important; }
+            background: rgba($primary-purple, 0.08) !important;
+            
+            .p-menuitem-text {
+                color: $primary-purple !important;
+                transform: translateY(-1px);
+            }
         }
 
         .p-menuitem-text {
-            font-weight: 500;
             color: $primary-purple;
+            font-weight: 600;
+            transition: all 0.2s ease;
         }
     }
 }
+
 
 .user-trigger {
     display: flex;
@@ -57,7 +64,7 @@ a{
     background: $grad;
     padding: 1.5px; 
 
-    ::v-deep .p-avatar {
+    .p-avatar {
         background-color: $accent-purple !important;
         color: $primary-purple !important;
         font-weight: bold;
@@ -65,7 +72,24 @@ a{
     }
 }
 
-/* 2. עיצוב התפריט הנפתח (Dropdown Menu) */
+
+
+.cart-trigger {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 50%;
+    background: $grad;
+    padding: 25px; 
+
+    .p-avatar {
+        background-color: $accent-purple !important;
+        color: $primary-purple !important;
+        font-weight: bold;
+        border: 2px solid white;
+    }
+}
+
 body ::v-deep .custom-profile-menu.p-menu {
     border: none;
     border-radius: 12px;
@@ -77,13 +101,12 @@ body ::v-deep .custom-profile-menu.p-menu {
         padding: 0;
     }
 
-    /* עיצוב כל שורה (מלבן) */
     .p-menuitem-link {
         display: flex;
         align-items: center;
-        padding: 20px 20px !important;       /* הגבהת המלבן (גבוה יותר) */
+        padding: 20px 20px !important;      
         text-decoration: none !important;   
-        transition: background 0.2s;
+        transition: all 0.2s;
         outline: none;
 
         &:hover {
@@ -103,12 +126,6 @@ body ::v-deep .custom-profile-menu.p-menu {
     }
 }
 
-:host ::v-deep a {
-    text-decoration: none !important;
-}
-
-
-
 .brand-name {
     font-weight: 800;
     font-size: 1.5rem;
@@ -116,4 +133,9 @@ body ::v-deep .custom-profile-menu.p-menu {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-left: 10px;
+}
+
+a {
+    text-decoration: none !important;
+    color: inherit !important;
 }

@@ -3,21 +3,21 @@ import {
 } from "./chunk-QONU7GIA.js";
 import "./chunk-FFIRRLZH.js";
 import {
+  Ripple
+} from "./chunk-JHCQQPQT.js";
+import {
   FormsModule,
   NG_VALUE_ACCESSOR,
   NgControlStatus,
   NgModel
 } from "./chunk-ZWVUCQV5.js";
 import {
-  Ripple
-} from "./chunk-JHCQQPQT.js";
-import {
-  PARENT_INSTANCE
-} from "./chunk-U7SKQ7FA.js";
-import {
   Bind,
   BindModule
 } from "./chunk-RRKVMRSH.js";
+import {
+  PARENT_INSTANCE
+} from "./chunk-U7SKQ7FA.js";
 import {
   BaseStyle
 } from "./chunk-AC7LTVVR.js";

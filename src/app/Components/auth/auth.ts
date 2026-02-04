@@ -1,4 +1,4 @@
-import { Component ,inject} from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
@@ -12,22 +12,24 @@ import { ProgressBar } from 'primeng/progressbar';
 import { DividerModule } from 'primeng/divider';
 import { Message } from 'primeng/message';
 import { MessageService } from 'primeng/api';
-import { SocialAuthService, GoogleLoginProvider, MicrosoftLoginProvider } from "@abacritt/angularx-social-login";
-import { UserService } from '../../Services/user-service';
+import { UserService } from '../../Services/UserService/user-service';
+import { environment } from '../../../environments/environment.development';
+import { ToastModule } from 'primeng/toast';
 
+declare var google: any;
 @Component({
   selector: 'app-auth',
   standalone: true,
   imports: [
     CommonModule, ReactiveFormsModule, ButtonModule,
     InputTextModule, PasswordModule, CardModule,
-    FloatLabel, TabsModule, ProgressBar, DividerModule,
+    FloatLabel, TabsModule, ProgressBar, DividerModule,ToastModule,
     Message],
   templateUrl: './auth.html',
   styleUrl: './auth.scss',
   providers: [MessageService]
 })
-export class Auth{
+export class Auth {
   userService = inject(UserService);
   router = inject(Router);
   messageService = inject(MessageService);
@@ -37,7 +39,10 @@ export class Auth{
 
   passwordStrengthValue: number = 0;
   strengthColor: string = '#C4B6FD';
-  
+
+  public googleClientId = environment.googleClientId;
+
+
 
   ngOnInit() {
     const savedEmail = this.userService.getSavedEmail();
@@ -55,7 +60,7 @@ export class Auth{
     });
   }
 
-    checkPasswordStrength() {
+  checkPasswordStrength() {
     const pwd = this.registerForm.get('password')?.value;
     if (!pwd) return;
 
@@ -74,30 +79,30 @@ export class Auth{
 
   updateStrengthColor(score: number) {
     if (score <= 1) {
-      this.strengthColor = '#C64BF1'; 
+      this.strengthColor = '#C64BF1';
     } else if (score === 2 || score === 3) {
-      this.strengthColor = '#9D58F5'; 
+      this.strengthColor = '#9D58F5';
     } else {
-      this.strengthColor = '#8139EB'; 
-    }           
+      this.strengthColor = '#8139EB';
+    }
   }
 
 
   isInvalid(controlName: string) {
-        const control = this.loginForm.get(controlName);
-        return control?.invalid && (control.touched || this.formSubmitted);
+    const control = this.loginForm.get(controlName);
+    return control?.invalid && (control.touched || this.formSubmitted);
   }
-  
+
   onLoginSubmit() {
     this.formSubmitted = true;
     if (this.loginForm.valid) {
       this.userService.login(this.loginForm.value).subscribe({
         next: (user) => {
-          this.messageService.add({ severity: 'success', summary: 'Success', detail: `Welcome back ${user.firstName}!` });
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: `Welcome back ${user.firstName}!` ,life: 3000 });
           this.router.navigate(['/home']); // ניתוב לדף הבית לאחר כניסה
         },
         error: (err) => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Invalid email or password' });
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Invalid email or password' ,life: 3000 });
         }
       });
     }
@@ -108,28 +113,42 @@ export class Auth{
     if (this.registerForm.valid) {
       this.userService.register(this.registerForm.value).subscribe({
         next: (newUser) => {
-          this.messageService.add({ severity: 'success', summary: 'Registered', detail: 'Account created successfully!' });
+          this.messageService.add({ severity: 'success', summary: 'Registered', detail: 'Account created successfully!',life: 3000 });
           this.router.navigate(['/home']);
         },
         error: (err) => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Registration failed. Email might be in use.' });
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Registration failed. Email might be in use.' ,life: 3000 });
         }
       });
     }
   }
 
+  ngAfterViewInit() {
+    this.renderGoogleButton();
+  }
+  
+  renderGoogleButton() {
+    if (typeof google !== 'undefined' && google.accounts) {
+      google.accounts.id.initialize({
+        client_id: this.googleClientId,
+        callback: (window as any).handleCredentialResponse
+      });
 
-  signInWithGoogle(): void {
-    //this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then(user => {
-      console.log("Google User:");
-    //});
+      google.accounts.id.renderButton(
+        document.getElementById("googleBtn"),
+        { theme: "outline", size: "large", width: "100%" }
+      );
+    } else {
+      setTimeout(() => this.renderGoogleButton(), 100);
+    }
   }
 
+
   signInWithMicrosoft(): void {
-   // this.authService.signIn(MicrosoftLoginProvider.PROVIDER_ID).then(user => {
-      console.log("Microsoft User:");
-   // });
+    // this.authService.signIn(MicrosoftLoginProvider.PROVIDER_ID).then(user => {
+    console.log("Microsoft User:");
+    // });
   }
 }
 
-  
+

@@ -5,3 +5,19 @@
     font-family:  'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     //font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
 }
+:root {
+    /* הגדרת צבע הליבה של כל האתר */
+    --p-primary-color: #8139eb !important;
+    --p-primary-contrast-color: #ffffff !important;
+    /* גוונים נוספים למצבי Hover ו-Active (אופציונלי) */
+    --p-primary-500: #a855f7 !important;
+    --p-primary-600: #8139eb!important;
+    --p-primary-700: #6a2ecb  !important;
+        /* צבע רקע כללי */
+    --p-background-color: #f9f9f9 !important;
+    /* צבעי טקסט */
+    --p-text-color: #3d3942 !important;
+    --p-text-secondary-color: #666666 !important;       
+    /* צבע ה"הילה" (Focus Ring) */
+    --p-focus-ring-color: rgba(129, 57, 235, 0.2) !important;
+}

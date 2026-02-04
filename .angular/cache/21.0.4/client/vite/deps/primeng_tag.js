@@ -1,10 +1,10 @@
 import {
+  Bind
+} from "./chunk-RRKVMRSH.js";
+import {
   BaseComponent,
   PARENT_INSTANCE
 } from "./chunk-U7SKQ7FA.js";
-import {
-  Bind
-} from "./chunk-RRKVMRSH.js";
 import {
   BaseStyle
 } from "./chunk-AC7LTVVR.js";

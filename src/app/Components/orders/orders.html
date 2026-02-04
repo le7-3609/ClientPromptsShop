@@ -1,0 +1,118 @@
+<div class="orders-wrapper" dir="ltr">
+    <section class="orders-header">
+        <h1>My Orders</h1>
+        <p>View all your AI-generated sites and share your experience</p>
+        <div class="underline"></div>
+    </section>
+
+    <div class="orders-list">
+        @for (order of orders; track order.orderId) {
+            <div class="order-item glass-panel">
+                
+                <div class="order-visual">
+                    @if (order.reviewImageUrl) {
+                        <img [src]="order.reviewImageUrl" class="order-img" alt="Site Preview">
+                    } @else {
+                        <div class="placeholder-gradient">
+                            <i class="pi pi-sparkles"></i>
+                        </div>
+                    }
+                </div>
+
+                <div class="order-content">
+                    <div class="content-header">
+                        <div class="title-section">
+                            <h3>{{ order.siteName || 'Untitled Project' }}</h3>
+                            <span class="site-type">{{ order.siteTypeName }}</span>
+                        </div>
+                        <div class="price-section">
+                            <span class="price-label">Total Amount:</span>
+                            <span class="price-value">${{ order.orderSum }}</span>
+                        </div>
+                    </div>
+
+                    <div class="meta-row">
+                        <span><i class="pi pi-calendar"></i> {{ order.orderDate }}</span>
+                        <span><i class="pi pi-tag"></i> {{ order.statusName }}</span>
+                        <span><i class="pi pi-box"></i> {{ order.orderItemsCount }} items</span>
+                    </div>
+
+                    <div class="order-actions">
+                        <p-button label="View Products" 
+                                  icon="pi pi-eye" 
+                                  [outlined]="true"
+                                  (click)="order.isExpanded = !order.isExpanded" 
+                                  styleClass="p-button-sm"
+                                  severity="help">
+                        </p-button>
+
+                        @if (order.reviewId === 0) {
+                            <p-button label="Add Review" 
+                                      icon="pi pi-star"
+                                      (click)="openReview(order)" 
+                                      styleClass="p-button-sm" 
+                                      severity="help">
+                            </p-button>
+                        }
+
+                        <p-button label="Download Prompt" 
+                                  icon="pi pi-download" 
+                                  styleClass="p-button-sm">
+                        </p-button>
+                    </div>
+
+                    @if (order.isExpanded) {
+                        <div class="items-summary">
+                            <div class="summary-title">Order Breakdown:</div>
+                            <ul class="items-list">
+                                @for (item of order.items; track item.productName) {
+                                    <li>
+                                        <span class="item-name">{{ item.productName }}</span>
+                                        <span class="item-price">${{ item.price }}</span>
+                                        <span class="item-platform">({{ item.platformName }})</span>
+                                    </li>
+                                } @empty {
+                                    <li>No items found for this order.</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                </div>
+            </div>
+        } @empty {
+            <div class="empty-state" >
+                <i class="pi pi-folder-open"></i>
+                <p>You haven't placed any orders yet.</p>
+                <p-button label="Create Your First Site" icon="pi pi-plus" [routerLink]="['/basicSite']"></p-button>
+            </div>
+        }
+    </div>
+
+    <p-dialog header="Add Review" [(visible)]="displayReviewDialog" [modal]="true" 
+              [style]="{width: '450px'}" styleClass="custom-dialog">
+        <div class="review-form">
+            <div class="field">
+                <label>Stars Rating</label>
+                <p-rating [(ngModel)]="newReview.stars"></p-rating>
+            </div>
+
+            <div class="field">
+                <p-floatlabel variant="on">
+                    <textarea pInputTextarea id="review_note" [(ngModel)]="newReview.text" rows="5"
+                              style="resize: none; width: 100%;" class="custom-textarea">
+                    </textarea>
+                    <label for="review_note">Write your opinion of the site here</label>
+                </p-floatlabel>
+            </div>
+
+            <div class="field">
+                <label>Site Image</label>
+                <p-fileUpload mode="basic" chooseLabel="Choose Image" (onSelect)="onFileSelect($event)"></p-fileUpload>
+            </div>
+
+            <div class="form-actions">
+                <p-button label="Submit Review" (click)="saveReview()" styleClass="submit-btn"></p-button>
+            </div>
+        </div>
+    </p-dialog>
+</div>

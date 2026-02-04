@@ -2,8 +2,8 @@
     <div class="content-wrapper">
 
         <div class="page-title-section">
-            <h1>{{ mainCategoryName }}</h1>
-            <p>Choose a sub-category to view our products</p>
+            <h1><b>{{ mainCategoryName }}</b></h1>
+            <h3>Choose a sub-category to view our products</h3>
         </div>
 
         <p-dataview #dv [value]="subCategories" [layout]="layout" [paginator]="true" [rows]="6" [sortField]="sortField"
@@ -28,18 +28,19 @@
 
             <ng-template #grid let-items>
                 <div class="grid-layout">
-                    @for (item of items; track item.SubCategoryId) {
+                    @for (sub of subCategories; track sub.subCategoryId) {
                     <div class="sub-category-card">
                         <div class="image-container">
-                            <img [src]="item.ImageUrl" [alt]="item.SubCategoryName">
+                            <img [src]="sub.imageUrl" [alt]="sub.subCategoryName">
                         </div>
                         <div class="card-info">
-                            <h3>{{ item.SubCategoryName }}</h3>
-                            <p>{{ item.SubCategoryDescription }}</p>
-
-                        <div class="item-actions">
-                            <button pButton class="p-button">More details</button>
-                        </div>
+                            <h3>{{ sub.subCategoryName }}</h3>
+                            <p>{{ sub.subCategoryDescription }}</p>
+                            <div class="item-actions">
+                                <button pButton class="p-button"
+                                    [routerLink]="['/sub-category', sub.subCategoryId]">More
+                                    details</button>
+                            </div>
                         </div>
                     </div>
                     }
@@ -48,21 +49,21 @@
 
             <ng-template #list let-items>
                 <div class="list-container">
-                    @for (item of items; track item.SubCategoryId) {
+                    @for (sub of items; track sub.subCategoryId) {
                     <div class="product-row-item">
                         <div class="item-main-content">
                             <div class="list-image-wrapper">
-                                <img [src]="item.ImageUrl" [alt]="item.SubCategoryName">
+                                <img [src]="sub.imageUrl" [alt]="sub.subCategoryName">
                             </div>
 
                             <div class="item-text-details">
-                                <span class="item-name">{{ item.SubCategoryName }}</span>
-                                <p class="item-description">{{ item.SubCategoryDescription }}</p>
+                                <span class="item-name">{{ sub.subCategoryName }}</span>
+                                <p class="item-description">{{ sub.subCategoryDescription }}</p>
                             </div>
                         </div>
-
                         <div class="item-actions">
-                            <button pButton class="p-button">More details</button>
+                            <button pButton class="p-button" [routerLink]="['/sub-category', sub.subCategoryId]">More
+                                details </button>
                         </div>
                     </div>
                     }

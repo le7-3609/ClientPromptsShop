@@ -2,20 +2,49 @@ $bg-color: #f9f5ff;
 $primary-purple: #8139eb;
 $accent-purple: #F6E8FE;
 $shadow-color: #9d58f51a;
+$grad-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(249, 245, 255, 0.65) 100%);
+
 .shop-layout {
-    direction: rtl;
-    background-color: $bg-color;
+    direction:ltr;
+    text-align: center;
+    background: $bg-color; 
+    backdrop-filter: blur(15px);         
+    border-radius: 20px;
+    box-shadow: 0 8px 30px $shadow-color;
     min-height: 100vh;
     padding: 20px;
 
-    // עיצוב ה-Header של ה-DataView
-    ::ng-deep .p-dataview-header {
-        background: white !important;
-        border: 1px solid $primary-purple !important;
+    ::ng-deep .p-dataview{
+        backdrop-filter: blur(15px);         
+        box-shadow: 0 8px 30px $shadow-color;
+        background-color: $grad-glass !important; 
+        border: 1px solid rgba(189, 112, 210, 0.25) !important;
+        padding: 15px;
+    }
+
+     ::ng-deep .p-dataview-header {
+        backdrop-filter: blur(15px);         
+        box-shadow: 0 8px 30px $shadow-color;
+        background-color: $grad-glass !important; 
+        border: 1px solid rgba(189, 112, 210, 0.25) !important;
         border-radius: 12px 12px 0 0;
         padding: 15px;
-        margin-bottom: 2px;
+        margin-bottom: 5px;
     }
+
+    ::ng-deep .p-paginator{
+        backdrop-filter: blur(15px);         
+        box-shadow: 0 8px 30px $shadow-color;
+        background-color: $grad-glass !important; 
+        border: 1px solid rgba(189, 112, 210, 0.25) !important;
+        border-radius: 0 0 12px 12px;
+        padding: 15px;
+        margin-top: 5px;
+    }
+}
+.page-title-section{
+    direction: ltr;
+    color: #3b004d;
 }
 
 .flex-header {
@@ -29,82 +58,184 @@ $shadow-color: #9d58f51a;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
-    padding: 20px ;
+    padding: 20px;
 }
 
 .sub-category-card {
-    background: white;
+    background:$grad-glass;
     border-radius: 12px;
-    border: 1px solid $primary-purple;
+    border: 1px solid rgba(189, 112, 210, 0.25) !important;
     box-shadow: 0 8px 25px $shadow-color;
     overflow: hidden;
     text-align: center;
-    transition: transform 0.2s;
+    transition: transform 0.2s, box-shadow 0.3s;
 
-    &:hover { transform: translateY(-0.5px); }
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 35px $shadow-color;
+    }
 
-    .image-container img {
+    .image-container {
         width: 100%;
         height: 160px;
-        object-fit: cover;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        &:hover img {
+            transform: scale(1.05);
+        }
     }
 
     .card-info {
-        padding: 20px;
-        h3 { color: #3b004d; font-size: 1.2rem; margin-bottom: 10px; }
-        .price-display { color: $primary-purple; font-weight: 700; margin-bottom: 10px; }
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        h3 {
+            color: #3b004d;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        p {
+            color: #6b5f78;
+            font-size: 0.9rem;
+            flex-grow: 1;
+        }
+
+        .item-actions {
+            display: flex;
+            justify-content: center;
+
+            .p-button {
+                background: linear-gradient(135deg, $primary-purple 0%, #C64BF1 100%) !important;
+                color: white !important;
+                border: none !important;
+                border-radius: 8px !important;
+                padding: 8px 20px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+
+                &:hover {
+                    background: $primary-purple;
+                    box-shadow: 0 4px 12px $shadow-color;
+                }
+            }
+        }
     }
+}
+
+// ::ng-deep .p-paginator-page, .p-paginator-next, .p-paginator-last, .p-paginator-first, .p-paginator-prev {
+//     color: #8139eb;
+//     background-color: $primary-purple;
+// }
+
+.list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 10px;
 }
 
 .product-row-item {
     background: white;
-    padding: 15px 25px;
+    padding: 15px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid $accent-purple;
-    
-    .item-name { color: #3b004d; font-weight: 600; }
-    .item-price { color: $primary-purple; font-weight: 700; }
-}
+    border-radius: 12px;
+    box-shadow: 0 6px 20px $shadow-color;
+    transition: transform 0.2s, box-shadow 0.3s;
 
-.p-button, .add-btn, .action-icon-btn {
-    background: linear-gradient(135deg, $primary-purple 0%, #C64BF1 100%) !important;
-    color: white !important;
-    border: none !important;
-    border-radius: 8px !important;
-    padding: 8px 20px;
-    cursor: pointer;
-}
-
-.action-icon-btn {
-    width: 35px;
-    height: 35px;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.p-button, .add-btn {
-    background: linear-gradient(135deg, $primary-purple 0%, #C64BF1 100%);
-    border: none;
-    color: white;
-    border-radius: 8px;
-    padding: 10px 20px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
     &:hover {
-            background: $primary-purple;
-            border: $primary-purple;
-            box-shadow: 0 4px 12px $shadow-color;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px $shadow-color;
+    }
+
+    .item-main-content {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+
+        .list-image-wrapper {
+            width: 100px;
+            height: 80px;
+            overflow: hidden;
+            border-radius: 10px;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 0.3s ease;
+            }
+
+            &:hover img {
+                transform: scale(1.05);
+            }
         }
+
+        .item-text-details {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+
+            .item-name {
+                color: #3b004d;
+                font-weight: 600;
+                font-size: 1rem;
+            }
+
+            .item-description {
+                color: #6b5f78;
+                font-size: 0.85rem;
+            }
+        }
+    }
+
+    .item-actions {
+        .p-button {
+            background: linear-gradient(135deg, $primary-purple 0%, #C64BF1 100%) !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 8px !important;
+            padding: 8px 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+
+            &:hover {
+                background: $primary-purple;
+                box-shadow: 0 4px 12px $shadow-color;
+            }
+        }
+    }
 }
 
-.add-btn {
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    border-radius: 50%;
+
+@media (max-width: 768px) {
+    .grid-layout {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+
+    .product-row-item {
+        flex-direction: column;
+        align-items: flex-start;
+
+        .item-actions {
+            margin-top: 10px;
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+        }
+    }
 }
+

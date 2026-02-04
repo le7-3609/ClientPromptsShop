@@ -8,8 +8,8 @@ import { AvatarModule } from 'primeng/avatar';
 import { MenuModule } from 'primeng/menu';
 import { MenubarModule } from 'primeng/menubar';
 import { MainCategoryModel } from '../../Models/main-category-model';
-import { MainCategoryService } from '../../Services/main-category-service';
-import { UserService } from '../../Services/user-service';
+import { MainCategoryService } from '../../Services/mainCategoryService/main-category-service';
+import { UserService } from '../../Services/UserService/user-service';
 import { RouterLink } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -46,7 +46,7 @@ export class Menu implements OnInit {
           label: user.firstName + ' ' + user.lastName+'\n'+ user.email,
           items: [
             { label: 'My Account', icon: 'pi pi-user', routerLink: '/settings' },
-            { label: 'My Orders', icon: 'pi pi-box', routerLink: '/settings' },
+            { label: 'My Orders', icon: 'pi pi-box', routerLink: '/orders' },
             { 
               label: 'Logout', 
               icon: 'pi pi-sign-out', 
@@ -72,30 +72,37 @@ export class Menu implements OnInit {
   this.mainCategoryService.getMainCategory().subscribe({
     next: (response) => {
       const categories = response.body ?? [];
-      console.log('Categories received:', categories); 
 
       const categoryItems = categories.map(cat => ({
-        label: cat.mainCategoryName, 
+        label: cat.mainCategoryName,
         icon: 'pi pi-tag',
-        routerLink: ['/main-category', cat.mainCategoryId] 
+        routerLink: ['/main-category', cat.mainCategoryId]
       }));
 
-      this.items = this.items.map(item => {
-        if (item.label === 'Catalog') {
-          return {
-            ...item,
-            items: [[{ 
-              label: 'Categories', 
-              items: categoryItems 
-            }]]
-          };
-        }
-        return item;
-      });
+      this.items = [
+        { label: 'Home', root: true, routerLink: '/' },
+        { label: 'BasicSite', root: true },
+
+        {
+          label: 'Catalog',
+          root: true,
+          items: [
+            [
+              {
+                label: 'Categories',
+                items: categoryItems
+              }
+            ]
+          ]
+        },
+
+        { label: 'Contact', root: true }
+      ];
     },
     error: (error) => console.error('Error fetching categories:', error)
   });
 }
+
 
  logout(event: Event) {
     this.confirmationService.confirm({
@@ -106,8 +113,8 @@ export class Menu implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       acceptLabel: 'Yes, Logout',
       rejectLabel: 'Cancel',
-      acceptButtonStyleClass: 'p-button-danger',
-      rejectButtonStyleClass: 'p-button-text',
+      acceptButtonStyleClass: 'p-button-secondary',
+      rejectButtonStyleClass: 'p-button-help',
       
       accept: () => {
         this.userService.logout();

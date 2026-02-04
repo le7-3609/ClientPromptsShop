@@ -1,5 +1,5 @@
 <div class="menu-container">
-    <p-menubar [model]="items">
+    <p-megaMenu [model]="items">
         <ng-template pTemplate="start">
             <div style="display: flex; align-items: center; cursor: pointer;">
                 <img src="icon.png" alt="icon"
@@ -9,6 +9,7 @@
         </ng-template>
 
         <ng-template pTemplate="end">
+            <!-- <div class="cart-trigger" icon="pi pi-cart-minus" style="cursor: pointer;"></div> -->
             <div class="user-trigger" (click)="profileMenu.toggle($event)" style="cursor: pointer;">
                 
                 <ng-container *ngIf="userService.currentUser() as user; else noUser">
@@ -39,7 +40,7 @@
                 </p-menu>
             </div>
         </ng-template>
-    </p-menubar>
+    </p-megaMenu>
 </div>
 
 <p-toast></p-toast>
