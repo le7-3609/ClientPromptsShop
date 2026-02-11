@@ -29,6 +29,7 @@ yarn-error.log
 .history/*
 
 # Miscellaneous
+.angular
 .angular/
 /.angular/cache
 .sass-cache/
@@ -45,3 +46,4 @@ Thumbs.db
 # API Keys & Secrets
 src/environments/environment.ts
 src/environments/environment.development.ts
+
