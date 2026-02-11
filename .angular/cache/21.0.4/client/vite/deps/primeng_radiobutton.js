@@ -7,14 +7,6 @@ import {
 } from "./chunk-OCOZYOYU.js";
 import "./chunk-5WUBT2TC.js";
 import {
-  NG_VALUE_ACCESSOR,
-  NgControl
-} from "./chunk-ZWVUCQV5.js";
-import {
-  Bind,
-  BindModule
-} from "./chunk-RRKVMRSH.js";
-import {
   PARENT_INSTANCE
 } from "./chunk-U7SKQ7FA.js";
 import {
@@ -23,7 +15,15 @@ import {
 import {
   SharedModule
 } from "./chunk-CXWQDPW7.js";
+import {
+  Bind,
+  BindModule
+} from "./chunk-RRKVMRSH.js";
 import "./chunk-YUNR4ATL.js";
+import {
+  NG_VALUE_ACCESSOR,
+  NgControl
+} from "./chunk-ZWVUCQV5.js";
 import {
   CommonModule
 } from "./chunk-IWDQBEOJ.js";

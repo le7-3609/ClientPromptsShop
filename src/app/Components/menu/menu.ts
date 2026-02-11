@@ -27,7 +27,7 @@ export class Menu implements OnInit {
     { label: 'Home', root: true, routerLink: '/' },
     { label: 'BasicSite', root: true },
     { label: 'Catalog', root: true, items: [[{ items: [] }]] },
-    { label: 'Contact', root: true }
+    { label: 'Contact', root: true, routerLink: '/contact'}
   ]
 
   private confirmationService = inject(ConfirmationService);
@@ -96,7 +96,7 @@ export class Menu implements OnInit {
           ]
         },
 
-        { label: 'Contact', root: true }
+        { label: 'Contact', root: true , routerLink: '/contact' }
       ];
     },
     error: (error) => console.error('Error fetching categories:', error)

@@ -9,16 +9,19 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { SelectModule } from 'primeng/select';
 import { SubCategoryModel } from '../../Models/sub-category-model';
 import { SubCategoryService } from '../../Services/subCategoryService/sub-category-service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-main-category',
   standalone: true,
+  providers: [SubCategoryService],
   imports: [CommonModule, FormsModule, DataViewModule, RouterModule, TagModule, ButtonModule, SelectButtonModule, SelectModule],
   templateUrl: './main-category.html',
   styleUrls: ['./main-category.scss']
 })
 export class MainCategory implements OnInit {
   mainCategoryName: string = 'Our Products';
+  categoryServise = inject(SubCategoryService)
   subCategories: SubCategoryModel[] = [];
   selectedSubCategory: SubCategoryModel | null = null;
   layout: 'list' | 'grid' = 'grid';
@@ -57,17 +60,14 @@ export class MainCategory implements OnInit {
 }
 
   async loadFilteredSubCategories(id: number) {
-    try {
-      const response = await this.subCategoryService.getSubCategoriesFiltered(0, 50, '', [id]);
-
-
-      this.subCategories = response.item1 || response.subCategories || response;
-
-      console.log('Filtered subcategories loaded:', this.subCategories);
-    } catch (error) {
-      console.error('Error loading filtered categories:', error);
-    }
+  try {
+    const response = await firstValueFrom(this.subCategoryService.getSubCategoriesFiltered(0, 50, [id], ''));
+    this.subCategories = response.body?.data || []; // גישה ל-body ולמערך הנתונים
+    console.log('Filtered subcategories loaded:', this.subCategories);
+  } catch (error) {
+    console.error('Error loading filtered categories:', error);
   }
+}
 
   async loadAllSubCategories() {
     try {

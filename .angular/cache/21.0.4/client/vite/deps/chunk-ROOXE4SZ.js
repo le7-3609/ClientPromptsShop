@@ -1,15 +1,12 @@
 import {
   MotionModule
-} from "./chunk-HIJI5RCD.js";
+} from "./chunk-7Q7BSIFW.js";
 import {
   Ripple
 } from "./chunk-JHCQQPQT.js";
 import {
   TimesIcon
 } from "./chunk-VWDISRDO.js";
-import {
-  Bind
-} from "./chunk-RRKVMRSH.js";
 import {
   BaseComponent,
   PARENT_INSTANCE
@@ -21,6 +18,9 @@ import {
   PrimeTemplate,
   SharedModule
 } from "./chunk-CXWQDPW7.js";
+import {
+  Bind
+} from "./chunk-RRKVMRSH.js";
 import {
   CommonModule,
   NgClass,
@@ -765,4 +765,4 @@ export {
   Message,
   MessageModule
 };
-//# sourceMappingURL=chunk-WAC3LJPQ.js.map
+//# sourceMappingURL=chunk-ROOXE4SZ.js.map

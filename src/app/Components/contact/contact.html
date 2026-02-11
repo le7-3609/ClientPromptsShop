@@ -1,0 +1,85 @@
+<p-toast></p-toast>
+
+<div class="contact-page-wrapper" dir="ltr">
+  <header class="contact-header">
+    <div class="container">
+      <h1>Contact Us</h1>
+      <div class="underline"></div>
+      <p>
+        Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+      </p>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="contact-grid">
+
+      <div class="info-sidebar">
+        <div class="info-card">
+          <div class="icon-box bg-violet">
+            <i class="pi pi-envelope"></i>
+          </div>
+          <h3>Email Us</h3>
+          <p>Our team is here to help.</p>
+          <a href="mailto:support@promptstore.com">support@promptstore.com</a>
+        </div>
+
+        <div class="info-card">
+          <div class="icon-box bg-fuchsia">
+            <i class="pi pi-comments"></i>
+          </div>
+          <h3>Live Chat</h3>
+          <p>Available during business hours.</p>
+          <span class="coming-soon">Coming soon</span>
+        </div>
+      </div>
+
+      <div class="form-container">
+        <div class="form-card">
+          <h2>Send us a message</h2>
+
+          <form (ngSubmit)="handleSubmit()" #contactForm="ngForm" class="contact-form">
+            <div class="form-row">
+              <div class="field">
+                <p-floatlabel variant="on">
+                  <input pInputText id="name" name="name" [(ngModel)]="formData.name" required class="custom-input" />
+                  <label for="name">Name</label>
+                </p-floatlabel>
+              </div>
+
+              <div class="field">
+                <p-floatlabel variant="on">
+                  <input pInputText type="email" id="email" name="email" [(ngModel)]="formData.email" required
+                    class="custom-input" />
+                  <label for="email">Email</label>
+                </p-floatlabel>
+              </div>
+            </div>
+
+            <div class="field">
+              <p-floatlabel variant="on">
+                <input pInputText id="subject" name="subject" [(ngModel)]="formData.subject" required
+                  class="custom-input" />
+                <label for="subject">Subject</label>
+              </p-floatlabel>
+            </div>
+
+            <div class="field">
+              <p-floatlabel variant="on">
+                <textarea pInputTextarea id="message" name="message" [(ngModel)]="formData.message" required rows="6"
+                  style="resize: none;" class="custom-textarea">
+      </textarea>
+                <label for="message">Tell us how we can help...</label>
+              </p-floatlabel>
+            </div>
+
+            <p-button type="submit" [disabled]="contactForm.invalid || isSubmitting"
+              [label]="isSubmitting ? 'Sending...' : 'Send Message'" icon="pi pi-send" styleClass="submit-btn-gradient">
+            </p-button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>

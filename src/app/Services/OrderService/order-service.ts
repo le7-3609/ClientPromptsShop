@@ -8,7 +8,7 @@ import { environment } from '../../../environments/environment.development';
   providedIn: 'root'
 })
 export class OrderService {
-  private BASIC_URL = `${environment.apiUrl}/orders`; 
+  private BASIC_URL = `${environment.apiUrl}/orders`;
 
   constructor(private http: HttpClient) { }
 
@@ -23,7 +23,7 @@ export class OrderService {
   }
 
   // הוספת ביקורת חדשה
-  addReview(review: AddReviewModel): Observable<any> {
-    return this.http.post(`${this.BASIC_URL}/reviews`, review);
+  saveReview(orderId: number, review: AddReviewModel): Observable<any> {
+    return this.http.post(`${this.BASIC_URL}/${orderId}/review`, review);
   }
 }

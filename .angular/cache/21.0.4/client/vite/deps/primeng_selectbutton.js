@@ -6,16 +6,6 @@ import {
   Ripple
 } from "./chunk-JHCQQPQT.js";
 import {
-  FormsModule,
-  NG_VALUE_ACCESSOR,
-  NgControlStatus,
-  NgModel
-} from "./chunk-ZWVUCQV5.js";
-import {
-  Bind,
-  BindModule
-} from "./chunk-RRKVMRSH.js";
-import {
   PARENT_INSTANCE
 } from "./chunk-U7SKQ7FA.js";
 import {
@@ -26,9 +16,19 @@ import {
   SharedModule
 } from "./chunk-CXWQDPW7.js";
 import {
+  Bind,
+  BindModule
+} from "./chunk-RRKVMRSH.js";
+import {
   k2 as k,
   p
 } from "./chunk-YUNR4ATL.js";
+import {
+  FormsModule,
+  NG_VALUE_ACCESSOR,
+  NgControlStatus,
+  NgModel
+} from "./chunk-ZWVUCQV5.js";
 import {
   CommonModule,
   NgTemplateOutlet

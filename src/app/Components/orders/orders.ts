@@ -96,7 +96,7 @@ import { RouterLink } from "@angular/router";
   imports: [
     CommonModule, ButtonModule, DialogModule, RatingModule, TextareaModule, FileUploadModule, FormsModule, FloatLabelModule,
     RouterLink
-],
+  ],
   templateUrl: './orders.html',
   styleUrl: './orders.scss'
 })
@@ -120,26 +120,34 @@ export class Orders implements OnInit {
   }
 
   loadOrders() {
-  this.orderService.getUserOrders(this.userId).subscribe({
-    next: (data) => {
-      // אנחנו עוברים על כל הזמנה ומוסיפים לה את המאפיין החדש
-      this.orders = data.map(order => ({
-        ...order,
-        isExpanded: false // כולם מתחילים סגורים
-      }));
-    },
-    error: (err) => console.error('שגיאה בטעינת הזמנות', err)
-  });
-}
-
-  openReview(order: OrderDetailsModel) {
-    this.selectedOrder = order;
-    this.displayReviewDialog = true;
+    this.orderService.getUserOrders(this.userId).subscribe({
+      next: (data) => {
+        this.orders = data.map(order => ({
+          ...order,
+          isExpanded: false 
+        }));
+      },
+      error: (err) => console.error('Error loading orders:', err)
+    });
   }
 
   onFileSelect(event: any) {
-    console.log('קובץ נבחר:', event.files[0]);
-    this.newReview.image = 'assets/demo-path.png'; 
+    console.log('File selected:', event.files[0]);
+    this.newReview.image = 'assets/demo-path.png';
+  }
+
+  openReview(order: any) {
+    this.selectedOrder = order;
+    if (order.reviewId > 0) {
+      this.newReview = {
+        stars: order.score || 5,
+        text: order.note || '', 
+        image: order.reviewImageUrl || ''
+      };
+    } else {
+      this.newReview = { stars: 5, text: '', image: '' };
+    }
+    this.displayReviewDialog = true;
   }
 
   saveReview() {
@@ -152,12 +160,12 @@ export class Orders implements OnInit {
       reviewImageUrl: this.newReview.image
     };
 
-    this.orderService.addReview(reviewData).subscribe({
+    this.orderService.saveReview(this.selectedOrder.orderId, reviewData).subscribe({
       next: () => {
         this.displayReviewDialog = false;
         this.loadOrders(); 
       },
-      error: (err) => alert('חלה שגיאה בשמירת הביקורת')
+      error: (err) => alert('Error saving review')
     });
   }
 }

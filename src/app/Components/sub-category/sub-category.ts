@@ -45,15 +45,18 @@ export class SubCategory {
   }
 
   ngOnInit() {
-    this.route.paramMap.subscribe(params => {
-      const id = params.get('SubId');
-      if (id) {
-        this.productService.getProductsBySubCategoryId(+id).then(data => {
-          this.products = [...data]; 
-          this.cdr.detectChanges(); 
-          console.log(this.products)
-        });
-      }
-    });
-  }
+  this.route.paramMap.subscribe(params => {
+    const id = params.get('SubId');
+    if (id) {
+      this.subCategoryService.getCategoryByID(+id).subscribe(res => {
+        this.currentSubCategory = res.body;
+      });
+
+      this.productService.getProductsBySubCategoryId(+id).then(data => {
+        this.products = [...data];
+        this.cdr.detectChanges();
+      });
+    }
+  });
+}
 }

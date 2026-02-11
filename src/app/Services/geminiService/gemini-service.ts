@@ -1,22 +1,22 @@
-import { HttpClient, HttpErrorResponse, HttpParams, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.development';
 import { Observable, switchMap } from 'rxjs';
 import { geminiPromptModel } from '../../Models/gemini-prompt-model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class GeminiServise {
+export class GeminiService {
   http: HttpClient = inject(HttpClient)
-  BASIC_URL: string = `{environment.apiUrl}/Gemini`
+  BASIC_URL: string = `${environment.apiUrl}/Gemini`
 
   addNewProduct(productId: number, userRequest: string): Observable<HttpResponse<geminiPromptModel>> {
     let params = new HttpParams()
-      .set('productId', productId)
+      .set('productId', String(productId))
       .set('userRequest', userRequest)
 
-    return this.http.get<geminiPromptModel>(this.BASIC_URL + "getUserProduct", { params: params, observe: 'response' })
+    return this.http.get<geminiPromptModel>(`${this.BASIC_URL}/getUserProduct`, { params: params, observe: 'response' })
 
   }
 

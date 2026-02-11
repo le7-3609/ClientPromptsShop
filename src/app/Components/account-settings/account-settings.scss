@@ -58,11 +58,12 @@ $error-red: #ff0000;
         padding: 14px;
         font-size: 1.1rem;
         transition: all 0.3s ease;
-        &:hover {
-            background: $primary-purple;
-            transform: translateY(-0.5px);
-            box-shadow: 0 4px 12px $shadow-color;
-        }
+
+        &:disabled {
+        background: $primary-purple !important;
+        box-shadow: none;
+        cursor: not-allowed;
+      }
     }
 }
 
@@ -88,6 +89,11 @@ $error-red: #ff0000;
         &:hover {
             background-color: $accent-purple;
         }
+        &:disabled {
+        background: $primary-purple !important;
+        box-shadow: none;
+        cursor: not-allowed;
+      }
     } 
 }
 

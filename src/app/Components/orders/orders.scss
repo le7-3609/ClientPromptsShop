@@ -114,9 +114,24 @@ p {
     .underline {
       width: 60px;
       height: 4px;
-      background: linear-gradient(90deg, $primary-purple, #bd00cb);
-      margin: 5px auto;
-      border-radius: 2px;
+      background: $grad;
+      margin: 20px auto;
+      border-radius: 10px;
+      animation: moveLeftRight 3s ease-in-out infinite;
+    }
+
+    @keyframes moveLeftRight {
+      0% {
+        transform: translateX(-60px);
+      }
+
+      50% {
+        transform: translateX(60px);
+      }
+
+      100% {
+        transform: translateX(-60px);
+      }
     }
   }
 }

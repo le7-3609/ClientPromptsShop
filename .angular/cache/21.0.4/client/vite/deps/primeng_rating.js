@@ -11,13 +11,6 @@ import {
   StarIcon
 } from "./chunk-VWDISRDO.js";
 import {
-  NG_VALUE_ACCESSOR
-} from "./chunk-ZWVUCQV5.js";
-import {
-  Bind,
-  BindModule
-} from "./chunk-RRKVMRSH.js";
-import {
   PARENT_INSTANCE
 } from "./chunk-U7SKQ7FA.js";
 import {
@@ -28,10 +21,17 @@ import {
   SharedModule
 } from "./chunk-CXWQDPW7.js";
 import {
+  Bind,
+  BindModule
+} from "./chunk-RRKVMRSH.js";
+import {
   bt,
   s3 as s,
   vt
 } from "./chunk-YUNR4ATL.js";
+import {
+  NG_VALUE_ACCESSOR
+} from "./chunk-ZWVUCQV5.js";
 import {
   CommonModule,
   NgClass,

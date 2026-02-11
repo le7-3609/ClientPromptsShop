@@ -162,14 +162,27 @@ $text-main: #4a4a4a;
       font-weight: 500;
     }
   }
+  
+.underline {
+  width: 60px;
+  height: 4px;
+  background: $grad;
+  margin: 20px auto;
+  border-radius: 10px;
+    animation: moveLeftRight 3s ease-in-out infinite;
+}
 
-  .underline {
-    width: 60px;
-    height: 4px;
-    background: $grad;
-    margin: 20px auto;
-    border-radius: 10px;
+@keyframes moveLeftRight {
+  0% {
+    transform: translateX(-60px); 
   }
+  50% {
+    transform: translateX(60px);  
+  }
+  100% {
+    transform: translateX(-60px); 
+  }
+}
 
   .glass-panel {
     background: $grad-glass;
@@ -225,25 +238,32 @@ $text-main: #4a4a4a;
       &:hover {
         transform: translateY(-8px);
         background: white;
-
-        .icon-circle {
-          background: $grad;
-          color: white;
-        }
       }
-
-      .icon-circle {
-        width: 50px;
-        height: 50px;
-        background: white;
-        color: $primary-purple;
-        border-radius: 50%;
+.icon-box {
+        width: 60px;
+        height: 60px;
+        border-radius: 15px;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-bottom: 15px;
         font-size: 1.5rem;
-        box-shadow: 0 4px 10px $shadow-color;
+        margin: 0 auto 15px;
+
+        &.bg-violet {
+          background-color: #f5f3ff;
+          color: #7c3aed;
+        }
+
+        &.bg-fuchsia {
+          background-color: #fdf4ff;
+          color: #c026d3;
+        }
+
+        &.bg-plum  {
+          background-color: #fdf4ff;
+          color: #8E4585;
+        }
+
       }
 
       .step-badge {
@@ -254,6 +274,21 @@ $text-main: #4a4a4a;
         font-size: 0.8rem;
         font-weight: bold;
         margin-bottom: 15px;
+
+        &.bg-violet {
+          background-color: #f5f3ff;
+          color: #7c3aed;
+        }
+
+        &.bg-fuchsia {
+          background-color: #fdf4ff;
+          color: #c026d3;
+        }
+
+        &.bg-plum  {
+          background-color: #fdf4ff;
+          color: #8E4585;
+        }
       }
     }
   }
@@ -380,3 +415,4 @@ $text-main: #4a4a4a;
     color: $primary-purple !important;
   }
 }
+

@@ -14,7 +14,7 @@ $error-red: #ff0000;
 
     ::ng-deep {
         .p-tablist-active-bar {
-            background: $primary-purple !important;
+            background-color: $primary-purple !important;
             height: 3px !important;
         }
 
@@ -123,6 +123,11 @@ $error-red: #ff0000;
         &:hover {
             background-color: $accent-purple;
         }
+        &:disabled {
+        background: $primary-purple !important;
+        box-shadow: none;
+        cursor: not-allowed;
+      }
     }
 }
 
@@ -179,12 +184,16 @@ $error-red: #ff0000;
 ::ng-deep .p-button.p-button-outlined {
     border-color: $accent-purple !important;
     color: $primary-purple !important;
-
     &:hover {
         background: $accent-purple !important;
         border-color: $primary-purple !important;
         color: $primary-purple !important;
     }
+    &:disabled {
+        background: $primary-purple !important;
+        box-shadow: none;
+        cursor: not-allowed;
+      }
 }
 
 .divider-text {
