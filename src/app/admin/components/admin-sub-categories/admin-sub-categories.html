@@ -1,0 +1,126 @@
+<div class="admin-container p-4">
+  <div class="flex justify-content-between align-items-center mb-5">
+    <h1 class="page-title">Sub-Categories Management</h1>
+    <p-button label="Add Sub-Category" icon="pi pi-plus" (onClick)="openNew()" class="p-button-primary"></p-button>
+  </div>
+
+  <div class="p-card shadow-2 border-round-2xl overflow-hidden">
+    <div class="p-4 pb-0">
+      <input
+        type="text"
+        pInputText
+        [(ngModel)]="subCategorySearchTerm"
+        placeholder="Search by sub-category name"
+        class="w-full" />
+    </div>
+
+    <p-table 
+      [value]="filteredSubCategories" 
+      [loading]="loading"
+      [tableStyle]="{ 'min-width': '60rem' }">
+      
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Sub-Category</th>
+          <th>Main Category</th>
+          <th>Description</th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-subCategory>
+        <tr>
+          <td>
+            <div class="sub-category-cell flex align-items-center gap-3">
+              <img [src]="subCategory.imageUrl || 'assets/placeholder.png'" class="sub-category-thumb border-round shadow-1" />
+              <span class="font-medium sub-category-name">{{ subCategory.subCategoryName }}</span>
+            </div>
+          </td>
+          <td>{{ getMainCategoryName(subCategory.mainCategoryId) }}</td>
+          <td class="text-slate-600">{{ subCategory.categoryDescription | slice:0:50 }}{{ subCategory.categoryDescription?.length > 50 ? '...' : '' }}</td>
+          <td>
+            <div class="flex gap-2">
+              <p-button icon="pi pi-pencil" styleClass="p-button-text p-button-secondary" (onClick)="editSubCategory(subCategory)"></p-button>
+              <p-button icon="pi pi-trash" styleClass="p-button-text p-button-danger" (onClick)="deleteSubCategory(subCategory)"></p-button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="4" class="text-center p-4">No sub-categories found.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<p-dialog [(visible)]="subCategoryDialog" [style]="{width: '600px'}" header="Sub-Category Details" [modal]="true" styleClass="p-fluid sub-category-dialog">
+  <ng-template pTemplate="content">
+    @if (selectedSubCategory) {
+      <div class="field mb-4">
+        <label for="mainCategory" class="block font-medium mb-2">Main Category *</label>
+        <p-select 
+          id="mainCategory" 
+          [(ngModel)]="selectedSubCategory.mainCategoryId" 
+          [options]="mainCategories" 
+          optionLabel="mainCategoryName" 
+          optionValue="mainCategoryId"
+          placeholder="Select a main category"
+          [showClear]="true">
+        </p-select>
+        @if (submitted && !selectedSubCategory.mainCategoryId) {
+          <small class="p-error block">Main category is required.</small>
+        }
+      </div>
+
+      <div class="field mb-4">
+        <label for="name" class="block font-medium mb-2">Name *</label>
+        <input type="text" pInputText id="name" [(ngModel)]="selectedSubCategory.subCategoryName" required />
+        @if (submitted && !selectedSubCategory.subCategoryName) {
+          <small class="p-error block">Name is required.</small>
+        }
+      </div>
+
+      <div class="field mb-4">
+        <label for="description" class="block font-medium mb-2">Description</label>
+        <textarea id="description" pInputTextarea [(ngModel)]="selectedSubCategory.categoryDescription" rows="3"></textarea>
+      </div>
+
+      <div class="field mb-4">
+        <label for="imageUrl" class="block font-medium mb-2">Image URL</label>
+        <input type="text" pInputText id="imageUrl" [(ngModel)]="selectedSubCategory.imageUrl" />
+      </div>
+
+      <div class="field mb-4">
+        <label class="block font-medium mb-2">
+          <i class="pi pi-image"></i>
+          Upload Image
+        </label>
+        <input type="file" accept="image/*" (change)="onFileSelect($event)" class="file-input" #fileInput />
+        
+        @if (imagePreview) {
+          <div class="image-preview-container">
+            <img [src]="imagePreview" alt="Preview" class="image-preview" />
+            <button type="button" class="remove-image-btn" (click)="removeImage()">
+              <i class="pi pi-times"></i>
+            </button>
+          </div>
+        } @else {
+          <div class="upload-placeholder" (click)="fileInput.click()">
+            <i class="pi pi-cloud-upload"></i>
+            <p>Click to upload image</p>
+          </div>
+        }
+      </div>
+    }
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <p-button label="Cancel" icon="pi pi-times" styleClass="p-button-text" (onClick)="hideDialog()"></p-button>
+    <p-button label="Save" icon="pi pi-check" (onClick)="saveSubCategory()"></p-button>
+  </ng-template>
+</p-dialog>
+
+<p-toast></p-toast>

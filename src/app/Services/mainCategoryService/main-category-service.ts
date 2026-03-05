@@ -1,7 +1,7 @@
 import { Injectable, inject} from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { MainCategoryModel } from '../../Models/main-category-model';
+import { MainCategoryModel } from '../../models/main-category-model';
 import { environment } from '../../../environments/environment.development';
 
 @Injectable({
@@ -13,5 +13,9 @@ export class MainCategoryService {
   getMainCategory():Observable<HttpResponse<MainCategoryModel[]>>
   {
         return this.http.get<MainCategoryModel[]>(this.BASIC_URL,{observe:'response'})
+  }
+
+  getMainCategoryById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.BASIC_URL}/${id}`);
   }
 }

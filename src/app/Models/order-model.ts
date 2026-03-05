@@ -1,9 +1,11 @@
 export interface OrderItemModel {
     orderItemId: number;
-    productName: string;
+    productName: string | null;
     price: number;
-    platformName: string;
+    platformName: string | null;
     userDescription: string;
+    promptId: number | null;
+    prompt: string | null;
 }
 
 export interface OrderSummaryModel {
@@ -11,16 +13,16 @@ export interface OrderSummaryModel {
     orderDate?: string;
     orderSum: number;
     statusName: string;
-}
-
-export interface OrderDetailsModel extends OrderSummaryModel{
-    orderItemsCount: number;
-    userId: number;
-    reviewId: number;
     reviewImageUrl: string;
-    score: number;
     siteName: string;
     siteTypeName: string;
+    orderItemsCount: number;
+}
+
+export interface OrderDetailsModel extends OrderSummaryModel {
+    userId: number;
+    reviewId: number;
+    score: number;
     siteDescription: string;
     items: OrderItemModel[];
 }
@@ -32,6 +34,24 @@ export interface AddReviewModel {
     reviewImageUrl: string;
 }
 
-export interface OrderUIModel extends OrderDetailsModel {
-    isExpanded?: boolean;
+export interface UpdateOrderStatusModel {
+    orderId: number;
+    statusName: string;
+    userId?: number;
+    siteName?: string;
+    siteTypeName?: string;
+    siteDescription?: string;
+    orderSum?: number;
+    orderDate?: string;
+    reviewId?: number;
+    score?: number;
+    reviewImageUrl?: string;
+}
+
+export interface OrderUIModel extends OrderSummaryModel {
+    isExpanded: boolean;
+    itemsLoaded: boolean;
+    items: OrderItemModel[];
+    reviewId?: number;
+    score?: number;
 }

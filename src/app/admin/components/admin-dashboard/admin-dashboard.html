@@ -1,0 +1,126 @@
+<div class="dashboard-container">
+  @if (loading) {
+    <div class="loading-state">
+      <div class="loading-spinner"></div>
+    </div>
+  } @else {
+    <div class="dashboard-inner">
+      <div class="page-header">
+        <div class="header-content">
+          <div class="header-left">
+            <h1 class="page-title">Dashboard</h1>
+            @if (user) {
+              <p class="page-subtitle">Welcome back, {{ user.firstName || user.email }}</p>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        @for (stat of stats(); track stat.title; let idx = $index) {
+          <div [routerLink]="stat.link" class="stat-card" [style.--delay]="(idx * 50) + 'ms'">
+            <div class="card-top">
+              <div class="card-icon" [ngClass]="stat.color">
+                <i [class]="stat.icon"></i>
+              </div>
+              <div class="trend-indicator">
+                <i class="pi pi-arrow-up-right"></i>
+              </div>
+            </div>
+            <div class="card-content">
+              <span class="stat-label">{{ stat.title }}</span>
+              <h3 class="stat-value">{{ stat.value }}</h3>
+              @if (stat.subtitle) {
+                <p class="stat-subtitle">{{ stat.subtitle }}</p>
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <i class="pi pi-chart-line"></i>
+              Revenue Trend (Last 7 Days)
+            </h2>
+          </div>
+          <div class="chart-container">
+            <p-chart type="line" [data]="revenueChartData" [options]="revenueChartOptions"></p-chart>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <i class="pi pi-calendar"></i>
+              Daily Orders (Last 7 Days)
+            </h2>
+          </div>
+          <div class="chart-container">
+            <p-chart type="bar" [data]="ordersChartData" [options]="ordersChartOptions"></p-chart>
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom-grid">
+        <div class="recent-orders-card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <i class="pi pi-shopping-cart"></i>
+              Recent Orders
+            </h2>
+            <a routerLink="/admin/orders" class="view-all-link">
+              View All <i class="pi pi-arrow-right"></i>
+            </a>
+          </div>
+
+          <div class="orders-list">
+            @if (recentOrders().length === 0) {
+              <div class="empty-msg">No orders yet.</div>
+            } @else {
+              @for (order of recentOrders(); track order.orderId) {
+                <div class="order-item">
+                  <div class="order-info">
+                    <span class="order-id">#{{ order.orderId.toString().slice(-8) }}</span>
+                    <span class="order-email">{{ order.userEmail || 'N/A' }}</span>
+                  </div>
+                  <div class="order-meta">
+                    <span class="order-amount">{{ formatCurrency(order.orderSum || 0) }}</span>
+                    <span class="status-badge" [ngClass]="order.statusName?.toLowerCase()">
+                      {{ order.statusName || 'Unknown' }}
+                    </span>
+                  </div>
+                </div>
+              }
+            }
+          </div>
+        </div>
+
+        <div class="top-products-card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <i class="pi pi-star"></i>
+              Top Products
+            </h2>
+          </div>
+          <div class="products-list">
+            @if (topProducts().length === 0) {
+              <div class="empty-msg">No product data yet.</div>
+            } @else {
+              @for (product of topProducts(); track product.name) {
+                <div class="product-item">
+                  <div class="product-info">
+                    <span class="product-name">{{ product.name }}</span>
+                    <span class="product-meta">{{ product.quantity }} sold</span>
+                  </div>
+                  <div class="product-revenue">{{ formatCurrency(product.revenue || 0) }}</div>
+                </div>
+              }
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

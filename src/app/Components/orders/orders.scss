@@ -7,7 +7,6 @@ $accent-purple: #F6E8FE;
 $shadow-color: rgba(157, 88, 245, 0.2);
 $grad: linear-gradient(135deg, $primary-purple 0%, #bd00cb 100%);
 
-/* עיצוב הדיאלוג */
 ::ng-deep .custom-dialog {
   .p-dialog-header {
     background: $light-purple;
@@ -72,7 +71,6 @@ $grad: linear-gradient(135deg, $primary-purple 0%, #bd00cb 100%);
     }
   }
 
-  /* כפתור שליחה סגול */
   .submit-btn {
     width: 100%;
     background: $primary-purple !important;
@@ -94,6 +92,7 @@ p {
 .orders-wrapper {
   padding: 40px 20px;
   background-color: $bg-color;
+  background-image: radial-gradient(circle at 10% 20%, rgba(129, 57, 235, 0.05) 0%, transparent 40%);
   min-height: 100vh;
 
   .orders-header {
@@ -113,24 +112,30 @@ p {
 
     .underline {
       width: 60px;
-      height: 4px;
+      height: 5px;
       background: $grad;
       margin: 20px auto;
       border-radius: 10px;
-      animation: moveLeftRight 3s ease-in-out infinite;
+      box-shadow: 0 2px 10px $shadow-color;
+      animation: elasticMove 3.5s ease-in-out infinite alternate;
     }
 
-    @keyframes moveLeftRight {
+    @keyframes elasticMove {
       0% {
-        transform: translateX(-60px);
+        transform: translateX(60px);
+        width: 40px;
+        opacity: 0.7;
       }
 
       50% {
-        transform: translateX(60px);
+        width: 100px;
+        opacity: 1;
       }
 
       100% {
         transform: translateX(-60px);
+        width: 40px;
+        opacity: 0.7;
       }
     }
   }
@@ -288,12 +293,27 @@ p {
 
         li {
           display: flex;
-          gap: 10px;
-          padding: 6px 0;
+          flex-wrap: wrap;
+          gap: 8px;
+          padding: 8px 0;
           border-bottom: 1px dashed #dcdde1;
+          align-items: flex-start;
 
           &:last-child {
             border-bottom: none;
+          }
+
+          &.ai-item {
+            background: rgba(129, 57, 235, 0.03);
+            border-radius: 8px;
+            padding: 8px 10px;
+          }
+
+          .item-main-line {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
           }
 
           .item-name {
@@ -310,6 +330,55 @@ p {
             color: #95a5a6;
             font-size: 0.8rem;
           }
+
+          .order-ai-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            background: linear-gradient(135deg, rgba(129, 57, 235, 0.1) 0%, rgba(189, 0, 203, 0.1) 100%);
+            border: 1px solid rgba(129, 57, 235, 0.3);
+            color: #8139eb;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.15rem 0.5rem;
+            border-radius: 20px;
+            white-space: nowrap;
+          }
+
+          .prompt-toggle-row {
+            width: 100%;
+            margin-top: 4px;
+
+            .prompt-toggle-btn {
+              background: none;
+              border: none;
+              cursor: pointer;
+              color: #8139eb;
+              font-size: 0.8rem;
+              font-weight: 600;
+              display: flex;
+              align-items: center;
+              gap: 0.3rem;
+              padding: 0;
+              transition: opacity 0.2s;
+
+              &:hover { opacity: 0.75; }
+            }
+
+            .prompt-text-block {
+              margin-top: 8px;
+              padding: 0.75rem 1rem;
+              background: rgba(255, 255, 255, 0.7);
+              border: 1px solid rgba(129, 57, 235, 0.2);
+              border-radius: 10px;
+              font-size: 0.85rem;
+              color: #444;
+              line-height: 1.5;
+              white-space: pre-wrap;
+              max-height: 200px;
+              overflow-y: auto;
+            }
+          }
         }
       }
     }
@@ -325,5 +394,36 @@ p {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+// ── Download dialog ──────────────────────────────
+.download-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-top: 10px;
+  align-items: center;
+
+  .download-label {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #444;
+    text-align: center;
+  }
+
+  .format-description {
+    text-align: center;
+    color: #636e72;
+    font-size: 0.9rem;
+
+    i {
+      color: $primary-purple;
+      margin-right: 4px;
+    }
+  }
+
+  .form-actions {
+    width: 100%;
   }
 }

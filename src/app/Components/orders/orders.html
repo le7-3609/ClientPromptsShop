@@ -34,30 +34,31 @@
                     <div class="meta-row">
                         <span><i class="pi pi-calendar"></i> {{ order.orderDate }}</span>
                         <span><i class="pi pi-tag"></i> {{ order.statusName }}</span>
-                        <span><i class="pi pi-box"></i> {{ order.orderItemsCount }} items</span>
+                        <span><i class="pi pi-box"></i> {{ order.orderItemsCount || order.items.length || 0 }} items</span>
                     </div>
 
                     <div class="order-actions">
                         <p-button label="View Products" 
                                   icon="pi pi-eye" 
                                   [outlined]="true"
-                                  (click)="order.isExpanded = !order.isExpanded" 
+                                  (click)="toggleOrderDetails(order)" 
                                   styleClass="p-button-sm"
                                   severity="help">
                         </p-button>
 
-                        @if (order.reviewId === 0) {
-                            <p-button label="Add Review" 
-                                      icon="pi pi-star"
-                                      (click)="openReview(order)" 
-                                      styleClass="p-button-sm" 
-                                      severity="help">
-                            </p-button>
-                        }
+                        <p-button [label]="order.reviewId ? 'Edit Review' : 'Add Review'" 
+                                  icon="pi pi-star"
+                                  (click)="openReview(order)" 
+                                  styleClass="p-button-sm" 
+                                  severity="help">
+                        </p-button>
 
                         <p-button label="Download Prompt" 
                                   icon="pi pi-download" 
-                                  styleClass="p-button-sm">
+                                  [outlined]="true"
+                                  (click)="openDownloadDialog(order)" 
+                                  styleClass="p-button-sm"
+                                  severity="help">
                         </p-button>
                     </div>
 
@@ -65,11 +66,33 @@
                         <div class="items-summary">
                             <div class="summary-title">Order Breakdown:</div>
                             <ul class="items-list">
-                                @for (item of order.items; track item.productName) {
-                                    <li>
-                                        <span class="item-name">{{ item.productName }}</span>
-                                        <span class="item-price">${{ item.price }}</span>
-                                        <span class="item-platform">({{ item.platformName }})</span>
+                                @for (item of order.items; track item.orderItemId) {
+                                    <li class="order-item-li" [class.ai-item]="item.promptId">
+                                        <div class="item-main-line">
+                                            <span class="item-name">{{ item.productName || ('Item #' + item.orderItemId) }}</span>
+                                            @if (item.promptId) {
+                                                <span class="order-ai-badge">
+                                                    <i class="pi pi-sparkles"></i> AI Design
+                                                </span>
+                                            }
+                                        </div>
+                                        @if (item.platformName) {
+                                            <span class="item-platform">({{ item.platformName }})</span>
+                                        }
+                                        @if (item.price) {
+                                            <span class="item-price">${{ item.price }}</span>
+                                        }
+                                        @if (item.promptId && item.prompt) {
+                                            <div class="prompt-toggle-row">
+                                                <button class="prompt-toggle-btn" (click)="togglePromptExpand(item.orderItemId)">
+                                                    <i class="pi" [ngClass]="isPromptExpanded(item.orderItemId) ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
+                                                    {{ isPromptExpanded(item.orderItemId) ? 'Hide Prompt' : 'View AI Prompt' }}
+                                                </button>
+                                                @if (isPromptExpanded(item.orderItemId)) {
+                                                    <div class="prompt-text-block">{{ item.prompt }}</div>
+                                                }
+                                            </div>
+                                        }
                                     </li>
                                 } @empty {
                                     <li>No items found for this order.</li>
@@ -88,7 +111,7 @@
         }
     </div>
 
-    <p-dialog header="Add Review" [(visible)]="displayReviewDialog" [modal]="true" 
+    <p-dialog [header]="isEditingReview ? 'Edit Review' : 'Add Review'" [(visible)]="displayReviewDialog" [modal]="true" 
               [style]="{width: '450px'}" styleClass="custom-dialog">
         <div class="review-form">
             <div class="field">
@@ -107,11 +130,45 @@
 
             <div class="field">
                 <label>Site Image</label>
-                <p-fileUpload mode="basic" chooseLabel="Choose Image" (onSelect)="onFileSelect($event)"></p-fileUpload>
+                <p-fileUpload mode="basic" chooseLabel="Choose Image" accept="image/*" (onSelect)="onFileSelect($event)"></p-fileUpload>
+                @if (newReview.image) {
+                    <img [src]="newReview.image" alt="Preview" style="margin-top: 8px; max-width: 100%; max-height: 150px; border-radius: 8px; object-fit: cover;" />
+                }
             </div>
 
             <div class="form-actions">
-                <p-button label="Submit Review" (click)="saveReview()" styleClass="submit-btn"></p-button>
+                <p-button [label]="isEditingReview ? 'Update Review' : 'Submit Review'" (click)="saveReview()" styleClass="submit-btn"></p-button>
+            </div>
+        </div>
+    </p-dialog>
+
+    <!-- Download Format Dialog -->
+    <p-dialog header="Download Prompt" [(visible)]="displayDownloadDialog" [modal]="true"
+              [style]="{width: '420px'}" styleClass="custom-dialog">
+        <div class="download-form">
+            <p class="download-label">Choose download format:</p>
+
+            <p-selectButton [options]="formatOptions" [(ngModel)]="selectedFormat"
+                            optionLabel="label" optionValue="value">
+                <ng-template #item let-item>
+                    <i [class]="item.icon" style="margin-right: 6px;"></i>
+                    {{ item.label }}
+                </ng-template>
+            </p-selectButton>
+
+            <div class="format-description">
+                @if (selectedFormat === 'pdf') {
+                    <p><i class="pi pi-file-pdf"></i> <strong>PDF</strong> — Print-ready document, looks the same on every device.</p>
+                } @else {
+                    <p><i class="pi pi-code"></i> <strong>HTML</strong> — Lightweight styled file, opens in any browser.</p>
+                }
+            </div>
+
+            <div class="form-actions">
+                <p-button label="Download" icon="pi pi-download"
+                          (click)="confirmDownload()" [loading]="isDownloading"
+                          styleClass="submit-btn" severity="help">
+                </p-button>
             </div>
         </div>
     </p-dialog>

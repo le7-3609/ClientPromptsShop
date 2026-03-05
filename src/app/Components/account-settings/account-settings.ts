@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 import { DividerModule } from 'primeng/divider';
 import { MessageService } from 'primeng/api';
 import { ProgressBar } from "primeng/progressbar";
-import { UserService } from '../../Services/UserService/user-service';
+import { UserService } from '../../services/userService/user-service';
 import { ToastModule } from 'primeng/toast';
 
 @Component({
@@ -71,7 +71,7 @@ export class AccountSettings {
       firstName: new FormControl('', [Validators.required]),
       lastName: new FormControl('', [Validators.required]),
       phone: new FormControl('', [Validators.required, Validators.pattern('^[0-9]{10}$')]),
-      password: new FormControl('', [Validators.minLength(6)]) // סיסמה אינה חובה בעדכון אלא אם רוצים לשנות
+      password: new FormControl('', [Validators.minLength(6)]) 
     });
 
     if (user) {

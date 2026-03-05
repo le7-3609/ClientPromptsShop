@@ -1,0 +1,59 @@
+@if (isVisible) {
+  <div class="drawer-overlay" (click)="closeSidebar()"></div>
+}
+
+<aside class="pop-cart" [class.open]="isVisible">
+  <header class="drawer-header">
+    <div>
+      <h3>Shopping Cart</h3>
+      <small>{{ itemCount }} item{{ itemCount === 1 ? '' : 's' }}</small>
+    </div>
+    <button type="button" class="icon-btn" (click)="closeSidebar()">
+      <i class="pi pi-times"></i>
+    </button>
+  </header>
+
+  <section class="drawer-body">
+    @if (basicSite) {
+      <div class="item-row basic-site-mini">
+        <div class="item-main">
+          <strong>{{ basicSite.siteName }}</strong>
+          <span>{{ basicSite.siteTypeName }}</span>
+          <span class="item-price">{{ basicSite.price * currencyRate | currency:currencyCode }}</span>
+        </div>
+        <button type="button" class="icon-btn" (click)="editBasicSite()"><i class="pi pi-pencil"></i></button>
+      </div>
+    }
+
+    @for (item of cartItems; track item.cartItemId) {
+      <div class="item-row">
+        <img class="item-thumb" [src]="getProductImage(item)" [alt]="item.subCategoryName || item.productName" />
+        <div class="item-main">
+          <strong>{{ item.productName }}</strong>
+          <span>{{ item.platformName || (isPromptRef(item.userDescription) ? 'AI Design' : 'Platform not selected') }}</span>
+          <span class="item-price">{{ item.price * currencyRate | currency:currencyCode }}</span>
+        </div>
+        <button type="button" class="icon-btn danger" (click)="removeItem(item.cartItemId)">
+          <i class="pi pi-times"></i>
+        </button>
+      </div>
+    }
+
+    @if (itemCount === 0) {
+      <div class="empty-cart">
+        <i class="pi pi-shopping-cart gradient-icon"></i>
+        <p>Your cart is empty</p>
+      </div>
+    }
+  </section>
+
+  <footer class="drawer-footer">
+    <div class="total-row">
+      <span>Total</span>
+      <strong>{{ totalPrice * currencyRate | currency:currencyCode }}</strong>
+    </div>
+
+    <p-button label="View Full Cart" icon="pi pi-shopping-cart" [routerLink]="['/cart']" (onClick)="closeSidebar()"></p-button>
+    <p-button label="Continue Shopping" icon="pi pi-arrow-left" [outlined]="true" (onClick)="closeSidebar()"></p-button>
+  </footer>
+</aside>

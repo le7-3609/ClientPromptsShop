@@ -9,6 +9,7 @@ $primary-purple: #8139eb;
   justify-content: center;
   align-items: center;
   background-color: $bg-color; 
+  background-image: radial-gradient(circle at 10% 20%, rgba(129, 57, 235, 0.05) 0%, transparent 40%);
   margin: 0;
 
   .content-container {

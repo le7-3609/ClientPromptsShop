@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { LoginModel } from '../../Models/login-model';
-import { UserProfileModel } from '../../Models/user-model';
+import { LoginModel } from '../../models/login-model';
+import { UserProfileModel } from '../../models/user-model';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { environment } from '../../../environments/environment.development';
+import { Injector, inject } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
   private BASIC_URL = `${environment.apiUrl}/Users`;
+  private injector = inject(Injector);
 
   private currentUserSubject = new BehaviorSubject<UserProfileModel | null>(null);
   public currentUser = toSignal(this.currentUserSubject.asObservable(), { initialValue: null });
@@ -32,14 +34,22 @@ export class UserService {
           localStorage.setItem('user_data', JSON.stringify(user));
           localStorage.setItem('last_email', user.email);
           this.currentUserSubject.next(user);
-          this.syncCartToDB(); // פונקציה שנממש בהמשך לסנכרון הסל
+          this.syncCartToDB(user.userId); 
         }
       })
     );
   }
 
   register(registerForm: any): Observable<UserProfileModel> {
-    return this.http.post<UserProfileModel>(`${this.BASIC_URL}/register`, registerForm);
+    return this.http.post<UserProfileModel>(`${this.BASIC_URL}/register`, registerForm).pipe(
+      tap(user => {
+        if (user) {
+          localStorage.setItem('user_data', JSON.stringify(user));
+          this.currentUserSubject.next(user);
+          this.syncCartToDB(user.userId);
+        }
+      })
+    );
   }
 
   updateUser(id: number, userData: any): Observable<any> {
@@ -59,6 +69,14 @@ export class UserService {
     return this.currentUserSubject.value;
   }
 
+  getUsers(): Observable<any[]> {
+    return this.http.get<any[]>(this.BASIC_URL);
+  }
+
+  getAdminUsers(): Observable<any[]> {
+    return this.http.get<any[]>(this.BASIC_URL);
+  }
+
   getSavedEmail(): string {
     return localStorage.getItem('last_email') || '';
   }
@@ -68,6 +86,19 @@ export class UserService {
     this.currentUserSubject.next(null);
   }
 
+  socialLogin(dto: { token: string; provider: string }): Observable<UserProfileModel> {
+    return this.http.post<UserProfileModel>(`${this.BASIC_URL}/social-login`, dto).pipe(
+      tap(user => {
+        if (user) {
+          localStorage.setItem('user_data', JSON.stringify(user));
+          localStorage.setItem('last_email', user.email);
+          this.currentUserSubject.next(user);
+          this.syncCartToDB(user.userId);
+        }
+      })
+    );
+  }
+
   checkStrength(pwd: string): Observable<any> {
     const url = `${environment.apiUrl}/PasswordValidity/passwordStrength`;
     return this.http.post<any>(url, JSON.stringify(pwd), {
@@ -75,5 +106,17 @@ export class UserService {
     });
   }
 
-  syncCartToDB() { }
+  syncCartToDB(userId: number) {
+    import('../cartService/cart-service').then(({ CartService }) => {
+      const cartService = this.injector.get(CartService);
+      cartService.syncCartToServer(userId).catch(error => {
+        console.error('Cart sync failed after login/register, but auth was successful:', error);
+      });
+    });
+  }
+
+  isAdmin(): boolean {
+    const user = this.currentUser();
+    return user ? user.email.toLocaleLowerCase() === 'clicksite@gmail.com' : false;
+  }
 }

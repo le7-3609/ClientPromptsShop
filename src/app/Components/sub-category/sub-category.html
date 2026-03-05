@@ -1,54 +1,136 @@
 <p-toast></p-toast>
-
-<div class="sub-category-header" *ngIf="currentSubCategory">
-    <div class="flex-header-info">
-        <ng-container *ngIf="currentSubCategory.imageUrl; else noImage">
-            <img [src]="currentSubCategory.imageUrl" 
-                 class="sub-cat-img" 
-                 (error)="currentSubCategory.imageUrl = ''"
-                 alt="Subcategory Image">
-        </ng-container>
-
-        <ng-template #noImage>
-            <div class="placeholder-gradient">
-                <i class="pi pi-sparkles sparkles-icon"></i>
+<div class="container">
+    <div class="sub-category-wrapper">
+        @if (currentSubCategory) {
+        <header class="category-hero" [class.reset]="resetActive">
+            <div class="image-container">
+                @if (currentSubCategory.imageUrl) {
+                <img [src]="currentSubCategory.imageUrl" class="hero-img" alt="Subcategory" />
+                } @else {
+                <div class="placeholder-icon">
+                    <i class="pi pi-sparkles"></i>
+                </div>
+                }
             </div>
-        </ng-template>
 
-        <div class="text-info">
-            <h1>{{ currentSubCategory.subCategoryName }}</h1>
-            <p>{{ currentSubCategory.subCategoryDescription }}</p>
+            <div class="hero-text">
+                <div class="title-row">
+                    <h1>{{ currentSubCategory.subCategoryName }}</h1>
+                    @if (chosenCount > 0 && !isEmpty) {
+                    <button pButton type="button" icon="pi pi-refresh" class="p-button-text p-button-sm reset-btn"
+                        (click)="resetSelection()">
+                        clean
+                    </button>
+                    }
+                </div>
+                <p>{{ currentSubCategory.categoryDescription }}</p>
+            </div>
+        </header>
+        }
+
+        @if (!isEmpty) {
+        <!-- show puzzle icon/banner when an AI prompt exists -->
+        @if (pendingGeminiPrompt && emptyProductId) {
+        <div class="puzzle-banner">
+            <i class="pi pi-puzzle"></i>
+            <span>Your custom AI prompt is ready – it will be added along with any products.</span>
         </div>
-    </div>
-</div>
+        }
 
-<p-dataView #dv [value]="products" layout="list">
-    <ng-template pTemplate="list" let-items>
-        <div class="list-layout">
-            @for (item of items; track item.productId) {
-                <div class="product-selection-row" [class.selected]="selectedProduct === item">
-                    <p-radiobutton name="productGroup" 
-                                   [value]="item" 
-                                   [(ngModel)]="selectedProduct">
-                    </p-radiobutton>
+        <div class="content-area">
+            <p-dataview [value]="filteredProducts" layout="list" styleClass="products-view">
+                <ng-template #list let-items>
+                    <div class="product-list-card">
+                        @for (item of items; track item.productId) {
+                        <div class="product-row" [class.active]="isChosen(item)" (click)="toggleChosen(item)">
+                            <div class="row-left">
+                                <div class="selection-icon" *ngIf="isChosen(item)">
+                                    <i class="pi pi-check-circle"></i>
+                                </div>
+                                <div class="product-info">
+                                    <span class="product-name">{{ item.productName }}</span>
+                                    <span class="product-tag">Select to include in this order</span>
+                                </div>
+                            </div>
 
-                    <div class="product-details">
-                        <span class="name">{{ item.productName }}</span>
+                            <div class="product-price">
+                                {{ item.price * currencyRate | currency:currencyCode }}
+                            </div>
+                        </div>
+                        } @empty {
+                        <div class="empty-products">No products match your filters.</div>
+                        }
                     </div>
-                    
-                    <div class="price-section">
-                        <span class="price">{{ item.price }} ₪</span>
+                </ng-template>
+            </p-dataview>
+
+            <aside class="sidebar">
+                <div class="sticky-filter-bar">
+                    <div class="filter-item">
+                        <span class="filter-label">Price Range</span>
+                        <p-slider [(ngModel)]="selectedPriceRange" [range]="true" [min]="priceBounds[0]"
+                            [max]="priceBounds[1]"></p-slider>
+                        <small>{{ selectedPriceRange[0] * currencyRate | currency:currencyCode }} - {{
+                            selectedPriceRange[1] * currencyRate | currency:currencyCode }}</small>
+                    </div>
+
+                    <div class="filter-item compact">
+                        <span class="filter-label">Sort</span>
+                        <p-select [options]="sortOptions" [(ngModel)]="sortValue" optionLabel="label"
+                            optionValue="value" placeholder="Sort by">
+                        </p-select>
+                    </div>
+
+                    <div class="filter-item">
+                        <span class="filter-label">Search</span>
+                        <p-iconfield iconPosition="left">
+                            <p-inputicon styleClass="pi pi-search"></p-inputicon>
+                            <input pInputText type="text" [(ngModel)]="searchTerm" placeholder="Search products..." />
+                        </p-iconfield>
                     </div>
                 </div>
-            }
-        </div>
-    </ng-template>
-</p-dataView>
 
-<div class="button-container">
-    <p-button label="Add to Cart" 
-              icon="pi pi-shopping-cart"
-              [disabled]="!selectedProduct" 
-              (click)="addToCart()">
-    </p-button>
+                <div *ngIf="chosenCount > 0" class="platform-required-bar">
+                    <div class="platform-title">
+                        <i class="pi pi-cog"></i>
+                        <span>Platform is required before adding selected products</span>
+                    </div>
+                    <p-select [(ngModel)]="selectedPlatform" [options]="platforms" optionLabel="label"
+                        placeholder="Select Platform">
+                    </p-select>
+                </div>
+
+                <footer *ngIf="chosenCount > 0" class="action-footer">
+                    <span class="selection-count">{{ chosenCount }} selected</span>
+                    <p-button label="Add to Shopping Cart" icon="pi pi-shopping-cart" styleClass="custom-cart-btn"
+                        [disabled]="(!chosenCount && !(pendingGeminiPrompt && emptyProductId)) || !selectedPlatform"
+                        (click)="addToCart()" [style.opacity]="canShowAddButton ? 1 : 0"
+                        [style.pointer-events]="canShowAddButton ? 'auto' : 'none'">
+                    </p-button>
+                </footer>
+            </aside>
+        </div>
+
+        @if (currentSubId && emptyProductId) {
+        <div class="ai-prompt-replacement-note">
+            <i class="pi pi-sparkles"></i>
+            <span>The "Empty" product is handled as a prompt flow below.</span>
+        </div>
+        <app-empty-product [id]="currentSubId" [priceInput]="emptyProductPrice" [promptConsumed]="geminiPromptConsumed"
+            [reset]="emptyProductResetTick" (geminiPrompt)="handleGeminiPrompt($event)">
+        </app-empty-product>
+        }
+
+        <div class="paginator-wrapper mt-4">
+            <p-paginator (onPageChange)="onPageChange($event)" [first]="0" [rows]="rows" [totalRecords]="totalRecords"
+                [rowsPerPageOptions]="[10, 20, 50]">
+            </p-paginator>
+        </div>
+
+        } @else {
+        @if (currentSubId) {
+        <app-empty-category [categoryId]="currentSubId"></app-empty-category>
+        }
+        }
+    </div>
 </div>

@@ -1,0 +1,38 @@
+<nav class="admin-nav">
+  <div class="nav-section left" routerLink="/">
+    <div class="brand-container">
+      <img src="icon1.png" alt="icon" class="brand-logo-img">
+      <span class="brand-title">Click-Site</span>
+      <span class="admin-tag">Admin</span>
+    </div>
+  </div>
+
+  <div class="nav-section center">
+    <a routerLink="dashboard" routerLinkActive="active" class="nav-item"><i class="pi pi-chart-line"></i> Dashboard</a>
+    <a routerLink="site-types" routerLinkActive="active" class="nav-item"><i class="pi pi-globe"></i> Site Types</a>
+    <a routerLink="sub-categories" routerLinkActive="active" class="nav-item"><i class="pi pi-folder"></i> Sub Categories</a>
+    <a routerLink="main-categories" routerLinkActive="active" class="nav-item"><i class="pi pi-folder-open"></i> Main Categories</a>
+    <a routerLink="products" routerLinkActive="active" class="nav-item"><i class="pi pi-box"></i> Products</a>
+    <a routerLink="orders" routerLinkActive="active" class="nav-item"><i class="pi pi-shopping-cart"></i> Orders</a>
+    <a routerLink="users" routerLinkActive="active" class="nav-item"><i class="pi pi-users"></i> Users</a>
+  </div>
+
+  <div class="nav-section right">
+    <a routerLink="/" class="view-store-link">
+      <i class="pi pi-external-link"></i> 
+      <span>View Store</span>
+    </a>
+    <button class="logout-btn" (click)="onLogout($event)" title="Logout">
+      <i class="pi pi-sign-out"></i>
+      <span>Logout</span>
+    </button>
+  </div>
+
+  <button class="mobile-menu-btn" (click)="toggleMobileMenu()">
+    <i class="pi" [ngClass]="mobileMenuOpen ? 'pi-times' : 'pi-bars'"></i>
+  </button>
+</nav>
+
+
+<p-toast></p-toast>
+<p-confirmDialog key="logoutConfirm"></p-confirmDialog>

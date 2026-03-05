@@ -4,5 +4,5 @@ export class SubCategoryModel{
     mainCategoryId!:Number;
     subCategoryName!:string;
     imageUrl?: string | null;
-    subCategoryDescription!:string;
+    categoryDescription!:string;
 }

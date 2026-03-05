@@ -3,23 +3,34 @@ $primary-purple: #8139eb;
 $accent-purple: #F6E8FE;
 $shadow-color: #9d58f51a;
 $error-red: #ff0000;
+
 .account-settings-container {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     background-color: $bg-color;
+    background-image: radial-gradient(circle at 10% 20%, rgba(129, 57, 235, 0.05) 0%, transparent 40%),
+                      radial-gradient(circle at 90% 80%, rgba(189, 0, 203, 0.03) 0%, transparent 40%);
     padding: 20px;
+    
     ::ng-deep .p-card {
         width: 100%;
         max-width: 480px;
-        border-radius: 12px;
-        box-shadow: 0 8px 30px $shadow-color;
+        border-radius: 16px;
+        box-shadow: 0 10px 40px $shadow-color;
         border: 1px solid $primary-purple;
         background-color: white;
+        
         .p-card-title {
-            font-weight: 600;
-            font-size: 1.8rem;
+            font-weight: 700;
+            font-size: 1.9rem;
+            color: $primary-purple;
+        }
+        
+        .p-card-subtitle {
+            color: #666;
+            font-size: 0.95rem;
         }
     }
 }
@@ -59,11 +70,17 @@ $error-red: #ff0000;
         font-size: 1.1rem;
         transition: all 0.3s ease;
 
+        &:hover:not(:disabled) {
+            background: linear-gradient(135deg, #6f2bc9 0%, #a000b0 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px $shadow-color;
+        }
+
         &:disabled {
-        background: $primary-purple !important;
-        box-shadow: none;
-        cursor: not-allowed;
-      }
+            background: #d4c5e8 !important;
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
     }
 }
 
@@ -85,15 +102,10 @@ $error-red: #ff0000;
         border-radius: 10px;
     }
     ::ng-deep .p-button {
-            background-color: white;
+        background-color: white;
         &:hover {
             background-color: $accent-purple;
         }
-        &:disabled {
-        background: $primary-purple !important;
-        box-shadow: none;
-        cursor: not-allowed;
-      }
     } 
 }
 

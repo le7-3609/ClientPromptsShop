@@ -9,8 +9,13 @@ $grad-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(249, 245
     top: 0;
     z-index: 1000;
     padding: 4px 4px 0 4px; 
-    background: transparent !important; 
+    background:
+    radial-gradient(circle at 10% 10%, rgba(147, 51, 234, 0.2), transparent 35%),
+    radial-gradient(circle at 90% 20%, rgba(217, 70, 239, 0.16), transparent 35%),
+    radial-gradient(circle at 20% 90%, rgba(126, 34, 206, 0.14), transparent 30%),
+    #f5f3ff;
     box-shadow: none !important;
+    background-image: radial-gradient(circle at 10% 20%, rgba(183, 0, 255, 0.05) 0%, transparent 40%);
 }
 
 :host ::v-deep .p-menubar {
@@ -71,7 +76,40 @@ $grad-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(249, 245
         border: 2px solid white;
     }
 }
+:host ::v-deep .custom-profile-menu.p-menu {
+    width: 300px !important;
+    border-radius: 12px;
+    padding: 0; 
+    overflow: hidden;
 
+    .p-menuitem-link {
+        &:hover {
+            background-color: #F6E8FE !important;
+            
+            .p-menuitem-text, .p-menuitem-icon {
+                color: #8139eb !important; 
+            }
+        }
+        
+        .p-menuitem-icon {
+            color: #6b7280;
+        }
+        
+        .p-menuitem-text {
+            font-weight: 500;
+        }
+    }
+
+    .p-menuitem-separator {
+        border-top: 1px solid #f3f4f6;
+        margin: 0;
+    }
+}
+
+.profile-header {
+    background-color: #ffffff;
+    border-bottom: 1px solid #f0f0f0;
+}
 
 
 .cart-trigger {
@@ -138,4 +176,46 @@ body ::v-deep .custom-profile-menu.p-menu {
 a {
     text-decoration: none !important;
     color: inherit !important;
+}
+
+::ng-deep .cart-button {
+    .p-button {
+        background: transparent !important;
+        border: none !important;
+        color: $primary-purple !important;
+        transition: all 0.3s ease;
+
+        &:hover {
+            background: rgba($primary-purple, 0.1) !important;
+            transform: scale(1.1);
+        }
+
+        .p-badge {
+            background: $grad !important;
+            min-width: 1.2rem;
+            height: 1.2rem;
+            line-height: 1.2rem;
+        }
+    }
+}
+
+.currency-select-wrap {
+    min-width: 150px;
+
+    ::ng-deep .p-select {
+        border-radius: 10px;
+        border: 1px solid rgba(129, 57, 235, 0.3);
+        background: rgba(255, 255, 255, 0.85);
+    }
+}
+
+.currency-option {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    small {
+        color: #666;
+        font-size: 0.72rem;
+    }
 }

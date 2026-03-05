@@ -1,0 +1,98 @@
+<div class="admin-container p-4">
+  @if (loading) {
+    <div class="flex justify-content-center align-items-center" style="min-height: 400px;">
+      <i class="pi pi-spin pi-spinner text-6xl text-violet-600"></i>
+    </div>
+  } @else {
+    <div class="flex justify-content-between align-items-center mb-5">
+      <div>
+        <h1 class="page-title">Site Types Management</h1>
+        <p class="text-slate-600 mt-2">{{ siteTypes.length }} site types</p>
+      </div>
+      <p-button label="Add Site Type" icon="pi pi-plus" (onClick)="openNew()"></p-button>
+    </div>
+
+    <div class="p-card shadow-2 border-round-2xl overflow-hidden bg-white">
+      <p-table [value]="siteTypes" [tableStyle]="{ 'min-width': '60rem' }">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Actions</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-siteType>
+          <tr>
+            <td>
+              <div>
+                <div class="font-medium text-slate-900">{{ siteType.siteTypeName }}</div>
+                @if (siteType.siteTypeNamePrompt) {
+                  <div class="text-xs text-slate-500 mt-1">{{ siteType.siteTypeNamePrompt | slice:0:50 }}...</div>
+                }
+              </div>
+            </td>
+            <td class="font-bold text-slate-700">${{ siteType.price }}</td>
+            <td>
+              <div class="text-sm text-slate-600">{{ siteType.siteTypeDescription | slice:0:60 }}...</div>
+            </td>
+            <td>
+              <div class="flex gap-2">
+                <p-button icon="pi pi-pencil" styleClass="p-button-text p-button-secondary" (onClick)="editSiteType(siteType)"></p-button>
+                <p-button icon="pi pi-trash" styleClass="p-button-text p-button-danger" (onClick)="deleteSiteType(siteType)"></p-button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="4" class="text-center p-4">No site types found.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  }
+</div>
+
+<p-dialog [(visible)]="siteTypeDialog" [style]="{width: '600px'}" header="Site Type Details" [modal]="true" styleClass="p-fluid site-type-dialog">
+  <ng-template pTemplate="content">
+    @if (selectedSiteType) {
+      <div class="field mb-4">
+        <label for="name" class="block font-medium mb-2">Name *</label>
+        <input type="text" pInputText id="name" [(ngModel)]="selectedSiteType.siteTypeName" required autofocus />
+        @if (submitted && !selectedSiteType.siteTypeName) {
+          <small class="p-error block">Name is required.</small>
+        }
+      </div>
+
+      <div class="field mb-4">
+        <label for="price" class="block font-medium mb-2">Base Price ($) *</label>
+        <p-inputNumber id="price" [(ngModel)]="selectedSiteType.price" mode="currency" currency="USD" locale="en-US"></p-inputNumber>
+      </div>
+
+      <div class="field mb-4">
+        <label for="description" class="block font-medium mb-2">Description</label>
+        <textarea id="description" pInputTextarea [(ngModel)]="selectedSiteType.siteTypeDescription" rows="2"></textarea>
+      </div>
+
+      <div class="field mb-4">
+        <label for="namePrompt" class="block font-medium mb-2">Name Prompt Template</label>
+        <textarea id="namePrompt" pInputTextarea [(ngModel)]="selectedSiteType.siteTypeNamePrompt" rows="3"></textarea>
+      </div>
+
+      <div class="field mb-4">
+        <label for="descPrompt" class="block font-medium mb-2">Description Prompt Template</label>
+        <textarea id="descPrompt" pInputTextarea [(ngModel)]="selectedSiteType.siteTypeDescriptionPrompt" rows="6"></textarea>
+      </div>
+    }
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <p-button label="Cancel" icon="pi pi-times" styleClass="p-button-text" (onClick)="hideDialog()"></p-button>
+    <p-button label="Save" icon="pi pi-check" (onClick)="saveSiteType()"></p-button>
+  </ng-template>
+</p-dialog>
+
+<p-toast></p-toast>

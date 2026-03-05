@@ -1,0 +1,216 @@
+<div class="admin-container p-4">
+  @if (loading) {
+    <div class="flex justify-content-center align-items-center" style="min-height: 400px;">
+      <i class="pi pi-spin pi-spinner text-6xl text-violet-600"></i>
+    </div>
+  } @else {
+    <div class="flex justify-content-between align-items-center mb-4">
+      <div>
+        <h1 class="page-title">Orders Management</h1>
+      </div>
+    </div>
+
+    <!-- Tab Bar -->
+    <div class="tab-bar mb-4">
+      <button class="tab-btn" [class.active]="activeTab === 'orders'" (click)="setTab('orders')">
+        <i class="pi pi-list mr-2"></i>Orders
+        <span class="tab-count">{{ filteredOrders.length }}</span>
+      </button>
+      <button class="tab-btn" [class.active]="activeTab === 'reviews'" (click)="setTab('reviews')">
+        <i class="pi pi-star mr-2"></i>Reviews
+        @if (reviews.length > 0) {
+          <span class="tab-count">{{ reviews.length }}</span>
+        }
+      </button>
+    </div>
+
+    <!-- Orders Tab -->
+    @if (activeTab === 'orders') {
+      <div class="flex justify-content-end mb-3">
+        <p-select 
+          [(ngModel)]="selectedStatus" 
+          [options]="statusOptions" 
+          optionLabel="label" 
+          optionValue="value"
+          (onChange)="filterOrders()"
+          placeholder="Filter by status">
+        </p-select>
+      </div>
+
+      <div class="p-card shadow-2 border-round-2xl overflow-hidden bg-white">
+        <p-table [value]="filteredOrders" [tableStyle]="{ 'min-width': '60rem' }">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Order #</th>
+              <th>Customer</th>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-order>
+            <tr>
+              <td class="font-mono text-sm">#{{ order.orderId.toString().slice(-8) }}</td>
+              <td>{{ order.userEmail || 'N/A' }}</td>
+              <td>{{ formatDate(order.orderDate) }}</td>
+              <td class="font-bold text-slate-700">${{ order.orderSum?.toFixed(2) || '0.00' }}</td>
+              <td>
+                <p-select
+                    [(ngModel)]="order.statusDraft"
+                    [options]="orderStatusOptions"
+                    optionLabel="label"
+                    optionValue="value"
+                    placeholder="Status"
+                    [style]="{ 'min-width': '140px' }">
+                  </p-select>
+              </td>
+              <td>
+                <div class="flex gap-2 align-items-center flex-wrap">
+                  <p-button label="View Details" icon="pi pi-eye" styleClass="p-button-text p-button-sm" (onClick)="viewOrderDetails(order)"></p-button>
+                  <p-button
+                    label="Update"
+                    icon="pi pi-check"
+                    styleClass="p-button-sm"
+                    [loading]="updatingOrderIds.has(order.orderId)"
+                    [disabled]="updatingOrderIds.has(order.orderId) || !order.statusDraft || order.statusDraft === (order.statusName?.toLowerCase())"
+                    (onClick)="saveOrderStatus(order)">
+                  </p-button>
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="6" class="text-center p-4">No orders found.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    }
+
+    <!-- Reviews Tab -->
+    @if (activeTab === 'reviews') {
+      @if (reviewsLoading) {
+        <div class="flex justify-content-center align-items-center" style="min-height: 300px;">
+          <i class="pi pi-spin pi-spinner text-5xl text-violet-600"></i>
+        </div>
+      } @else if (reviews.length === 0) {
+        <div class="flex flex-column align-items-center justify-content-center" style="min-height: 300px; gap: 1rem;">
+          <i class="pi pi-star text-5xl text-slate-300"></i>
+          <p class="text-slate-500 text-lg">No reviews yet.</p>
+        </div>
+      } @else {
+        <div class="reviews-grid">
+          @for (review of reviews; track review.reviewId) {
+            <div class="review-card">
+              <!-- Image or gradient placeholder -->
+              <div class="review-image-wrap">
+                @if (review.reviewImageUrl) {
+                  <img [src]="review.reviewImageUrl" alt="Review image" class="review-img" />
+                } @else {
+                  <div class="review-img-placeholder">
+                    <i class="pi pi-sparkles"></i>
+                  </div>
+                }
+              </div>
+
+              <div class="review-body">
+                <!-- Site info -->
+                <div class="review-site-info">
+                  <span class="review-site-name">{{ review.siteName }}</span>
+                  <span class="review-site-type">{{ review.siteTypeName }}</span>
+                </div>
+
+                <!-- Stars -->
+                <div class="review-stars">
+                  @for (filled of getStarArray(review.score); track $index) {
+                    <i class="pi" [class.pi-star-fill]="filled" [class.pi-star]="!filled"></i>
+                  }
+                  <span class="review-score-num">{{ review.score }}/5</span>
+                </div>
+
+                <!-- Note -->
+                @if (review.note) {
+                  <p class="review-note">{{ review.note }}</p>
+                } @else {
+                  <p class="review-note review-note--empty">No comment provided.</p>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+    }
+  }
+</div>
+
+<p-dialog
+  [(visible)]="orderDetailsDialog"
+  [style]="{ width: '700px', 'max-width': '95vw' }"
+  [header]="getOrderDialogHeader()"
+  [modal]="true"
+  styleClass="order-details-dialog">
+  <ng-template pTemplate="content">
+    @if (selectedOrder) {
+      <div class="order-summary-grid mb-4">
+        <div class="summary-cell">
+          <p class="summary-label m-0 mb-1">Customer</p>
+          <p class="summary-primary m-0">{{ getCustomerDisplayName(selectedOrderCustomerEmail) }}</p>
+          <p class="summary-secondary m-0">{{ selectedOrderCustomerEmail || 'No email available' }}</p>
+        </div>
+
+        <div class="summary-cell">
+          <p class="summary-label m-0 mb-1">Date</p>
+          <p class="summary-primary m-0">{{ formatDate(selectedOrder.orderDate) }}</p>
+        </div>
+
+        <div class="summary-cell">
+          <p class="summary-label m-0 mb-1">Status</p>
+          <span class="status-pill">{{ selectedOrder.statusName }}</span>
+        </div>
+
+        <div class="summary-cell">
+          <p class="summary-label m-0 mb-1">Total Amount</p>
+          <p class="summary-total m-0">${{ selectedOrder.orderSum.toFixed(2) }}</p>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <h3 class="section-title m-0 mb-2">Order Items</h3>
+        <div class="items-list">
+          @for (item of selectedOrder.items; track item.orderItemId) {
+            <div class="item-card">
+              <div class="flex justify-content-between align-items-start gap-3">
+                <div>
+                  <p class="item-name m-0 mb-1">{{ item.productName || 'Untitled Product' }}</p>
+                  <p class="item-meta m-0">Qty: 1</p>
+                </div>
+                <p class="item-price m-0">${{ item.price.toFixed(2) }}</p>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      @if (selectedOrder.siteName) {
+        <div class="site-info-block">
+          <p class="site-info-title m-0 mb-2">Site Information</p>
+          <p class="m-0 mb-1"><strong>Site Name:</strong> {{ selectedOrder.siteName }}</p>
+          <p class="m-0 mb-1"><strong>Type:</strong> {{ selectedOrder.siteTypeName }}</p>
+          @if (selectedOrder.siteDescription) {
+            <p class="m-0"><strong>Description:</strong> {{ selectedOrder.siteDescription }}</p>
+          }
+        </div>
+      }
+    }
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <p-button label="Close" icon="pi pi-times" styleClass="p-button-text" (onClick)="hideDialog()"></p-button>
+  </ng-template>
+</p-dialog>
+
+<p-toast></p-toast>

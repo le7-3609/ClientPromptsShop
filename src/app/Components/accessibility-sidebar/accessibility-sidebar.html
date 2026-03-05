@@ -1,0 +1,128 @@
+<!-- Floating trigger button -->
+<button
+  class="a11y-fab"
+  (click)="toggle()"
+  [attr.aria-expanded]="isOpen"
+  aria-controls="a11y-sidebar"
+  aria-label="Open accessibility settings">
+  <i class="pi pi-eye" aria-hidden="true"></i>
+</button>
+
+<!-- Overlay -->
+<div
+  class="a11y-overlay"
+  [class.visible]="isOpen"
+  (click)="toggle()"
+  aria-hidden="true">
+</div>
+
+<!-- Sidebar panel -->
+<aside
+  id="a11y-sidebar"
+  class="a11y-sidebar"
+  [class.open]="isOpen"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Accessibility settings panel">
+
+  <!-- Header -->
+  <div class="a11y-header">
+    <div class="a11y-header-left">
+      <i class="pi pi-eye" aria-hidden="true"></i>
+      <h2>Accessibility</h2>
+    </div>
+    <button class="a11y-close" (click)="toggle()" aria-label="Close accessibility panel">
+      <i class="pi pi-times" aria-hidden="true"></i>
+    </button>
+  </div>
+
+  <div class="a11y-body">
+
+    <!-- High Contrast -->
+    <div class="a11y-row" [class.active]="s.highContrast">
+      <div class="a11y-row-icon"><i class="pi pi-sun" aria-hidden="true"></i></div>
+      <div class="a11y-row-text">
+        <span class="a11y-row-title">High Contrast</span>
+        <span class="a11y-row-desc">Stronger color contrast for readability</span>
+      </div>
+      <p-toggleswitch
+        [ngModel]="s.highContrast"
+        (onChange)="a11y.setHighContrast($event.checked)"
+        ariaLabel="Toggle high contrast mode">
+      </p-toggleswitch>
+    </div>
+
+    <!-- Font Size -->
+    <div class="a11y-row">
+      <div class="a11y-row-icon"><i class="pi pi-eye" aria-hidden="true"></i></div>
+      <div class="a11y-row-text">
+        <span class="a11y-row-title">Font Size</span>
+        <span class="a11y-row-desc">Adjust text size across the site</span>
+        <div class="font-btns" role="group" aria-label="Select font size">
+          <button
+            class="font-btn"
+            [class.selected]="s.fontScale === 'normal'"
+            (click)="setFont('normal')"
+            [attr.aria-pressed]="s.fontScale === 'normal'">
+            A
+          </button>
+          <button
+            class="font-btn font-lg"
+            [class.selected]="s.fontScale === 'large'"
+            (click)="setFont('large')"
+            [attr.aria-pressed]="s.fontScale === 'large'">
+            A
+          </button>
+          <button
+            class="font-btn font-xl"
+            [class.selected]="s.fontScale === 'xl'"
+            (click)="setFont('xl')"
+            [attr.aria-pressed]="s.fontScale === 'xl'">
+            A
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reduced Motion -->
+    <div class="a11y-row" [class.active]="s.reducedMotion">
+      <div class="a11y-row-icon"><i class="pi pi-forward" aria-hidden="true"></i></div>
+      <div class="a11y-row-text">
+        <span class="a11y-row-title">Reduce Motion</span>
+        <span class="a11y-row-desc">Disables animations and transitions</span>
+      </div>
+      <p-toggleswitch
+        [ngModel]="s.reducedMotion"
+        (onChange)="a11y.setReducedMotion($event.checked)"
+        ariaLabel="Toggle reduce motion">
+      </p-toggleswitch>
+    </div>
+
+    <!-- Focus Indicators -->
+    <div class="a11y-row" [class.active]="s.focusIndicators">
+      <div class="a11y-row-icon"><i class="pi pi-search-plus" aria-hidden="true"></i></div>
+      <div class="a11y-row-text">
+        <span class="a11y-row-title">Enhanced Focus</span>
+        <span class="a11y-row-desc">Stronger outlines for keyboard navigation</span>
+      </div>
+      <p-toggleswitch
+        [ngModel]="s.focusIndicators"
+        (onChange)="a11y.setFocusIndicators($event.checked)"
+        ariaLabel="Toggle enhanced focus indicators">
+      </p-toggleswitch>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="a11y-footer">
+    <p-button
+      label="Reset to Defaults"
+      icon="pi pi-refresh"
+      [outlined]="true"
+      severity="help"
+      (onClick)="a11y.reset()">
+    </p-button>
+  </div>
+
+</aside>

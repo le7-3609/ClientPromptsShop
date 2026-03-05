@@ -1,0 +1,162 @@
+<p-toast></p-toast>
+
+<div class="empty-category-studio">
+
+  <!-- Studio Header -->
+  <div class="studio-header">
+    <div class="gemini-icon-wrapper">
+      <i class="pi pi-sparkles"></i>
+    </div>
+    <h2>AI Design Studio</h2>
+    <p>Two-step customization: first shape the category, then craft your product prompt.</p>
+
+    <!-- Step indicator -->
+    @if (user) {
+      <div class="step-indicator">
+        <div class="step" [class.active]="phase === 'cat-input' || phase === 'cat-gen' || phase === 'cat-done'" [class.done]="phase === 'cat-done' || phase === 'prod-input' || phase === 'prod-gen' || phase === 'prod-done' || phase === 'adding'">
+          <span class="step-num">1</span>
+          <span class="step-label">Category Prompt</span>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step" [class.active]="phase === 'prod-input' || phase === 'prod-gen' || phase === 'prod-done' || phase === 'adding'">
+          <span class="step-num">2</span>
+          <span class="step-label">Product Prompt</span>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Auth guard -->
+  @if (!user) {
+    <div class="auth-card">
+      <i class="pi pi-lock auth-lock-icon"></i>
+      <h3>Sign in required</h3>
+      <p>Please sign in to use the AI Design Studio.</p>
+      <p-button label="Sign In" icon="pi pi-user" [routerLink]="['/auth']" styleClass="signin-btn"></p-button>
+    </div>
+
+  } @else {
+
+    <!-- ═══════════════ PHASE 1: CATEGORY ═══════════════ -->
+
+    @if (phase === 'cat-input' || phase === 'cat-gen') {
+      <div class="phase-section">
+        <div class="phase-label">
+          <span class="phase-badge">Step 1</span>
+          <strong>Describe the category customization</strong>
+          <span class="phase-hint">What kind of category do you want to create? (style, purpose, audience…)</span>
+        </div>
+        <textarea
+          [(ngModel)]="categoryInput"
+          rows="5"
+          placeholder="e.g. 'A category for modern e-commerce landing pages targeting small businesses with clean minimalist design and conversion-focused layout...'"
+          class="description-textarea"
+          [disabled]="phase === 'cat-gen'">
+        </textarea>
+        <p-button
+          [label]="phase === 'cat-gen' ? 'Generating category prompt...' : 'Generate Category Prompt ✨'"
+          icon="pi pi-sparkles"
+          (onClick)="generateCategoryPrompt()"
+          [disabled]="!categoryInput.trim() || phase === 'cat-gen'"
+          [loading]="phase === 'cat-gen'"
+          styleClass="generate-btn w-full">
+        </p-button>
+      </div>
+    }
+
+    @if (phase === 'cat-done') {
+      <div class="phase-section result-section">
+        <div class="phase-label">
+          <span class="phase-badge done">Step 1 ✓</span>
+          <strong>Category Prompt — review &amp; edit if needed</strong>
+        </div>
+        <textarea [(ngModel)]="editableCategoryText" rows="6" class="description-textarea result-textarea"></textarea>
+        <div class="result-actions">
+          <p-button label="Regenerate" icon="pi pi-refresh" (onClick)="regenerateCategoryPrompt()"
+            [outlined]="true" styleClass="p-button-sm"></p-button>
+          <p-button label="Next: Product Prompt →" icon="pi pi-arrow-right"
+            (onClick)="proceedToProductStep()" styleClass="next-btn"></p-button>
+        </div>
+      </div>
+    }
+
+    <!-- ═══════════════ PHASE 2: PRODUCT ═══════════════ -->
+
+    @if (phase === 'prod-input' || phase === 'prod-gen') {
+      <div class="phase-section">
+        <div class="phase-label">
+          <span class="phase-badge">Step 2</span>
+          <strong>Describe the specific product you want</strong>
+          <span class="phase-hint">The category context will be used automatically to enrich the prompt.</span>
+        </div>
+        <textarea
+          [(ngModel)]="productInput"
+          rows="5"
+          placeholder="e.g. 'A hero section with animated headline, CTA button, and background gradient matching the brand colors...'"
+          class="description-textarea"
+          [disabled]="phase === 'prod-gen'">
+        </textarea>
+        <div class="result-actions">
+          <p-button label="← Back" icon="pi pi-arrow-left" (onClick)="backToCategoryStep()"
+            severity="secondary" [outlined]="true" styleClass="p-button-sm" [disabled]="phase === 'prod-gen'"></p-button>
+          <p-button
+            [label]="phase === 'prod-gen' ? 'Generating product prompt...' : 'Generate Product Prompt ✨'"
+            icon="pi pi-sparkles"
+            (onClick)="generateProductPrompt()"
+            [disabled]="!productInput.trim() || phase === 'prod-gen'"
+            [loading]="phase === 'prod-gen'"
+            styleClass="generate-btn flex-1">
+          </p-button>
+        </div>
+      </div>
+    }
+
+    @if (phase === 'prod-done' || phase === 'adding') {
+      <div class="phase-section result-section">
+        <div class="phase-label">
+          <span class="phase-badge done">Step 2 ✓</span>
+          <strong>Product Prompt — review &amp; edit if needed</strong>
+        </div>
+        <textarea [(ngModel)]="editableProductText" rows="7" class="description-textarea result-textarea"></textarea>
+
+        @if (emptyProductPrice > 0) {
+          <div class="price-display">
+            <span class="price-label">Price for this custom design:</span>
+            <span class="price-value">${{ emptyProductPrice }}</span>
+          </div>
+        }
+
+        <div class="platform-select-row">
+          <label class="input-label"><i class="pi pi-cog"></i> Choose Platform:</label>
+          <p-select [(ngModel)]="selectedPlatform" [options]="platforms"
+            placeholder="Select Platform" optionLabel="label" styleClass="platform-select">
+          </p-select>
+        </div>
+
+        <div class="result-actions">
+          <p-button label="← Back" icon="pi pi-arrow-left" (onClick)="backToCategoryStep()"
+            severity="secondary" [outlined]="true" styleClass="p-button-sm" [disabled]="phase === 'adding'"></p-button>
+          <p-button label="Regenerate" icon="pi pi-refresh" (onClick)="regenerateProductPrompt()"
+            [outlined]="true" styleClass="p-button-sm" [disabled]="phase === 'adding'"></p-button>
+          <p-button
+            label="Add to Cart"
+            icon="pi pi-shopping-cart"
+            (onClick)="addToCart()"
+            [disabled]="!emptyProductId || phase === 'adding'"
+            [loading]="phase === 'adding'"
+            styleClass="add-cart-btn">
+          </p-button>
+          <p-button label="Delete All" icon="pi pi-trash" (onClick)="deleteAllAndReset()"
+            severity="danger" [outlined]="true" styleClass="p-button-sm" [disabled]="phase === 'adding'"></p-button>
+        </div>
+
+        @if (!emptyProductId) {
+          <p class="warning-text">
+            <i class="pi pi-exclamation-triangle"></i>
+            No "Empty" product found in this subcategory. Please contact support.
+          </p>
+        }
+      </div>
+    }
+  }
+</div>

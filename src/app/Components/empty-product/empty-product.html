@@ -1,9 +1,61 @@
- <p>Bring your ideas to life with Gemini</p> 
-<!-- <input [(ngModel)]="input">
-<button (click)="sentGemini()">submit</button>
- {{geminiRes|async}}  -->
-<!-- @if(flag===true)
-{
-    <button (click)="sentFather()">confrime</button>
-    <button (click)="tryAgain()">try again</button>
-}  -->
+<div class="empty-product-widget">
+  <div class="widget-header">
+    <i class="pi pi-sparkles widget-icon"></i>
+    <h3>Custom AI Design</h3>
+    <p>Describe your vision and let Gemini craft a personalized prompt for you</p>
+  </div>
+
+  @if (!flag) {
+    <div class="input-area">
+      <textarea
+        [(ngModel)]="userInput"
+        rows="4"
+        placeholder="Describe what you'd like — e.g. 'A modern landing page with hero section, feature grid, and contact form using React and Tailwind CSS'"
+        class="description-input">
+      </textarea>
+      <p-button
+        label="Generate with AI ✨"
+        icon="pi pi-sparkles"
+        (onClick)="generate()"
+        [disabled]="!userInput.trim()"
+        styleClass="generate-btn w-full">
+      </p-button>
+    </div>
+  }
+
+  @if (flag && generating && !prompt) {
+    <div class="generating-state">
+      <div class="spinner-ring"></div>
+      <p>Gemini is crafting your custom design&hellip;</p>
+    </div>
+  }
+
+  @if (flag && !generating && prompt) {
+    <div class="result-area">
+      <div class="result-label">
+        <i class="pi pi-check-circle"></i>
+        <span>Your AI-generated prompt is ready — edit it if needed</span>
+      </div>
+      <textarea
+        [(ngModel)]="editablePrompt"
+        rows="6"
+        class="description-input result-textarea">
+      </textarea>
+      @if (price > 0) {
+        <div class="price-row">
+          <span class="price-label">Price for this custom design:</span>
+          <span class="price-value">${{ price }}</span>
+        </div>
+      }
+      <div class="result-actions">
+        <p-button label="Update Prompt" icon="pi pi-refresh" (onClick)="update()" styleClass="p-button-sm" [outlined]="true"></p-button>
+        <p-button label="Back" icon="pi pi-arrow-left" (onClick)="backToInput()" styleClass="p-button-sm" severity="secondary" [outlined]="true"></p-button>
+        <p-button label="Delete" icon="pi pi-trash" (onClick)="deletePrompt()" styleClass="p-button-sm" severity="danger" [outlined]="true"></p-button>
+      </div>
+      <p class="hint-text">
+        <i class="pi pi-info-circle"></i>
+        Select a product above and click <strong>Add to Shopping Cart</strong> — your AI design will be included automatically.
+      </p>
+    </div>
+  }
+</div>

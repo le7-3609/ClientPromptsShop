@@ -3,21 +3,88 @@
     margin: 0;
     box-sizing: border-box;
     font-family:  'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    //font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
 }
+
 :root {
-    /* הגדרת צבע הליבה של כל האתר */
     --p-primary-color: #8139eb !important;
     --p-primary-contrast-color: #ffffff !important;
-    /* גוונים נוספים למצבי Hover ו-Active (אופציונלי) */
     --p-primary-500: #a855f7 !important;
     --p-primary-600: #8139eb!important;
     --p-primary-700: #6a2ecb  !important;
-        /* צבע רקע כללי */
     --p-background-color: #f9f9f9 !important;
-    /* צבעי טקסט */
     --p-text-color: #3d3942 !important;
     --p-text-secondary-color: #666666 !important;       
-    /* צבע ה"הילה" (Focus Ring) */
     --p-focus-ring-color: rgba(129, 57, 235, 0.2) !important;
+}
+
+/* Accessibility Features */
+html.a11y-high-contrast {
+  filter: contrast(1.35);
+
+  body { color: #111 !important; }
+
+  .p-card { border: 2px solid #29163b !important; }
+
+  p, span, h1, h2, h3, h4, h5, h6, li, label, td, th {
+    color: inherit;
+  }
+
+  a { text-decoration: underline; }
+
+  button, .p-button {
+    outline: 2px solid currentColor !important;
+  }
+
+  input, select, textarea {
+    border: 2px solid #29163b !important;
+  }
+}
+
+html.a11y-font-large {
+  font-size: 115%;
+}
+
+html.a11y-font-xl {
+  font-size: 132%;
+}
+
+html.a11y-reduced-motion,
+html.a11y-reduced-motion * {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+
+html.a11y-reduced-motion *::before,
+html.a11y-reduced-motion *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+html.a11y-focus-indicators *:focus,
+html.a11y-focus-indicators *:focus-visible {
+  outline: 3px solid #8139eb !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 5px rgba(129, 57, 235, 0.3) !important;
+}
+
+/* global scrollbars everywhere */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #c9a8f5 #f0f0f0;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+::-webkit-scrollbar-thumb {
+  background: #c9a8f5;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a67ee3;
 }

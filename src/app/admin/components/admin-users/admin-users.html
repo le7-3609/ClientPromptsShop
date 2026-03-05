@@ -1,0 +1,46 @@
+<div class="admin-container p-4">
+	@if (loading) {
+		<div class="flex justify-content-center align-items-center" style="min-height: 400px;">
+			<i class="pi pi-spin pi-spinner text-6xl text-violet-600"></i>
+		</div>
+	} @else {
+		<div class="flex justify-content-between align-items-center mb-5">
+			<div>
+				<h1 class="page-title">Users Management</h1>
+				<p class="text-slate-600 mt-2">{{ users.length }} users</p>
+			</div>
+		</div>
+
+		<div class="p-card shadow-2 border-round-2xl overflow-hidden bg-white">
+			<p-table [value]="users" [tableStyle]="{ 'min-width': '60rem' }">
+				<ng-template pTemplate="header">
+					<tr>
+						<th>ID</th>
+						<th>Full Name</th>
+						<th>Email</th>
+						<th>Phone</th>
+						<th>Role</th>
+						<th>Created</th>
+					</tr>
+				</ng-template>
+
+				<ng-template pTemplate="body" let-user>
+					<tr>
+						<td class="font-mono text-sm">#{{ user.userId || user.id || 'N/A' }}</td>
+						<td class="font-medium">{{ getDisplayName(user) }}</td>
+						<td>{{ user.email || 'N/A' }}</td>
+						<td>{{ user.phone || user.phoneNumber || 'N/A' }}</td>
+						<td>{{ getRole(user) }}</td>
+						<td>{{ formatDate(user.createdAt || user.createdDate || user.registerDate) }}</td>
+					</tr>
+				</ng-template>
+
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="6" class="text-center p-4">No users found.</td>
+					</tr>
+				</ng-template>
+			</p-table>
+		</div>
+	}
+</div>

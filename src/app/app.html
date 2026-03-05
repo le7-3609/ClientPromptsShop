@@ -1,6 +1,14 @@
-<app-menu></app-menu> 
-
+@if (!isAdminPage()) {
+  <app-menu></app-menu>
+}
+<app-cart-sidebar></app-cart-sidebar>
 <main>
-    <router-outlet></router-outlet> 
+  <router-outlet></router-outlet>
 </main>
-
+@if (!isAdminPage()) {
+  <app-bottom-navigation></app-bottom-navigation>
+}
+@if (!isAdminPage()) {
+  <app-chat-bot></app-chat-bot>
+}
+<app-accessibility-sidebar></app-accessibility-sidebar>

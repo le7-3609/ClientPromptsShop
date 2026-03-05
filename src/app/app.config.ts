@@ -2,8 +2,27 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChang
 import { provideRouter } from '@angular/router';
 import { providePrimeNG } from 'primeng/config';
 import Lara from '@primeuix/themes/lara';
+import { definePreset } from '@primeuix/themes';
 import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
+
+const PurplePreset = definePreset(Lara, {
+  semantic: {
+    primary: {
+      50: '#f4f2ff',
+      100: '#ece7ff',
+      200: '#ddd2ff',
+      300: '#c4adff',
+      400: '#a67fff',
+      500: '#8139eb',
+      600: '#742fd5',
+      700: '#6125b1',
+      800: '#4f1f8f',
+      900: '#431d75',
+      950: '#2d0f52',
+    },
+  },
+});
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,29 +32,10 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     providePrimeNG({
       theme: {
-        preset: Lara,
+        preset: PurplePreset,
         options: {
           darkModeSelector: false,
-          primitiveColors: {
-            purple: {
-              50: '#f4f2ff',
-              // ... הגדרת שאר הגוונים
-              500: '#8139eb',
-              600: '#9b68ee',
-              // ...
-            }
-          },
-          semantic: {
-            primary: {
-              colorScheme: {
-                light: {
-                  root: '{purple.500}',
-                  hover: '{purple.600}',
-                  active: '{purple.700}'
-                }
-              }
-            }
-          }
+          cssLayer: false,
         }
       }
     })

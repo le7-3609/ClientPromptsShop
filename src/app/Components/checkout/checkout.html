@@ -1,0 +1,143 @@
+<div class="checkout-wrapper">
+  <div class="checkout-container">
+    <h1>Checkout</h1>
+    
+    <div class="checkout-content">
+      <div class="order-summary">
+        <h2>Order Summary</h2>
+        
+        @if (basicSite) {
+          <div class="site-info">
+            <h3>Website Project</h3>
+            <p><strong>Name:</strong> {{ basicSite.siteName }}</p>
+            <p><strong>Type:</strong> {{ basicSite.siteTypeName }}</p>
+            <p><strong>Price:</strong> ${{ basicSite.price }}</p>
+          </div>
+        } @else {
+          <div class="site-info" style="border-color: #ff6b6b;">
+            <h3><i class="pi pi-exclamation-triangle" style="color: #ff6b6b;"></i> Basic Site Required</h3>
+            <p>You must create a Basic Site before you can complete your purchase.</p>
+            <p-button 
+              label="Create Basic Site" 
+              icon="pi pi-plus"
+              [routerLink]="['/basicSite']"
+              styleClass="p-button-sm">
+            </p-button>
+          </div>
+        }
+        
+        <div class="items-list">
+          @for (item of cartItems; track item.cartItemId) {
+            <div class="summary-item">
+              <img [src]="item.imageUrl" [alt]="item.productName">
+              <div class="item-info">
+                <h4>{{ item.productName }}</h4>
+                <p>{{ item.platformName }}</p>
+              </div>
+              <span class="item-price">${{ item.price }}</span>
+            </div>
+          }
+        </div>
+        
+        <div class="total-section">
+          <div class="total-row">
+            <span>Subtotal:</span>
+            <span>${{ totalPrice }}</span>
+          </div>
+          <div class="total-row final">
+            <span>Total:</span>
+            <span>${{ totalPrice }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="payment-section">
+        <h2>Payment Method</h2>
+        <button class="paypal-button" (click)="openPayPalModal()" [disabled]="!canCheckout">
+          <svg viewBox="0 0 24 24" width="24" height="24">
+            <path fill="currentColor" d="M20.067 8.478c.492.88.556 2.014.3 3.327-.74 3.806-3.276 5.12-6.514 5.12h-.5a.805.805 0 0 0-.794.68l-.04.22-.63 3.993-.032.17a.804.804 0 0 1-.794.679H7.72a.483.483 0 0 1-.477-.558L9.096 7.74a.948.948 0 0 1 .936-.803h4.22c1.194 0 2.138.149 2.815.447z"/>
+          </svg>
+          Pay with PayPal
+        </button>
+        @if (!canCheckout) {
+          <p class="secure-text" style="color: #ff6b6b;">
+            <i class="pi pi-exclamation-triangle"></i>
+            Please create a Basic Site to proceed with payment
+          </p>
+        } @else {
+          <p class="secure-text">
+            <i class="pi pi-lock"></i>
+            Secure payment powered by PayPal
+          </p>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- PayPal Modal -->
+  <p-dialog 
+    [(visible)]="showPayPalModal" 
+    [modal]="true" 
+    [closable]="!isProcessing"
+    [closeOnEscape]="!isProcessing"
+    styleClass="paypal-modal">
+    
+    <ng-template pTemplate="header">
+      <div class="paypal-header">
+        <svg viewBox="0 0 100 32" width="100" height="32">
+          <path fill="#003087" d="M12 4.917v.583c0 1.16-.943 2.1-2.1 2.1h-1.4L10.45 2h.05c1.16 0 2.1.943 2.1 2.1v.817zm10.9 0v.583c0 1.16-.943 2.1-2.1 2.1h-1.4L21.35 2h.05c1.16 0 2.1.943 2.1 2.1v.817z"/>
+          <path fill="#0070BA" d="M6.7 10.417c.66 0 1.2.54 1.2 1.2v8.166c0 .66-.54 1.2-1.2 1.2H4.917c-.66 0-1.2-.54-1.2-1.2v-8.166c0-.66.54-1.2 1.2-1.2H6.7z"/>
+        </svg>
+      </div>
+    </ng-template>
+
+    <div class="paypal-content">
+      @if (!paymentSuccess) {
+        @if (!isProcessing) {
+          <div class="payment-details">
+            <h3>Complete your payment</h3>
+            <div class="amount-display">
+              <span class="label">Total Amount:</span>
+              <span class="amount">${{ totalPrice }}</span>
+            </div>
+            
+            <div class="mock-login">
+              <p class="info-text">
+                <i class="pi pi-info-circle"></i>
+                This is a demo payment. Click "Pay Now" to simulate payment.
+              </p>
+            </div>
+
+            <div class="button-group">
+              <p-button 
+                label="Pay Now" 
+                icon="pi pi-check"
+                (onClick)="processPayment()"
+                styleClass="pay-button">
+              </p-button>
+              <p-button 
+                label="Cancel" 
+                icon="pi pi-times"
+                (onClick)="cancelPayment()"
+                [outlined]="true"
+                severity="secondary">
+              </p-button>
+            </div>
+          </div>
+        } @else {
+          <div class="processing">
+            <i class="pi pi-spin pi-spinner"></i>
+            <h3>Processing Payment...</h3>
+            <p>Please wait while we process your payment</p>
+          </div>
+        }
+      } @else {
+        <div class="success">
+          <i class="pi pi-check-circle"></i>
+          <h3>Payment Successful!</h3>
+          <p>Redirecting...</p>
+        </div>
+      }
+    </div>
+  </p-dialog>
+</div>

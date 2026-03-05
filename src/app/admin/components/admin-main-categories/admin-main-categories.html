@@ -1,0 +1,81 @@
+<div class="admin-container">
+  @if (loading) {
+    <div class="loading-container">
+      <i class="pi pi-spin pi-spinner"></i>
+    </div>
+  } @else {
+    <div class="page-header">
+      <div class="header-content">
+        <div class="header-left">
+          <h1 class="page-title">Main Categories</h1>
+          <p class="page-subtitle">{{ mainCategories.length }} categories</p>
+        </div>
+        <p-button label="Add Category" icon="pi pi-plus" (onClick)="openNew()" styleClass="add-btn"></p-button>
+      </div>
+    </div>
+
+    <div class="categories-grid">
+      @for (category of mainCategories; track category.mainCategoryId) {
+        <div class="category-card">
+          <div class="card-icon">
+            <i class="pi pi-folder-open"></i>
+          </div>
+          <div class="card-content">
+            <h3 class="category-name">{{ category.mainCategoryName }}</h3>
+          </div>
+          <div class="card-actions">
+            <button class="action-btn edit" (click)="editCategory(category)" title="Edit">
+              <i class="pi pi-pencil"></i>
+            </button>
+            <button class="action-btn delete" (click)="deleteCategory(category)" title="Delete">
+              <i class="pi pi-trash"></i>
+            </button>
+          </div>
+        </div>
+      }
+      @empty {
+        <div class="empty-state">
+          <i class="pi pi-folder-open"></i>
+          <p>No categories found</p>
+          <p-button label="Add First Category" icon="pi pi-plus" (onClick)="openNew()"></p-button>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<p-dialog [(visible)]="categoryDialog" [style]="{width: '500px'}" header="Category Details" [modal]="true" styleClass="p-fluid category-dialog">
+  <ng-template pTemplate="content">
+    @if (selectedCategory) {
+      <div class="dialog-content">
+        <div class="form-field">
+          <label for="name" class="field-label">
+            <i class="pi pi-tag"></i>
+            Category Name *
+          </label>
+          <input type="text" pInputText id="name" [(ngModel)]="selectedCategory.mainCategoryName" required autofocus placeholder="Enter category name" />
+          @if (submitted && !selectedCategory.mainCategoryName) {
+            <small class="error-msg">Category name is required</small>
+          }
+        </div>
+
+        <div class="form-field">
+          <label for="prompt" class="field-label">
+            <i class="pi pi-file-edit"></i>
+            Prompt Template
+          </label>
+          <textarea id="prompt" pInputTextarea [(ngModel)]="selectedCategory.promptTemplate" rows="4" placeholder="Enter prompt template (optional)"></textarea>
+        </div>
+      </div>
+    }
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <div class="dialog-footer">
+      <p-button label="Cancel" icon="pi pi-times" styleClass="p-button-text" (onClick)="hideDialog()"></p-button>
+      <p-button label="Save" icon="pi pi-check" (onClick)="saveCategory()"></p-button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-toast></p-toast>

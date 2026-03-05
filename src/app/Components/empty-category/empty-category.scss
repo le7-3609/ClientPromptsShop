@@ -1,0 +1,337 @@
+.empty-category-studio {
+  max-width: 720px;
+  margin: 2rem auto;
+  padding: 2.5rem;
+  background: linear-gradient(135deg, rgba(129, 57, 235, 0.06) 0%, rgba(189, 0, 203, 0.06) 100%);
+  border: 1px solid rgba(129, 57, 235, 0.2);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(129, 57, 235, 0.12);
+
+  // ── Header ──────────────────────────────────────────────────
+  .studio-header {
+    text-align: center;
+    margin-bottom: 2rem;
+
+    .gemini-icon-wrapper {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #8139eb 0%, #bd00cb 100%);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+
+      .pi-sparkles {
+        font-size: 1.75rem;
+        color: white;
+      }
+    }
+
+    h2 {
+      margin: 0 0 0.5rem;
+      font-size: 1.75rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #8139eb 0%, #bd00cb 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p {
+      color: #777;
+      font-size: 0.95rem;
+      max-width: 480px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+  }
+
+  // ── Auth card ───────────────────────────────────────────────
+  .auth-card {
+    text-align: center;
+    padding: 2.5rem 1.5rem;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 16px;
+    border: 1px solid rgba(129, 57, 235, 0.15);
+
+    .auth-lock-icon {
+      font-size: 3rem;
+      color: rgba(129, 57, 235, 0.4);
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      margin: 0 0 0.5rem;
+      color: #444;
+    }
+
+    p {
+      color: #888;
+      margin-bottom: 1.5rem;
+    }
+
+    ::ng-deep .signin-btn.p-button {
+      background: linear-gradient(135deg, #8139eb 0%, #bd00cb 100%);
+      border: none;
+      padding: 0.65rem 2rem;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+  }
+
+  // ── Shared textarea ─────────────────────────────────────────
+  .description-textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 14px;
+    border: 1.5px solid rgba(129, 57, 235, 0.3);
+    padding: 0.85rem 1rem;
+    font-size: 0.95rem;
+    resize: vertical;
+    font-family: inherit;
+    background: rgba(255, 255, 255, 0.9);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    margin-bottom: 1.25rem;
+
+    &:focus {
+      border-color: #8139eb;
+      box-shadow: 0 0 0 3px rgba(129, 57, 235, 0.12);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    &.result-textarea {
+      background: rgba(255, 255, 255, 0.98);
+      border-color: rgba(129, 57, 235, 0.45);
+    }
+  }
+
+  // ── Input section ───────────────────────────────────────────
+  .input-section {
+    .input-label {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 0.5rem;
+      font-size: 0.95rem;
+
+      .pi {
+        color: #8139eb;
+      }
+    }
+
+    ::ng-deep .generate-btn.p-button {
+      background: linear-gradient(135deg, #8139eb 0%, #bd00cb 100%);
+      border: none;
+      width: 100%;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1rem;
+      border-radius: 14px;
+      padding: 0.85rem;
+
+      &:disabled {
+        opacity: 0.45;
+      }
+    }
+  }
+
+  // ── Result section ──────────────────────────────────────────
+  .result-section {
+    .result-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+      color: #8139eb;
+      font-size: 0.95rem;
+
+      .success-icon {
+        font-size: 1.1rem;
+        color: #22c55e;
+      }
+    }
+
+    .price-display {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.6rem 1rem;
+      background: rgba(129, 57, 235, 0.07);
+      border-radius: 10px;
+      margin-bottom: 1.25rem;
+
+      .price-label {
+        color: #666;
+        font-size: 0.9rem;
+      }
+
+      .price-value {
+        font-size: 1.35rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #8139eb 0%, #bd00cb 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    }
+
+    .platform-select-row {
+      margin-bottom: 1.5rem;
+
+      .input-label {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-weight: 600;
+        color: #555;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+
+        .pi { color: #8139eb; }
+      }
+
+      ::ng-deep .platform-select {
+        width: 100%;
+      }
+    }
+
+    .result-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+
+      ::ng-deep .add-cart-btn.p-button {
+        background: linear-gradient(135deg, #8139eb 0%, #bd00cb 100%);
+        border: none;
+        font-weight: 700;
+        border-radius: 12px;
+        padding: 0.7rem 1.5rem;
+
+        &:disabled {
+          opacity: 0.5;
+        }
+      }
+    }
+
+    .warning-text {
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: #e67e22;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+  }
+
+  // ── Step indicator ───────────────────────────────────────────
+  .step-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-top: 1.25rem;
+
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+
+      .step-num {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: rgba(129, 57, 235, 0.15);
+        color: #8139eb;
+        font-size: 0.9rem;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid rgba(129, 57, 235, 0.3);
+        transition: all 0.3s;
+      }
+
+      .step-label {
+        font-size: 0.72rem;
+        color: #999;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        transition: color 0.3s;
+      }
+
+      &.active {
+        .step-num {
+          background: linear-gradient(135deg, #8139eb, #bd00cb);
+          color: #fff;
+          border-color: transparent;
+          box-shadow: 0 2px 10px rgba(129, 57, 235, 0.4);
+        }
+        .step-label { color: #8139eb; }
+      }
+
+      &.done .step-num {
+        background: rgba(39, 174, 96, 0.15);
+        color: #27ae60;
+        border-color: rgba(39, 174, 96, 0.4);
+      }
+    }
+
+    .step-connector {
+      width: 60px;
+      height: 2px;
+      background: rgba(129, 57, 235, 0.2);
+      margin: 0 0.5rem;
+      margin-bottom: 1.2rem;
+    }
+  }
+
+  // ── Phase label ──────────────────────────────────────────────
+  .phase-label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-bottom: 0.75rem;
+
+    .phase-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.2rem 0.7rem;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: rgba(129, 57, 235, 0.1);
+      color: #8139eb;
+      border: 1px solid rgba(129, 57, 235, 0.25);
+      width: fit-content;
+
+      &.done {
+        background: rgba(39, 174, 96, 0.1);
+        color: #27ae60;
+        border-color: rgba(39, 174, 96, 0.3);
+      }
+    }
+
+    strong {
+      font-size: 0.95rem;
+      color: #312639;
+    }
+
+    .phase-hint {
+      font-size: 0.8rem;
+      color: #888;
+    }
+  }
+}

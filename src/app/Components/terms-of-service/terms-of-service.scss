@@ -1,0 +1,49 @@
+$primary-purple: #8139eb;
+$bg-color: #f9f5ff;
+
+.policy-wrapper {
+  min-height: 100vh;
+  background: $bg-color;
+  padding: 3rem 1.5rem;
+
+  .policy-container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    padding: 3rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(129, 57, 235, 0.1);
+
+    h1 {
+      color: $primary-purple;
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      font-weight: 800;
+    }
+
+    .policy-content {
+      section {
+        margin-bottom: 2rem;
+
+        h2 {
+          color: $primary-purple;
+          font-size: 1.3rem;
+          margin-bottom: 0.75rem;
+          font-weight: 700;
+        }
+
+        p {
+          color: #2c3e50;
+          line-height: 1.8;
+          font-size: 1rem;
+          margin-bottom: 0.5rem;
+
+          strong {
+            color: $primary-purple;
+          }
+        }
+      }
+    }
+  }
+}

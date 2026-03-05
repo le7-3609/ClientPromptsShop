@@ -1,0 +1,112 @@
+<div class="full-screen-cart" dir="ltr">
+  <p-toast />
+  <p-confirmDialog />
+
+  <section class="cart-header">
+    <h1>My Cart</h1>
+    <p>Great selection! You're just one step away from turning your ideas into reality.</p>
+    <div class="underline"></div>
+  </section>
+
+  @if (!hasContent) {
+    <div class="empty-state">
+      <i class="pi pi-folder-open"></i>
+      <p>Every great creation begins with a single prompt. Your cart is waiting for the next big idea.</p>
+      <p-button label="Begin to create" icon="pi pi-code" [routerLink]="['/home']"></p-button>
+    </div>
+  } @else {
+    <div class="cart-layout">
+      <section class="items-column">
+        <div class="foundation-card" [class.warning]="!basicSite">
+          <div class="foundation-header">
+            <h2>Foundation Card</h2>
+            @if (basicSite) {
+              <span class="status-pill valid">Configured</span>
+            } @else {
+              <span class="status-pill invalid">Missing</span>
+            }
+          </div>
+
+          @if (basicSite) {
+            <div class="foundation-content">
+              <h3>{{ basicSite.siteName }}</h3>
+              <p>{{ basicSite.siteDescription }}</p>
+              <div class="foundation-meta">
+                <span><i class="pi pi-tag"></i> {{ basicSite.siteTypeName }}</span>
+                <span><i class="pi pi-cog"></i> {{ basicSite.platformName || 'Platform not selected' }}</span>
+                <strong>{{ basicSite.price * currencyRate | currency:currencyCode }}</strong>
+              </div>
+              <p-button label="Edit Basic Site" icon="pi pi-pencil" [outlined]="true" (onClick)="editBasicSite()"></p-button>
+            </div>
+          } @else {
+            <div class="warning-card">
+              <i class="pi pi-exclamation-triangle"></i>
+              <p>A basic site foundation is required before checkout.</p>
+              <p-button label="Initialize Site Base" icon="pi pi-plus" (onClick)="editBasicSite()"></p-button>
+            </div>
+          }
+        </div>
+
+        <div class="items-list">
+          @for (item of cartItems; track item.cartItemId) {
+            <article class="cart-row">
+              <img class="product-thumb" [src]="getProductImage(item)" [alt]="item.subCategoryName || item.productName" />
+
+              <div class="row-main">
+                <h3>{{ item.productName }}</h3>
+                <p>{{ isPromptRef(item.userDescription) ? getPromptExcerpt(item) : (item.userDescription || item.subCategoryName) }}</p>
+                <div class="row-meta">
+                  <span><i class="pi pi-tag"></i> {{ item.subCategoryName || 'Subcategory' }}</span>
+                  <span><i class="pi pi-cog"></i> {{ item.platformName || 'Platform not selected' }}</span>
+                  <button type="button" class="status-pill" [class.valid]="item.isActive" [class.invalid]="!item.isActive" (click)="toggleItemActive(item)">
+                    {{ item.isActive ? 'Valid' : 'Invalid' }}
+                  </button>
+                </div>
+              </div>
+
+              <div class="row-actions">
+                <strong>{{ item.price * currencyRate | currency:currencyCode }}</strong>
+                <p-button label="Remove" icon="pi pi-trash" [outlined]="true" severity="danger" (onClick)="removeProduct(item.cartItemId)"></p-button>
+              </div>
+            </article>
+          }
+        </div>
+      </section>
+
+      <aside class="summary-column">
+        <p-card>
+          <ng-template #title>
+            Order Summary
+          </ng-template>
+
+          <div class="summary-row">
+            <span>Products</span>
+            <strong>{{ cartItems.length }}</strong>
+          </div>
+
+          <div class="summary-row">
+            <span>Products Total</span>
+            <strong>{{ getProductsTotal() * currencyRate | currency:currencyCode }}</strong>
+          </div>
+
+          @if (basicSite) {
+            <div class="summary-row">
+              <span>Foundation Price</span>
+              <strong>{{ basicSite.price * currencyRate | currency:currencyCode }}</strong>
+            </div>
+          }
+
+          <div class="summary-row total">
+            <span>Total</span>
+            <strong>{{ totalPrice * currencyRate | currency:currencyCode }}</strong>
+          </div>
+
+          <div class="summary-actions">
+            <p-button label="Complete Purchase" icon="pi pi-credit-card" (onClick)="goToPayment()" [disabled]="!basicSite"></p-button>
+            <p-button label="Continue Shopping" icon="pi pi-arrow-left" [outlined]="true" [routerLink]="['/home']"></p-button>
+          </div>
+        </p-card>
+      </aside>
+    </div>
+  }
+</div>

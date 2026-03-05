@@ -1,0 +1,74 @@
+.admin-content {
+  min-height: calc(100vh - 64px);
+  background:
+    radial-gradient(circle at 10% 10%, rgba(147, 51, 234, 0.2), transparent 35%),
+    radial-gradient(circle at 90% 20%, rgba(217, 70, 239, 0.16), transparent 35%),
+    radial-gradient(circle at 20% 90%, rgba(126, 34, 206, 0.14), transparent 30%),
+    #f5f3ff;
+  padding: 0;
+
+  @media (max-width: 768px) {
+    padding: 0;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0;
+  }
+
+  @media (max-width: 1024px) {
+    min-height: 100vh;
+    margin-right: 280px;
+  }
+
+  @media (max-width: 768px) {
+    margin-right: 240px;
+  }
+
+  @media (max-width: 480px) {
+    margin-right: 220px;
+  }
+}
+
+.p-card {
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+
+  @media (max-width: 768px) {
+    border-radius: 12px;
+  }
+}
+
+::ng-deep {
+  .p-datatable {
+    .p-datatable-wrapper {
+      overflow-x: auto;
+    }
+
+    @media (max-width: 768px) {
+      font-size: 0.875rem;
+
+      .p-datatable-thead > tr > th {
+        padding: 0.75rem 0.5rem;
+      }
+
+      .p-datatable-tbody > tr > td {
+        padding: 0.75rem 0.5rem;
+      }
+    }
+  }
+
+  .p-dialog {
+    @media (max-width: 768px) {
+      width: 95vw !important;
+      max-width: 95vw !important;
+    }
+  }
+
+  .p-button {
+    @media (max-width: 480px) {
+      padding: 0.625rem 1rem;
+      font-size: 0.875rem;
+    }
+  }
+}

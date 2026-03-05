@@ -1,5 +1,5 @@
-import { Component, DestroyRef, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, inject, AfterViewInit, NgZone } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -12,9 +12,11 @@ import { ProgressBar } from 'primeng/progressbar';
 import { DividerModule } from 'primeng/divider';
 import { Message } from 'primeng/message';
 import { MessageService } from 'primeng/api';
-import { UserService } from '../../Services/UserService/user-service';
+import { UserService } from '../../services/userService/user-service';
 import { environment } from '../../../environments/environment.development';
 import { ToastModule } from 'primeng/toast';
+import { CheckboxModule } from 'primeng/checkbox';
+import { RouterLink } from '@angular/router';
 
 declare var google: any;
 @Component({
@@ -23,17 +25,20 @@ declare var google: any;
   imports: [
     CommonModule, ReactiveFormsModule, ButtonModule,
     InputTextModule, PasswordModule, CardModule,
-    FloatLabel, TabsModule, ProgressBar, DividerModule,ToastModule,
-    Message],
+    FloatLabel, TabsModule, ProgressBar, DividerModule, ToastModule,
+    Message, CheckboxModule, RouterLink],
   templateUrl: './auth.html',
   styleUrl: './auth.scss',
   providers: [MessageService]
 })
-export class Auth {
+export class Auth implements AfterViewInit {
   userService = inject(UserService);
   router = inject(Router);
+  route = inject(ActivatedRoute);
   messageService = inject(MessageService);
+  private ngZone = inject(NgZone);
   formSubmitted: boolean = false;
+  private returnUrl: string = '/home';
   loginForm!: FormGroup;
   registerForm!: FormGroup;
 
@@ -45,6 +50,7 @@ export class Auth {
 
 
   ngOnInit() {
+    this.returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/home';
     const savedEmail = this.userService.getSavedEmail();
     this.loginForm = new FormGroup({
       email: new FormControl(savedEmail, [Validators.required, Validators.email]),
@@ -56,7 +62,8 @@ export class Auth {
       firstName: new FormControl('', [Validators.required]),
       lastName: new FormControl('', [Validators.required]),
       phone: new FormControl('', [Validators.required, Validators.pattern('^[0-9]{10}$')]),
-      password: new FormControl('', [Validators.required, Validators.minLength(6)])
+      password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+      acceptTerms: new FormControl(false, [Validators.requiredTrue])
     });
   }
 
@@ -99,7 +106,7 @@ export class Auth {
       this.userService.login(this.loginForm.value).subscribe({
         next: (user) => {
           this.messageService.add({ severity: 'success', summary: 'Success', detail: `Welcome back ${user.firstName}!` ,life: 3000 });
-          this.router.navigate(['/home']); // ניתוב לדף הבית לאחר כניסה
+          this.router.navigateByUrl(this.returnUrl); 
         },
         error: (err) => {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Invalid email or password' ,life: 3000 });
@@ -111,44 +118,95 @@ export class Auth {
   onRegisterSubmit() {
     this.formSubmitted = true;
     if (this.registerForm.valid) {
-      this.userService.register(this.registerForm.value).subscribe({
+      const registrationPayload = {
+        ...this.registerForm.value,
+        provider: "local"
+      };
+      
+      this.userService.register(registrationPayload).subscribe({
         next: (newUser) => {
-          this.messageService.add({ severity: 'success', summary: 'Registered', detail: 'Account created successfully!',life: 3000 });
-          this.router.navigate(['/home']);
+          this.messageService.add({ 
+            severity: 'success', 
+            summary: 'Registration Successful', 
+            detail: `Welcome ${newUser.firstName}! Your account has been created successfully.`,
+            life: 1500 
+          });
+          this.router.navigateByUrl(this.returnUrl);
         },
         error: (err) => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Registration failed. Email might be in use.' ,life: 3000 });
+          console.error('Registration error:', err);
+          let errorMessage = 'Registration failed. Please try again.';
+          
+          if (err.status === 400) {
+            errorMessage = 'Invalid registration data. Please check your information.';
+          } else if (err.status === 409 || err.error?.message?.includes('email')) {
+            errorMessage = 'This email is already registered. Please use a different email or try logging in.';
+          } else if (err.status === 500) {
+            errorMessage = 'Server error occurred. Please try again later.';
+          }
+          
+          this.messageService.add({ 
+            severity: 'error', 
+            summary: 'Registration Failed', 
+            detail: errorMessage,
+            life: 5000 
+          });
         }
       });
     }
   }
 
   ngAfterViewInit() {
-    this.renderGoogleButton();
+    this.renderGoogleButtons();
   }
-  
-  renderGoogleButton() {
-    if (typeof google !== 'undefined' && google.accounts) {
+
+  renderGoogleButtons() {
+    if (typeof google !== 'undefined' && google?.accounts) {
       google.accounts.id.initialize({
         client_id: this.googleClientId,
-        callback: (window as any).handleCredentialResponse
+        callback: (response: any) => {
+          this.ngZone.run(() => this.onGoogleCredential(response));
+        },
+        ux_mode: 'popup',
+        use_fedcm_for_prompt: true
       });
 
-      google.accounts.id.renderButton(
-        document.getElementById("googleBtn"),
-        { theme: "outline", size: "large", width: "100%" }
-      );
+      const loginBtn = document.getElementById('googleBtnLogin');
+      if (loginBtn) {
+        google.accounts.id.renderButton(loginBtn, { theme: 'outline', size: 'large', width: 280 });
+      }
+      const registerBtn = document.getElementById('googleBtnRegister');
+      if (registerBtn) {
+        google.accounts.id.renderButton(registerBtn, { theme: 'outline', size: 'large', width: 280 });
+      }
     } else {
-      setTimeout(() => this.renderGoogleButton(), 100);
+      setTimeout(() => this.renderGoogleButtons(), 100);
     }
   }
 
+  onGoogleCredential(response: any) {
+    this.userService.socialLogin({ token: response.credential, provider: 'Google' }).subscribe({
+      next: (user) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Welcome!',
+          detail: `Welcome ${user.firstName}!`,
+          life: 3000
+        });
+        setTimeout(() => this.router.navigateByUrl(this.returnUrl), 1500);
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Sign-In Failed',
+          detail: 'Google sign-in failed. Please try again.',
+          life: 4000
+        });
+      }
+    });
+  }
 
   signInWithMicrosoft(): void {
-    // this.authService.signIn(MicrosoftLoginProvider.PROVIDER_ID).then(user => {
-    console.log("Microsoft User:");
-    // });
+    console.log('Microsoft Sign In - not yet implemented');
   }
 }
-
-

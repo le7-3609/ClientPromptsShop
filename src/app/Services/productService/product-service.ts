@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { ProductModel } from '../../Models/product-model';
+import { ProductModel } from '../../models/product-model';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 
@@ -12,17 +12,41 @@ export class ProductService {
   private http = inject(HttpClient);
   private BASIC_URL = `${environment.apiUrl}/products`;
 
-  async getProducts(): Promise<ProductModel[]> {
-    return firstValueFrom(this.http.get<ProductModel[]>(this.BASIC_URL));
-  }
+async getProducts(position: number, skip: number, subCategoryIds?: number[]): Promise<any> {
+    let params = new HttpParams()
+        .set('position', position.toString())
+        .set('skip', skip.toString());
 
-  async getProductsBySubCategoryId(categoryId: number): Promise<ProductModel[]> {
+    if (subCategoryIds && subCategoryIds.length > 0) {
+        subCategoryIds.forEach(id => {
+            params = params.append('subCategoryIds', id.toString());
+        });
+    }
+
+    return firstValueFrom(this.http.get<any>(this.BASIC_URL, { params }));
+}
+
+
+
+  async getProductsById(productId: number): Promise<ProductModel[]> {
     const options = {
-      params: new HttpParams().set('categoryId', categoryId)
+      params: new HttpParams().set('productId', productId)
     };
 
     return firstValueFrom(
       this.http.get<ProductModel[]>(`${this.BASIC_URL}`, options)
     );
+  }
+
+  addProduct(product: any): Promise<any> {
+    return firstValueFrom(this.http.post(this.BASIC_URL, product));
+  }
+
+  updateProduct(id: number, product: any): Promise<any> {
+    return firstValueFrom(this.http.put(`${this.BASIC_URL}/${id}`, product));
+  }
+
+  deleteProduct(id: number): Promise<any> {
+    return firstValueFrom(this.http.delete(`${this.BASIC_URL}/${id}`));
   }
 }

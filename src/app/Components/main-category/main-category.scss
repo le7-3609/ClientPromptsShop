@@ -1,57 +1,183 @@
+// --- Variables ---
 $bg-color: #f9f5ff;
 $primary-purple: #8139eb;
 $accent-purple: #F6E8FE;
 $shadow-color: #9d58f51a;
+$text-dark: #3b004d;
+$text-muted: #6b5f78;
+$grad: linear-gradient(135deg, $primary-purple 0%, #bd00cb 100%);
 $grad-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(249, 245, 255, 0.65) 100%);
+$border-glass: 1px solid rgba(189, 112, 210, 0.25);
 
 .shop-layout {
-    direction:ltr;
+    .page-title-section {
+        text-align: center;
+        margin-bottom: 50px;
+        position: relative;
+
+        h1 {
+            color: $primary-purple;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: $grad;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+
+        &::after {
+            content: '';
+            display: block;
+            height: 5px;
+            background: $grad;
+            margin: 15px auto 0;
+            border-radius: 10px;
+
+            animation: elasticMove 3.5s ease-in-out infinite alternate;
+            box-shadow: 0 2px 10px $shadow-color;
+        }
+
+
+        @keyframes elasticMove {
+            0% {
+                transform: translateX(60px);
+                width: 40px;
+                opacity: 0.7;
+            }
+
+            50% {
+                width: 100px; 
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateX(-60px);
+                width: 40px;
+                opacity: 0.7;
+            }
+        }
+
+        h3 {
+            margin-top: 20px;
+            color: $text-muted;
+            font-size: 1.2rem;
+            font-weight: 400;
+        }
+    }
+}
+
+// --- Global Layout ---
+.shop-layout {
+    direction: ltr;
     text-align: center;
-    background: $bg-color; 
-    backdrop-filter: blur(15px);         
+    background: $bg-color;
+    background-image: radial-gradient(circle at 10% 20%, rgba(129, 57, 235, 0.05) 0%, transparent 40%);
+    backdrop-filter: blur(15px);
     border-radius: 20px;
     box-shadow: 0 8px 30px $shadow-color;
     min-height: 100vh;
     padding: 20px;
 
-    ::ng-deep .p-dataview{
-        backdrop-filter: blur(15px);         
-        box-shadow: 0 8px 30px $shadow-color;
-        background-color: $grad-glass !important; 
-        border: 1px solid rgba(189, 112, 210, 0.25) !important;
-        padding: 15px;
-    }
+    // --- PrimeNG Components Styling ---
+    ::ng-deep {
+        .p-dataview {
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 30px $shadow-color;
+            background-color: $grad-glass !important;
+            border: $border-glass !important;
+            padding: 15px;
+        }
 
-     ::ng-deep .p-dataview-header {
-        backdrop-filter: blur(15px);         
-        box-shadow: 0 8px 30px $shadow-color;
-        background-color: $grad-glass !important; 
-        border: 1px solid rgba(189, 112, 210, 0.25) !important;
-        border-radius: 12px 12px 0 0;
-        padding: 15px;
-        margin-bottom: 5px;
-    }
+        .p-dataview-header {
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 30px $shadow-color;
+            background-color: $grad-glass !important;
+            border: $border-glass !important;
+            border-radius: 12px 12px 0 0;
+            padding: 15px;
+            margin-bottom: 5px;
+        }
 
-    ::ng-deep .p-paginator{
-        backdrop-filter: blur(15px);         
-        box-shadow: 0 8px 30px $shadow-color;
-        background-color: $grad-glass !important; 
-        border: 1px solid rgba(189, 112, 210, 0.25) !important;
-        border-radius: 0 0 12px 12px;
-        padding: 15px;
-        margin-top: 5px;
+        .p-paginator {
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 30px $shadow-color;
+            background-color: $grad-glass !important;
+            border: $border-glass !important;
+            border-radius: 0 0 12px 12px;
+            padding: 15px;
+            margin-top: 5px;
+        }
+
+        // Fix for "Greenish" or default PrimeNG highlights
+        .p-selectbutton .p-button.p-highlight {
+            background: $primary-purple !important;
+            border-color: $primary-purple !important;
+            color: white !important;
+
+            &:hover {
+                background: darken($primary-purple, 10%) !important;
+            }
+        }
+
+        .p-button {
+            background: linear-gradient(135deg, $primary-purple 0%, #C64BF1 100%) !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 8px !important;
+            font-weight: 600;
+            transition: all 0.3s ease;
+
+            &:hover {
+                background: $primary-purple !important;
+                box-shadow: 0 4px 12px $shadow-color;
+            }
+        }
     }
 }
-.page-title-section{
+
+.page-title-section {
     direction: ltr;
-    color: #3b004d;
+    color: $text-dark;
 }
 
 .flex-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    .controls { display: flex; gap: 10px; align-items: center; }
+
+    .controls {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+}
+
+.search-box {
+    .p-input-icon-left {
+        position: relative;
+
+        i {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: $text-muted;
+            z-index: 1;
+        }
+    }
+
+    .p-inputtext {
+        background: rgba(255, 255, 255, 0.5);
+        border: 1px solid rgba(189, 112, 210, 0.3);
+        border-radius: 8px;
+        padding-left: 35px;
+
+        &:focus {
+            border-color: $primary-purple;
+            box-shadow: 0 0 0 0.2rem rgba(129, 57, 235, 0.1);
+        }
+    }
 }
 
 .grid-layout {
@@ -62,13 +188,16 @@ $grad-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(249, 245
 }
 
 .sub-category-card {
-    background:$grad-glass;
+    background: $grad-glass;
     border-radius: 12px;
-    border: 1px solid rgba(189, 112, 210, 0.25) !important;
+    border: $border-glass !important;
     box-shadow: 0 8px 25px $shadow-color;
     overflow: hidden;
     text-align: center;
     transition: transform 0.2s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+    min-height: 400px; // Ensures space for description
 
     &:hover {
         transform: translateY(-5px);
@@ -92,51 +221,53 @@ $grad-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(249, 245
         }
     }
 
+    .placeholder-gradient {
+        background: linear-gradient(135deg, $primary-purple 0%, #bd00cb 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 15px $shadow-color;
+        width: 100%;
+        height: 100%;
+        border-radius: 12px;
+        flex-shrink: 0;
+
+        .sparkles-icon {
+            font-size: 3rem;
+            color: white;
+            opacity: 0.9;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+            animation: sparkle-float 3s infinite ease-in-out;
+        }
+    }
+
     .card-info {
         padding: 15px;
         display: flex;
         flex-direction: column;
         gap: 10px;
+        flex-grow: 1;
 
         h3 {
-            color: #3b004d;
+            color: $text-dark;
             font-size: 1.2rem;
             font-weight: 600;
+            margin: 0;
         }
 
         p {
-            color: #6b5f78;
+            color: $text-muted;
             font-size: 0.9rem;
             flex-grow: 1;
+            margin: 0;
         }
 
         .item-actions {
-            display: flex;
-            justify-content: center;
-
-            .p-button {
-                background: linear-gradient(135deg, $primary-purple 0%, #C64BF1 100%) !important;
-                color: white !important;
-                border: none !important;
-                border-radius: 8px !important;
-                padding: 8px 20px;
-                font-weight: 600;
-                cursor: pointer;
-                transition: all 0.3s ease;
-
-                &:hover {
-                    background: $primary-purple;
-                    box-shadow: 0 4px 12px $shadow-color;
-                }
-            }
+            margin-top: auto;
+            padding-top: 10px;
         }
     }
 }
-
-// ::ng-deep .p-paginator-page, .p-paginator-next, .p-paginator-last, .p-paginator-first, .p-paginator-prev {
-//     color: #8139eb;
-//     background-color: $primary-purple;
-// }
 
 .list-container {
     display: flex;
@@ -175,11 +306,26 @@ $grad-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(249, 245
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
-                transition: transform 0.3s ease;
             }
+        }
 
-            &:hover img {
-                transform: scale(1.05);
+        .placeholder-gradient {
+            background: linear-gradient(135deg, $primary-purple 0%, #bd00cb 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px $shadow-color;
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+            flex-shrink: 0;
+
+            .sparkles-icon {
+                font-size: 2rem;
+                color: white;
+                opacity: 0.9;
+                filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+                animation: sparkle-float 3s infinite ease-in-out;
             }
         }
 
@@ -187,39 +333,22 @@ $grad-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(249, 245
             display: flex;
             flex-direction: column;
             gap: 5px;
+            text-align: left;
 
             .item-name {
-                color: #3b004d;
+                color: $text-dark;
                 font-weight: 600;
                 font-size: 1rem;
             }
 
             .item-description {
-                color: #6b5f78;
+                color: $text-muted;
                 font-size: 0.85rem;
-            }
-        }
-    }
-
-    .item-actions {
-        .p-button {
-            background: linear-gradient(135deg, $primary-purple 0%, #C64BF1 100%) !important;
-            color: white !important;
-            border: none !important;
-            border-radius: 8px !important;
-            padding: 8px 20px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-
-            &:hover {
-                background: $primary-purple;
-                box-shadow: 0 4px 12px $shadow-color;
+                margin: 0;
             }
         }
     }
 }
-
 
 @media (max-width: 768px) {
     .grid-layout {
@@ -231,7 +360,7 @@ $grad-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(249, 245
         align-items: flex-start;
 
         .item-actions {
-            margin-top: 10px;
+            margin-top: 15px;
             width: 100%;
             display: flex;
             justify-content: flex-end;
@@ -239,3 +368,36 @@ $grad-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(249, 245
     }
 }
 
+@keyframes sparkle-float {
+
+    0%,
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 0.8;
+    }
+
+    50% {
+        transform: translateY(-5px) scale(1.1);
+        opacity: 1;
+    }
+}
+
+// ── AI Design badge on Empty subcategory tiles ──────────────
+.ai-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: linear-gradient(135deg, rgba(129, 57, 235, 0.12) 0%, rgba(189, 0, 203, 0.12) 100%);
+    border: 1px solid rgba(129, 57, 235, 0.35);
+    color: #8139eb;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.25rem 0.6rem;
+    border-radius: 20px;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.02em;
+
+    .pi-sparkles {
+        font-size: 0.75rem;
+    }
+}

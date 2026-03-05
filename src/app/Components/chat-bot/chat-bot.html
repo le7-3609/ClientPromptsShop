@@ -1,0 +1,69 @@
+<div class="chat-fab" [class.open]="isOpen" (click)="toggleChat()">
+  <div class="fab-inner">
+    @if (!isOpen) {
+      <i class="pi pi-comments"></i>
+    } @else {
+      <i class="pi pi-times"></i>
+    }
+  </div>
+  <div class="pulse-ring"></div>
+</div>
+
+<div class="chat-panel" [class.panel-open]="isOpen">
+  <div class="chat-header">
+    <div class="bot-avatar">
+      <i class="pi pi-star-fill"></i>
+    </div>
+    <div class="chat-header-info">
+      <span class="bot-name">Click-Site Assistant</span>
+      <span class="bot-status">Online</span>
+    </div>
+    <button class="close-btn" (click)="toggleChat()">
+      <i class="pi pi-times"></i>
+    </button>
+  </div>
+
+  <div class="messages-container" #messagesContainer (scroll)="onMessagesScroll()">
+    @for (message of messages; track $index) {
+      <div class="message-row" [class.user-row]="message.role === 'user'" [class.bot-row]="message.role === 'model'">
+        @if (message.role === 'model') {
+          <div class="bot-bubble-avatar">
+            <i class="pi pi-star-fill"></i>
+          </div>
+        }
+
+        <div class="bubble" [class.user-bubble]="message.role === 'user'" [class.bot-bubble]="message.role === 'model'">
+          {{ message.text }}
+        </div>
+      </div>
+    }
+
+    @if (isLoading) {
+      <div class="message-row bot-row">
+        <div class="bot-bubble-avatar">
+          <i class="pi pi-star-fill"></i>
+        </div>
+        <div class="bubble bot-bubble typing-bubble">
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="chat-input-area">
+    <textarea
+      [(ngModel)]="newMessage"
+      (keydown)="onKeyDown($event)"
+      placeholder="Type a message..."
+      rows="1"
+      class="chat-textarea"
+      [disabled]="isLoading"
+    ></textarea>
+
+    <button class="send-btn" (click)="sendMessage()" [disabled]="!newMessage.trim() || isLoading">
+      <i class="pi pi-send"></i>
+    </button>
+  </div>
+</div>

@@ -1,128 +1,600 @@
-// ... המשתנים נשארים אותו דבר ...
-$bg-color: #f9f5ff;
 $primary-purple: #8139eb;
-$accent-purple: #F6E8FE;
-$shadow-color: #9d58f51a;
-$dark-text: #3b004d;
+$deep-purple: #4a148c;
+$light-purple: #F6E8FE;
+$bg-color: #f9f5ff;
+$white: #ffffff;
+$shadow: rgba(129, 57, 235, 0.15);
 
-.shop-layout {
-    direction: rtl;
+.container {
+    max-width: 100%;
     background-color: $bg-color;
-    padding: 20px;
+    background-image: radial-gradient(circle at 10% 20%, rgba(129, 57, 235, 0.05) 0%, transparent 40%);
 }
 
-.sub-category-header {
+.sub-category-wrapper {
+    direction: rtl;
+    max-width: 95%;
+    min-width: 80%;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.category-hero {
+    position: relative;
     display: flex;
-    gap: 25px;
-    background: white;
-    padding: 25px;
-    border-radius: 15px;
-    border: 1px solid $primary-purple;
-    border-right: 6px solid $primary-purple;
-    box-shadow: 0 8px 30px $shadow-color;
-    margin-bottom: 30px;
     align-items: center;
-    
-    // איחוד הגדרות לתמונה ולגרדיאנט כדי לשמור על גודל אחיד
-    .sub-cat-img, .placeholder-gradient {
-        width: 140px;
-        height: 140px;
-        border-radius: 12px;
-        flex-shrink: 0; // מונע מהתמונה להתכווץ אם יש הרבה טקסט
+    gap: 2rem;
+    background: $white;
+    padding: 2rem;
+    border-radius: 24px;
+    box-shadow: 0 10px 40px $shadow;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+
+    &.reset {
+        background: $light-purple;
     }
 
-    .sub-cat-img {
-        object-fit: cover;
+    .hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(120deg, rgba(129, 57, 235, 0.1), transparent 55%);
+        pointer-events: none;
     }
 
-    // הוספת העיצוב לגרדיאנט והאייקון
-    .placeholder-gradient {
-        background: linear-gradient(135deg, $primary-purple 0%, #bd00cb 100%);
+    .image-container {
+        width: 120px;
+        height: 120px;
+        flex-shrink: 0;
+        position: relative;
+        z-index: 1;
+
+        .hero-img,
+        .placeholder-icon {
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            object-fit: cover;
+            box-shadow: 0 8px 20px $shadow;
+        }
+
+        .placeholder-icon {
+            background: linear-gradient(135deg, $primary-purple, $deep-purple);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 2.5rem;
+        }
+    }
+
+    .hero-text {
+        position: relative;
+        z-index: 1;
+
+        h1 {
+            font-size: 2.1rem;
+            color: $deep-purple;
+            margin: 0;
+            font-weight: 800;
+        }
+
+        p {
+            color: #666;
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+    }
+}
+
+.title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+
+    .reset-btn {
+        color: $primary-purple !important;
+        font-size: 0.9rem !important;
+        padding: 0.5rem !important;
+    }
+}
+
+/* banner shown when an AI prompt has been generated */
+.puzzle-banner {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.8rem 1rem;
+    background: linear-gradient(135deg, rgba(129,57,235,0.1), rgba(189,0,203,0.1));
+    border: 1px solid rgba(129,57,235,0.2);
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    color: $deep-purple;
+    font-weight: 600;
+
+    i {
+        font-size: 1.4rem;
+    }
+}
+
+.sticky-filter-bar {
+    /* now housed in sidebar; no longer sticky globally */
+    z-index: 20;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    background: $white;
+    border: 1px solid rgba(129, 57, 235, 0.15);
+    border-radius: 16px;
+    padding: 1rem;
+    box-shadow: 0 8px 25px rgba(129, 57, 235, 0.08);
+    margin-bottom: 1rem;
+}
+
+.filter-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .filter-label {
+        font-weight: 700;
+        color: $deep-purple;
+        font-size: 0.88rem;
+    }
+
+    small {
+        color: #666;
+        font-size: 0.8rem;
+    }
+
+    &.compact {
+        max-width: 220px;
+    }
+}
+
+.platform-required-bar {
+    /* moved into sidebar; positioned by sidebar flex layout */
+    background: #fdfaff;
+    border: 1px solid rgba(129, 57, 235, 0.2);
+    border-radius: 14px;
+    padding: 0.9rem 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+
+    .platform-title {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: $deep-purple;
+        font-weight: 700;
+        font-size: 0.9rem;
+    }
+}
+
+.products-view {
+    display: block;
+    max-width: 65%;
+}
+
+/* layout wrapper placing products and controls side-by-side */
+.content-area {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.sidebar {
+    /* smaller fixed width so products have more horizontal room */
+    flex: 0 0 220px;
+    position: sticky;
+    top: 80px;
+    align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    min-width: 35%;
+}
+
+/* ensure the dataview (product list) expands to fill remaining space */
+.content-area > p-dataview {
+    flex: 1 1 auto;
+    min-width: 0; /* allow shrinking on small screens */
+}
+
+@media (max-width: 900px) {
+    .content-area {
+        flex-direction: column;
+    }
+    .sidebar {
+        position: static;
+        width: 100%;
+        top: auto;
+    }
+}
+
+.product-list-card {
+    background: $white;
+    border-radius: 16px;
+    border: 1px solid rgba(129, 57, 235, 0.1);
+    box-shadow: 0 8px 25px rgba(129, 57, 235, 0.08);
+    overflow: hidden;
+}
+
+.product-row {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid rgba(129, 57, 235, 0.08);
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+
+    .selection-icon {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 24px;
+        height: 24px;
+        background: $primary-purple;
+        border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 4px 15px $shadow-color;
+        color: white;
+        font-size: 1rem;
+        z-index: 2;
+    }
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    &.active {
+        background-color: rgba(129, 57, 235, 0.07);
+    }
+
+    .row-left {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .product-thumb {
+        width: 68px;
+        height: 68px;
+        object-fit: cover;
+        border-radius: 10px;
+        border: 1px solid rgba(129, 57, 235, 0.2);
+    }
+
+    .product-info {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        margin-right: 15px;
+
+        .product-name {
+            font-weight: 700;
+            color: #2d3436;
+            font-size: 1rem;
+        }
+
+        .product-tag {
+            font-size: 0.78rem;
+            color: #78618f;
+        }
+    }
+
+    .product-price {
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: $deep-purple;
+    }
+}
+
+.empty-products {
+    padding: 2rem;
+    text-align: center;
+    color: #666;
+}
+
+/* legacy footer style removed – sidebar version defined later */
+
+@media (max-width: 900px) {
+    .sticky-filter-bar {
+        grid-template-columns: 1fr;
+        top: 68px;
+    }
+
+    .platform-required-bar {
+        top: 270px;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .action-footer {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+}
+$primary-purple: #8139eb;
+$deep-purple: #4a148c;
+$soft-bg: #fbfaff;
+$white: #ffffff;
+$shadow: rgba(129, 57, 235, 0.15);
+$bg-color: #f9f5ff;
+$grad-glass: linear-gradient(135deg, $bg-color 0%, $shadow 50%, $bg-color 100%);
+
+.container{
+    max-width: 100%;
+    background-color: $bg-color;
+    background-image: radial-gradient(circle at 10% 20%, rgba(129, 57, 235, 0.05) 0%, transparent 40%);
+}
+
+.sub-category-wrapper {
+    direction: rtl;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: $bg-color;
+    background-image: radial-gradient(circle at 10% 20%, rgba(129, 57, 235, 0.05) 0%, transparent 40%);
+}
+
+.category-hero {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    background: $white;
+    padding: 2rem;
+    border-radius: 24px;
+    box-shadow: 0 10px 40px $shadow;
+    margin-bottom: 3rem;
+
+    .hero-img, .placeholder-icon {
+        width: 120px;
+        height: 120px;
+        border-radius: 20px;
+        object-fit: cover;
+    }
+
+    .placeholder-icon {
+        background: linear-gradient(135deg, $primary-purple, $deep-purple);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 2.5rem;
+    }
+
+    .hero-text {
+        h1 { font-size: 2.5rem; color: $deep-purple; margin: 0; font-weight: 800; }
+        p { color: #666; font-size: 1.1rem; margin-top: 0.5rem; }
+    }
+
+@keyframes sparkle-float {
+    0%, 100% { 
+        transform: translateY(0) scale(1) rotate(0deg); 
+        opacity: 0.9;
+    }
+    50% { 
+        transform: translateY(-8px) scale(1.1) rotate(5deg); 
+        opacity: 1;
+    }
+}
+
+.image-container {
+    width: 120px;
+    height: 120px;
+    flex-shrink: 0;
+
+    .hero-img {
+        width: 100%;
+        height: 100%;
+        border-radius: 20px;
+        object-fit: cover;
+        box-shadow: 0 8px 20px $shadow;
+    }
+
+    .placeholder-icon {
+        width: 100%;
+        height: 100%;
+        border-radius: 20px;
+        background: linear-gradient(135deg, $primary-purple 0%, $deep-purple 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 25px $shadow;
+        overflow: hidden;
+        position: relative;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            transform: rotate(45deg);
+        }
 
         .sparkles-icon {
-            font-size: 3rem;
-            color: white;
-            opacity: 0.9;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+            font-size: 3.5rem;
+            color: $white;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
             animation: sparkle-float 3s infinite ease-in-out;
         }
     }
+}
+}
+.title-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items:center;
+    width: 100%;
 
-    .text-info {
-        h1 { color: $dark-text; font-size: 2rem; margin: 0; }
-        p { color: #555; margin-top: 10px; font-size: 1.1rem; }
+    .reset-btn {
+        color: $primary-purple !important;
+        font-size: 0.9rem !important;
+        padding: 0.5rem !important;
+        margin:   0 50px 0 0 !important;
+        
+        &:hover {
+            background-color: rgba($primary-purple, 0.05) !important;
+        }
     }
 }
 
-// אנימציה עדינה לאייקון כדי להוסיף חיים לדף
-@keyframes sparkle-float {
-    0%, 100% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(-5px) scale(1.1); }
+.products-grid {
+    display: grid;
+    gap: 1rem;
 }
 
-.product-selection-row {
+.product-card {
     display: flex;
     align-items: center;
-    padding: 20px;
-    background: white;
-    border-bottom: 1px solid $accent-purple;
-    transition: all 0.2s ease;
+    background: $white;
+    padding: 1.5rem;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid transparent;
 
-    &.selected {
-        background-color: $accent-purple;
-        border-right: 4px solid $primary-purple;
+    &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px $shadow;
     }
 
-    .product-details {
+    &.active {
+        background: #f6e8fe;
+        border-color: $primary-purple;
+    }
+
+    .product-info {
         flex-grow: 1;
-        margin-right: 20px;
-        .name { font-weight: 600; color: $dark-text; font-size: 1.1rem; }
+        margin-right: 1.5rem;
+        display: flex;
+        flex-direction: column;
+
+        .product-name { font-weight: 700; color: #2d3436; font-size: 1.2rem; }
+        .product-tag { font-size: 0.8rem; color: $primary-purple; opacity: 0.8; }
     }
 
-    .price-section {
-        color: $primary-purple;
-        font-weight: 700;
-        font-size: 1.2rem;
-        margin-left: 20px;
-    }
-}
-
-.footer-actions {
-    margin-top: 20px;
-    text-align: left;
-    
-    ::ng-deep .p-button {
-        width: 250px;
-        background: linear-gradient(135deg, $primary-purple 0%, #bd00cb 100%) !important;
-        font-size: 1.1rem !important;
-        height: 50px !important;
+    .product-price {
+        text-align: left;
+        color: $deep-purple;
+        .currency { font-size: 1rem; margin-left: 2px; }
+        .amount { font-size: 1.5rem; font-weight: 800; }
     }
 }
 
-::ng-deep .p-radiobutton .p-radiobutton-box.p-highlight {
-    background: $primary-purple !important;
-    border-color: $primary-purple !important;
-}
+.action-footer {
+    /* positioned by sidebar flex layout */
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+    width: 100%;
 
+    .platform-selector {
+        background: $white;
+        padding: 1.5rem 2rem;
+        border-radius: 16px;
+        box-shadow: 0 8px 20px $shadow;
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+        width: 100%;
+        max-width: 500px;
+        animation: slideUp 0.3s ease;
 
-.button-container {
-    ::ng-deep .p-button {
-        width: 30%;
-        background: linear-gradient(135deg, $primary-purple 0%, #bd00cb 100%);
-        border: none;
-        padding: 14px;
-        font-size: 1.1rem;
-        transition: all 0.3s ease;
+        label {
+            font-weight: 700;
+            color: $deep-purple;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
 
-        &:hover {
-            background: $primary-purple;
-            border: $primary-purple;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px $shadow-color;
+            &::before {
+                content: '🚀';
+                font-size: 1.2rem;
+            }
         }
+
+        ::ng-deep .p-select {
+            width: 100%;
+            
+            .p-select-label {
+                padding: 0.9rem 1.2rem;
+                font-size: 1rem;
+                border-radius: 12px;
+                border: 2px solid rgba($primary-purple, 0.2);
+                transition: all 0.3s;
+
+                &:hover {
+                    border-color: $primary-purple;
+                }
+            }
+
+            &.p-focus .p-select-label {
+                border-color: $primary-purple;
+                box-shadow: 0 0 0 3px rgba($primary-purple, 0.1);
+            }
+        }
+    }
+
+    ::ng-deep .custom-cart-btn {
+        padding: 1rem 4rem !important;
+        background: linear-gradient(135deg, $primary-purple, $deep-purple) !important;
+        border: none !important;
+        font-weight: 700 !important;
+        font-size: 1.2rem !important;
+        border-radius: 16px !important;
+        
+        &:hover {
+            box-shadow: 0 10px 25px rgba(74, 20, 140, 0.3) !important;
+            transform: translateY(-2px);
+        }
+
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.ai-prompt-replacement-note {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0.85rem 0;
+    color: #5b4a71;
+    font-size: 0.9rem;
+    background: rgba(129, 57, 235, 0.06);
+    border: 1px solid rgba(129, 57, 235, 0.2);
+    border-radius: 10px;
+    padding: 0.65rem 0.85rem;
+
+    i {
+        color: $primary-purple;
     }
 }

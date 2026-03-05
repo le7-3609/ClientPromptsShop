@@ -1,1 +1,200 @@
-<p>basic-site works!</p>
+<p-toast></p-toast>
+<p-confirmDialog key="replaceBasicSite"></p-confirmDialog>
+
+<div class="contact-page-wrapper" dir="ltr">
+    <header class="contact-header">
+        <div class="container">
+            <h1>Ignition Point</h1>
+            <div class="underline"></div>
+            <p>
+                Define your site's name and type to establish the precise foundation for generating your custom prompts.
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="form-container">
+            <div class="form-card">
+                <h2>{{ isEditMode ? 'Edit Your Basic Site' : 'Create Your Basic Site' }}</h2>
+
+                <div *ngIf="isLoading" class="loading-message">
+                    <p>Loading platforms and site types...</p>
+                </div>
+
+                <form (ngSubmit)="saveBasicSite()" #basicSiteForm="ngForm" class="contact-form" *ngIf="!isLoading && !isSubmitting && !isAiProcessing">
+                    <div class="field">
+                        <p-floatlabel variant="on">
+                            <input pInputText id="siteName" name="siteName" [(ngModel)]="formData.siteName" required class="custom-input" [disabled]="isAiProcessing" />
+                            <label for="siteName">Site Name</label>
+                        </p-floatlabel>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="field">
+                            <p-floatlabel variant="on">
+                                <p-select
+                                    [options]="platforms"
+                                    [(ngModel)]="formData.platformId"
+                                    [showClear]="true"
+                                    [disabled]="isAiProcessing"
+                                    optionLabel="platformName"
+                                    optionValue="platformId"
+                                    name="platform"
+                                    id="platform"
+                                    (onChange)="onPlatformChange()"
+                                    required
+                                    class="custom-select-prime"
+                                    placeholder="Select a Platform"
+                                    emptyMessage="No platforms available"
+                                >
+                                </p-select>
+                                <label for="platform">Platform *</label>
+                            </p-floatlabel>
+                        </div>
+
+                        @if (!useAiMode) {
+                            <div class="field">
+                                <p-floatlabel variant="on">
+                                    <p-select
+                                        [options]="siteTypes"
+                                        [(ngModel)]="formData.siteTypeId"
+                                        [showClear]="true"
+                                        [disabled]="isAiProcessing"
+                                        [filter]="true"
+                                        filterBy="siteTypeName,price,siteTypeDescription"
+                                        filterPlaceholder="Search by name, price, or description..."
+                                        optionLabel="siteTypeName"
+                                        optionValue="siteTypeId"
+                                        name="siteType"
+                                        id="siteType"
+                                        (onChange)="onSiteTypeChange()"
+                                        [required]="!useAiMode"
+                                        class="custom-select-prime"
+                                        placeholder="Select a Site Type"
+                                    >
+                                        <ng-template #selectedItem let-selectedItem>
+                                            <div class="site-type-selected">
+                                                <span>{{ selectedItem.siteTypeName }}</span>
+                                                <span class="site-type-price-badge">${{ selectedItem.price }}</span>
+                                            </div>
+                                        </ng-template>
+                                        <ng-template #item let-siteType>
+                                            <div class="site-type-option">
+                                                <div class="site-type-option-header">
+                                                    <span class="site-type-option-name">{{ siteType.siteTypeName }}</span>
+                                                    <span class="site-type-option-price">${{ siteType.price }}</span>
+                                                </div>
+                                                <p class="site-type-option-desc">{{ siteType.siteTypeDescription }}</p>
+                                            </div>
+                                        </ng-template>
+                                    </p-select>
+                                    <label for="siteType">Site Type *</label>
+                                </p-floatlabel>
+                            </div>
+                        } @else {
+                            <div class="field ai-mode-indicator">
+                                <i class="pi pi-sparkles"></i>
+                                <span>AI mode is active. Site type selection is replaced by your generated prompt.</span>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="gemini-integration-wrapper">
+                        <div class="form-card">
+                            <h2>AI Assistance</h2>
+
+                            <div class="ai-input-row">
+                                <div class="field input-container">
+                                    <p-floatlabel variant="on">
+                                        <input pInputText id="aiPrompt" name="aiPrompt" [(ngModel)]="aiData" (ngModelChange)="onAiInputChange($event)" class="custom-input" [disabled]="isAiProcessing" />
+                                        <label for="aiPrompt">Describe your unique vision here. Our AI will handle the rest.</label>
+                                    </p-floatlabel>
+                                </div>
+
+                                <div class="buttons-container">
+                                    <p-button
+                                        *ngIf="!isSubmitted"
+                                        (onClick)="handleAiSubmit()"
+                                        label="Generate"
+                                        icon="pi pi-sparkles"
+                                        styleClass="submit-btn-gradient ai-btn"
+                                        [disabled]="!aiData.trim() || isAiProcessing || !!formData.siteTypeId"
+                                    >
+                                    </p-button>
+
+                                    <div *ngIf="isSubmitted" class="action-group">
+                                        <p-button
+                                            (onClick)="handleEdit()"
+                                            label="Update Vision"
+                                            icon="pi pi-sync"
+                                            styleClass="p-button-outlined p-button-secondary update-btn-custom"
+                                            [disabled]="isAiProcessing"
+                                        >
+                                        </p-button>
+
+                                        <p-button
+                                            (onClick)="handleDelete()"
+                                            icon="pi pi-trash"
+                                            styleClass="p-button-rounded p-button-danger p-button-text delete-btn"
+                                            [disabled]="isAiProcessing"
+                                        >
+                                        </p-button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p-button
+                        type="submit"
+                        [disabled]="basicSiteForm.invalid || (!formData.siteTypeId && !isSubmitted) || isSubmitting || isAiProcessing"
+                        [label]="isSubmitting ? 'Saving...' : (isEditMode ? 'Update Site' : 'Create Site')"
+                        icon="pi pi-check"
+                        styleClass="submit-btn-gradient">
+                    </p-button>
+                </form>
+
+                <div *ngIf="isAiProcessing" class="ai-processing-message">
+                    <div class="ai-processing-card">
+                        <div class="ai-processing-animation">
+                            <i class="pi pi-sparkles ai-processing-icon"></i>
+                        </div>
+                        <h3>AI at Work</h3>
+                        <p>We are preparing a perfect description for you. Please wait while our AI crafts your vision...</p>
+                        <div class="ai-processing-indicator">
+                            <div class="ai-processing-dots">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="isSubmitting" class="processing-message">
+                    <div class="processing-card">
+                        <div class="processing-animation">
+                            <i class="pi pi-spinner pi-spin processing-icon"></i>
+                        </div>
+                        <h3>Processing Your Request</h3>
+                        <p>Your site description has been sent for processing. Please wait while we create your basic site format...</p>
+                        <div class="processing-steps">
+                            <div class="step active">
+                                <i class="pi pi-check-circle"></i>
+                                <span>Validating information</span>
+                            </div>
+                            <div class="step active">
+                                <i class="pi pi-cog pi-spin"></i>
+                                <span>Creating site structure</span>
+                            </div>
+                            <div class="step">
+                                <i class="pi pi-circle"></i>
+                                <span>Finalizing setup</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
