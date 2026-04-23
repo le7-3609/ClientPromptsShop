@@ -1,3 +1,4 @@
+@use "sass:color";
 $purple: #8139eb;
 $purple-light: #f3e8ff;
 $grad: linear-gradient(135deg, #8139eb 0%, #bd00cb 100%);
@@ -24,7 +25,7 @@ $grad: linear-gradient(135deg, #8139eb 0%, #bd00cb 100%);
   transition: width 0.2s, background 0.2s;
 
   &:hover {
-    background: darken($purple, 8%);
+    background: color.adjust($purple, $lightness: -8%);
     width: 50px;
   }
 
@@ -85,8 +86,15 @@ $grad: linear-gradient(135deg, #8139eb 0%, #bd00cb 100%);
     align-items: center;
     gap: 10px;
 
-    i { font-size: 1.3rem; }
-    h2 { font-size: 1.1rem; font-weight: 700; margin: 0; }
+    i {
+      font-size: 1.3rem;
+    }
+
+    h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin: 0;
+    }
   }
 }
 
@@ -104,7 +112,9 @@ $grad: linear-gradient(135deg, #8139eb 0%, #bd00cb 100%);
   font-size: 1rem;
   transition: background 0.2s;
 
-  &:hover { background: rgba(255, 255, 255, 0.35); }
+  &:hover {
+    background: rgba(255, 255, 255, 0.35);
+  }
 
   &:focus-visible {
     outline: 2px solid white;
@@ -205,8 +215,13 @@ $grad: linear-gradient(135deg, #8139eb 0%, #bd00cb 100%);
   }
 }
 
-.font-lg { font-size: 1.1rem; }
-.font-xl { font-size: 1.35rem; }
+.font-lg {
+  font-size: 1.1rem;
+}
+
+.font-xl {
+  font-size: 1.35rem;
+}
 
 /* ── Footer ── */
 .a11y-footer {

@@ -122,7 +122,6 @@ export class Orders implements OnInit {
     reader.readAsDataURL(file);
   }
 
-  /** Toggles the expanded state of an AI Design prompt on an order item */
   togglePromptExpand(orderItemId: number) {
     if (this.expandedPromptItemIds.has(orderItemId)) {
       this.expandedPromptItemIds.delete(orderItemId);

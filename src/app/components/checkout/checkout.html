@@ -11,7 +11,7 @@
             <h3>Website Project</h3>
             <p><strong>Name:</strong> {{ basicSite.siteName }}</p>
             <p><strong>Type:</strong> {{ basicSite.siteTypeName }}</p>
-            <p><strong>Price:</strong> ${{ basicSite.price }}</p>
+            <p><strong>Price:</strong> {{ basicSite.price * currencyRate | currency:currencyCode }}</p>
           </div>
         } @else {
           <div class="site-info" style="border-color: #ff6b6b;">
@@ -29,12 +29,12 @@
         <div class="items-list">
           @for (item of cartItems; track item.cartItemId) {
             <div class="summary-item">
-              <img [src]="item.imageUrl" [alt]="item.productName">
+              <img [src]="getProductImage(item)" [alt]="item.productName">
               <div class="item-info">
                 <h4>{{ item.productName }}</h4>
                 <p>{{ item.platformName }}</p>
               </div>
-              <span class="item-price">${{ item.price }}</span>
+              <span class="item-price">{{ item.price * currencyRate | currency:currencyCode }}</span>
             </div>
           }
         </div>
@@ -42,11 +42,11 @@
         <div class="total-section">
           <div class="total-row">
             <span>Subtotal:</span>
-            <span>${{ totalPrice }}</span>
+            <span>{{ totalPrice * currencyRate | currency:currencyCode }}</span>
           </div>
           <div class="total-row final">
             <span>Total:</span>
-            <span>${{ totalPrice }}</span>
+            <span>{{ totalPrice * currencyRate | currency:currencyCode }}</span>
           </div>
         </div>
       </div>
@@ -59,6 +59,12 @@
           </svg>
           Pay with PayPal
         </button>
+        @if (checkoutError) {
+          <p class="secure-text" style="color: #ff6b6b; margin-top: 0.75rem;">
+            <i class="pi pi-exclamation-triangle"></i>
+            {{ checkoutError }}
+          </p>
+        }
         @if (!canCheckout) {
           <p class="secure-text" style="color: #ff6b6b;">
             <i class="pi pi-exclamation-triangle"></i>
@@ -74,7 +80,6 @@
     </div>
   </div>
 
-  <!-- PayPal Modal -->
   <p-dialog 
     [(visible)]="showPayPalModal" 
     [modal]="true" 
@@ -98,25 +103,33 @@
             <h3>Complete your payment</h3>
             <div class="amount-display">
               <span class="label">Total Amount:</span>
-              <span class="amount">${{ totalPrice }}</span>
-            </div>
-            
-            <div class="mock-login">
-              <p class="info-text">
-                <i class="pi pi-info-circle"></i>
-                This is a demo payment. Click "Pay Now" to simulate payment.
-              </p>
+              <span class="amount">{{ totalPrice * currencyRate | currency:currencyCode }}</span>
             </div>
 
+            <p class="info-text">
+              <i class="pi pi-info-circle"></i>
+              Use your PayPal account to complete checkout.
+            </p>
+
+            @if (paypalError) {
+              <p class="secure-text" style="color: #ff6b6b; margin-top: 0.75rem;">
+                <i class="pi pi-exclamation-triangle"></i>
+                {{ paypalError }}
+              </p>
+            }
+
+            @if (!paypalReady && !paypalError) {
+              <div class="processing" style="margin-top: 1rem;">
+                <i class="pi pi-spin pi-spinner"></i>
+                <p>Loading PayPal...</p>
+              </div>
+            }
+
+            <div id="paypal-button-container" style="margin-top: 1rem;"></div>
+
             <div class="button-group">
-              <p-button 
-                label="Pay Now" 
-                icon="pi pi-check"
-                (onClick)="processPayment()"
-                styleClass="pay-button">
-              </p-button>
-              <p-button 
-                label="Cancel" 
+              <p-button
+                label="Cancel"
                 icon="pi pi-times"
                 (onClick)="cancelPayment()"
                 [outlined]="true"
@@ -140,4 +153,14 @@
       }
     </div>
   </p-dialog>
+
+  <div class="floating-pay-cta">
+    <div class="cta-total">{{ totalPrice * currencyRate | currency:currencyCode }}</div>
+    <button class="paypal-button" (click)="openPayPalModal()" [disabled]="!canCheckout">
+      <svg viewBox="0 0 24 24" width="22" height="22">
+        <path fill="currentColor" d="M20.067 8.478c.492.88.556 2.014.3 3.327-.74 3.806-3.276 5.12-6.514 5.12h-.5a.805.805 0 0 0-.794.68l-.04.22-.63 3.993-.032.17a.804.804 0 0 1-.794.679H7.72a.483.483 0 0 1-.477-.558L9.096 7.74a.948.948 0 0 1 .936-.803h4.22c1.194 0 2.138.149 2.815.447z"/>
+      </svg>
+      Pay with PayPal
+    </button>
+  </div>
 </div>

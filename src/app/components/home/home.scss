@@ -123,8 +123,10 @@ $text-main: #4a4a4a;
   .zoom-in,
   .fade-in,
   .spin-in {
-    opacity: 0;
-    animation-fill-mode: forwards !important;
+    /* animation-fill-mode: both ensures opacity:0 comes from the keyframe's
+       "from" state (not a static CSS property), so when animation is disabled
+       (e.g. Reduce Motion) the element has no hardcoded opacity and stays visible */
+    animation-fill-mode: both !important;
     animation-delay: var(--delay, 0s);
   }
 
@@ -341,6 +343,23 @@ $text-main: #4a4a4a;
     }
   }
 
+  /* Auto-reveal animations for sections that were previously broken by pAnimateOnScroll
+     bubbling animationend events from children (PrimeNG bug). These play automatically
+     with a generous delay so the content is ALWAYS visible without scroll-trigger dependency. */
+  .stats-reveal {
+    animation: revealUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: 0.2s;
+  }
+
+  .reviews-reveal {
+    animation: revealUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: 0.3s;
+  }
+
+  /* When reduce-motion is active the animations are killed by styles.scss globally;
+     without pAnimateOnScroll there is no inline opacity:0, so the sections are
+     immediately visible – no extra rule needed here. */
+
   .reviews-section {
     padding: 80px 20px;
     max-width: 860px;
@@ -357,7 +376,7 @@ $text-main: #4a4a4a;
       }
 
       .section-sub {
-        color: lighten($primary-purple, 20%);
+        color: color.adjust($primary-purple, $lightness: 20%);
         font-size: 1rem;
         margin-bottom: 12px;
       }

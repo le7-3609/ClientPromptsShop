@@ -55,6 +55,13 @@ html.a11y-reduced-motion * {
   scroll-behavior: auto !important;
 }
 
+/* When reduced motion is active, PrimeNG's pAnimateOnScroll directive still
+   sets inline style="opacity:0" on init. Force those elements to be visible
+   so content is never hidden when animations are disabled. */
+html.a11y-reduced-motion .p-animateonscroll {
+  opacity: 1 !important;
+}
+
 html.a11y-reduced-motion *::before,
 html.a11y-reduced-motion *::after {
   animation: none !important;

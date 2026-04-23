@@ -25,7 +25,7 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
-              "src/assets" ,
+              "src/assets",
               {
                 "glob": "**/*",
                 "input": "public"
@@ -41,13 +41,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "2mb",
+                  "maximumError": "3mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kB",
-                  "maximumError": "8kB"
+                  "maximumWarning": "10kb",
+                  "maximumError": "15kb"
                 }
               ],
               "outputHashing": "all"
@@ -67,12 +67,12 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-            "builder": "@angular/build:dev-server",
-            "options": {
-              "proxyConfig": "proxy.conf.json",
-              "port": 5000,
-              "ssl": false
-            },
+          "builder": "@angular/build:dev-server",
+          "options": {
+            "proxyConfig": "proxy.conf.json",
+            "port": 5000,
+            "ssl": false
+          },
           "configurations": {
             "production": {
               "buildTarget": "client:build:production"

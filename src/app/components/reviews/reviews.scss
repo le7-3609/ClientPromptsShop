@@ -120,21 +120,7 @@ $grad: linear-gradient(135deg, $primary-purple 0%, #bd00cb 100%);
     }
   }
 
-  .floating-icon {
-    font-size: 3rem;
-    color: $primary-purple;
-    display: inline-block;
-    animation: floatBob 3s ease-in-out infinite;
-    margin-bottom: 10px;
-
-    .pi {
-      background: $grad;
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-  }
-
+  
   .header-title {
     color: $primary-purple;
     font-size: 2.5rem;
@@ -294,11 +280,12 @@ $grad: linear-gradient(135deg, $primary-purple 0%, #bd00cb 100%);
     align-items: center;
     justify-content: center;
 
-    .pi {
-      color: white;
-      font-size: 3rem;
-      animation: floatBob 3s ease-in-out infinite;
-    }
+    
+      .pi {
+        color: white;
+        font-size: 3rem;
+        animation: none !important;
+      }
   }
 }
 
@@ -513,7 +500,7 @@ $grad: linear-gradient(135deg, $primary-purple 0%, #bd00cb 100%);
   }
 
   .pulse-star {
-    animation: pulseGlow 2s ease-in-out infinite;
+    animation: none !important;
   }
 
   p {

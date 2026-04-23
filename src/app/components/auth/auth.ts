@@ -122,29 +122,48 @@ export class Auth implements AfterViewInit {
         ...this.registerForm.value,
         provider: "local"
       };
-      
       this.userService.register(registrationPayload).subscribe({
-        next: (newUser) => {
-          this.messageService.add({ 
-            severity: 'success', 
-            summary: 'Registration Successful', 
-            detail: `Welcome ${newUser.firstName}! Your account has been created successfully.`,
-            life: 1500 
-          });
-          this.router.navigateByUrl(this.returnUrl);
+        next: (response) => {
+          const status = response?.status;
+          const newUser = response?.body as any;
+          if (status === 201 && newUser) {
+            this.messageService.add({ 
+              severity: 'success', 
+              summary: 'Registration Successful', 
+              detail: `Welcome ${newUser.firstName}! Your account has been created successfully.`,
+              life: 1500 
+            });
+            this.router.navigateByUrl(this.returnUrl);
+          } else {
+            let detail = `Registration did not complete. Server returned status ${status}.`;
+            if (registrationPayload.provider === 'local') {
+              if (status === 200) {
+                detail = 'Registration returned OK but was not created. Please check your email or try again.';
+              } else if (status === 204) {
+                detail = 'No content returned after registration. Please try again.';
+              }
+            } else {
+              detail = `Unexpected response (${status}) for ${registrationPayload.provider} registration.`;
+            }
+
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Registration Failed',
+              detail,
+              life: 5000
+            });
+          }
         },
         error: (err) => {
           console.error('Registration error:', err);
           let errorMessage = 'Registration failed. Please try again.';
-          
-          if (err.status === 400) {
+          if (err?.status === 400) {
             errorMessage = 'Invalid registration data. Please check your information.';
-          } else if (err.status === 409 || err.error?.message?.includes('email')) {
+          } else if (err?.status === 409 || err?.error?.message?.includes('email')) {
             errorMessage = 'This email is already registered. Please use a different email or try logging in.';
-          } else if (err.status === 500) {
+          } else if (err?.status === 500) {
             errorMessage = 'Server error occurred. Please try again later.';
           }
-          
           this.messageService.add({ 
             severity: 'error', 
             summary: 'Registration Failed', 
@@ -195,7 +214,21 @@ export class Auth implements AfterViewInit {
         });
         setTimeout(() => this.router.navigateByUrl(this.returnUrl), 1500);
       },
-      error: () => {
+      error: (err: any) => {
+        if (err?.status === 409) {
+          const serverMsg = err?.error?.message || '';
+          const detail = serverMsg.includes('provider') || serverMsg.includes('registered')
+            ? 'This email is already registered with another provider. Please sign in using that provider.'
+            : 'This email is already registered. Please sign in using the original provider.';
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Sign-In Conflict',
+            detail,
+            life: 5000
+          });
+          return;
+        }
+
         this.messageService.add({
           severity: 'error',
           summary: 'Sign-In Failed',

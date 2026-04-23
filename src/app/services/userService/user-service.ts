@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { LoginModel } from '../../models/login-model';
 import { UserProfileModel } from '../../models/user-model';
@@ -40,9 +40,10 @@ export class UserService {
     );
   }
 
-  register(registerForm: any): Observable<UserProfileModel> {
-    return this.http.post<UserProfileModel>(`${this.BASIC_URL}/register`, registerForm).pipe(
-      tap(user => {
+  register(registerForm: any): Observable<HttpResponse<UserProfileModel>> {
+    return this.http.post<UserProfileModel>(`${this.BASIC_URL}/register`, registerForm, { observe: 'response' }).pipe(
+      tap(response => {
+        const user = response.body as UserProfileModel | null;
         if (user) {
           localStorage.setItem('user_data', JSON.stringify(user));
           this.currentUserSubject.next(user);

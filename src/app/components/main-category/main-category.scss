@@ -1,4 +1,6 @@
 // --- Variables ---
+@use "sass:color";
+
 $bg-color: #f9f5ff;
 $primary-purple: #8139eb;
 $accent-purple: #F6E8FE;
@@ -26,18 +28,16 @@ $border-glass: 1px solid rgba(189, 112, 210, 0.25);
             display: inline-block;
         }
 
-        &::after {
-            content: '';
-            display: block;
+        .underline {
+            width: 60px;
             height: 5px;
             background: $grad;
-            margin: 15px auto 0;
+            margin: 20px auto;
             border-radius: 10px;
+            box-shadow: 0 2px 10px $shadow-color;
 
             animation: elasticMove 3.5s ease-in-out infinite alternate;
-            box-shadow: 0 2px 10px $shadow-color;
         }
-
 
         @keyframes elasticMove {
             0% {
@@ -47,7 +47,7 @@ $border-glass: 1px solid rgba(189, 112, 210, 0.25);
             }
 
             50% {
-                width: 100px; 
+                width: 100px;
                 opacity: 1;
             }
 
@@ -116,7 +116,7 @@ $border-glass: 1px solid rgba(189, 112, 210, 0.25);
             color: white !important;
 
             &:hover {
-                background: darken($primary-purple, 10%) !important;
+                background: color.adjust($primary-purple, $lightness: -10%) !important;
             }
         }
 

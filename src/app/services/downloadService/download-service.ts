@@ -6,9 +6,10 @@ import { jsPDF } from 'jspdf';
 })
 export class DownloadService {
   /**
-   * Download text content as a styled PDF file.
+   * Build a jsPDF document from text without saving it.
+   * Returns the doc instance so callers can export as needed.
    */
-  downloadAsPdf(text: string, fileName: string = 'document'): void {
+  private buildPdfDoc(text: string, fileName: string = 'document'): jsPDF {
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
     const margin = 20;
@@ -16,24 +17,20 @@ export class DownloadService {
     const lineHeight = 7;
     let cursorY = 20;
 
-    // Title
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(18);
     doc.text(fileName, pageWidth / 2, cursorY, { align: 'center' });
     cursorY += 12;
 
-    // Separator line
-    doc.setDrawColor(129, 57, 235); // purple accent
+    doc.setDrawColor(129, 57, 235);
     doc.setLineWidth(0.5);
     doc.line(margin, cursorY, pageWidth - margin, cursorY);
     cursorY += 10;
 
-    // Body text
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(11);
 
     const lines = doc.splitTextToSize(text, maxLineWidth);
-
     for (const line of lines) {
       if (cursorY + lineHeight > doc.internal.pageSize.getHeight() - margin) {
         doc.addPage();
@@ -43,20 +40,21 @@ export class DownloadService {
       cursorY += lineHeight;
     }
 
-    doc.save(`${fileName}.pdf`);
+    return doc;
   }
 
   /**
-   * Download text content as a styled HTML file.
+   * Generate the HTML string for the given text content.
+   * Returns the raw HTML string without triggering a download.
    */
-  downloadAsHtml(text: string, fileName: string = 'document'): void {
+  generateHtmlString(text: string, fileName: string = 'document'): string {
     const escapedText = text
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/\n/g, '<br>');
 
-    const html = `<!DOCTYPE html>
+    return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -119,7 +117,35 @@ export class DownloadService {
   </div>
 </body>
 </html>`;
+  }
 
+  /**
+   * Generate PDF content as a base64 data URI string (without saving).
+   */
+  generatePdfDataUri(text: string, fileName: string = 'document'): string {
+    return this.buildPdfDoc(text, fileName).output('datauristring');
+  }
+
+  /**
+   * Generate PDF content as a Blob (without saving).
+   */
+  generatePdfBlob(text: string, fileName: string = 'document'): Blob {
+    return this.buildPdfDoc(text, fileName).output('blob') as unknown as Blob;
+  }
+
+  /**
+   * Download text content as a styled PDF file.
+   */
+  downloadAsPdf(text: string, fileName: string = 'document'): void {
+    const doc = this.buildPdfDoc(text, fileName);
+    doc.save(`${fileName}.pdf`);
+  }
+
+  /**
+   * Download text content as a styled HTML file.
+   */
+  downloadAsHtml(text: string, fileName: string = 'document'): void {
+    const html = this.generateHtmlString(text, fileName);
     const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
     const url = URL.createObjectURL(blob);
 

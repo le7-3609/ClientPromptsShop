@@ -41,13 +41,12 @@ $grad: linear-gradient(135deg, $primary-purple 0%, #bd00cb 100%);
 
     .underline {
       width: 60px;
-      height: 5px; // טיפה עבה יותר לנוכחות
+      height: 5px; 
       background: $grad;
       margin: 20px auto;
       border-radius: 10px;
       box-shadow: 0 2px 10px $shadow-color;
       
-      // הפעלת האנימציה האלסטית החדשה
       animation: elasticMove 3.5s ease-in-out infinite alternate;
     }
   }
