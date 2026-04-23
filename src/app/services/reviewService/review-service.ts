@@ -9,7 +9,7 @@ import { AdminReviewModel } from '../../models/review-model'
 })
 export class ReviewService {
   private http = inject(HttpClient)
-  private REVIEWS_URL = `${environment.apiUrl}/Orders/reviews`
+  private REVIEWS_URL = `${environment.apiUrl}/Reviews`
 
   private reviewSubject = new BehaviorSubject<AdminReviewModel[] | null>(null)
   public review$: Observable<AdminReviewModel[] | null> = this.reviewSubject.asObservable()

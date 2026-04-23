@@ -13,6 +13,7 @@ import { DownloadService } from '../../services/downloadService/download-service
 import { Router, RouterLink } from '@angular/router';
 import { AddReviewModel, OrderDetailsModel, OrderUIModel } from '../../models/order-model';
 import { MessageService } from 'primeng/api';
+import { firstValueFrom } from 'rxjs';
 import { SelectButtonModule } from 'primeng/selectbutton';
 
 @Component({
@@ -49,6 +50,7 @@ export class Orders implements OnInit {
   };
 
   isEditingReview: boolean = false;
+  currentReviewId: number | null = null;
 
   // Download dialog state
   displayDownloadDialog = false;
@@ -134,16 +136,23 @@ export class Orders implements OnInit {
     return this.expandedPromptItemIds.has(orderItemId);
   }
 
-  openReview(order: any) {
+  async openReview(order: any) {
     this.selectedOrder = order;
-    this.isEditingReview = !!order.reviewId;
-    if (order.reviewId > 0) {
-      this.newReview = {
-        stars: order.score || 5,
-        text: order.note || '',
-        image: order.reviewImageUrl || '',
-      };
-    } else {
+    this.currentReviewId = null;
+    this.isEditingReview = false;
+    try {
+      const existing = await firstValueFrom(this.orderService.getReviewByOrderId(order.orderId));
+      if (existing) {
+        this.currentReviewId = existing.reviewId;
+        this.isEditingReview = true;
+        this.newReview = {
+          stars: existing.score || 5,
+          text: existing.note || '',
+          image: existing.reviewImageUrl || '',
+        };
+      }
+    } catch {
+      // No review yet — keep defaults
       this.newReview = { stars: 5, text: '', image: '' };
     }
     this.displayReviewDialog = true;
@@ -161,7 +170,7 @@ export class Orders implements OnInit {
 
     const request$ = this.isEditingReview
       ? this.orderService.updateReview(this.selectedOrder.orderId, review)
-      : this.orderService.saveReview(this.selectedOrder.orderId, review);
+      : this.orderService.saveReview(this.selectedOrder.orderId, review, this.selectedFile ?? undefined);
 
     request$.subscribe({
         next: () => {

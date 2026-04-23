@@ -28,13 +28,9 @@ async getProducts(position: number, skip: number, subCategoryIds?: number[]): Pr
 
 
 
-  async getProductsById(productId: number): Promise<ProductModel[]> {
-    const options = {
-      params: new HttpParams().set('productId', productId)
-    };
-
+  async getProductsById(productId: number): Promise<ProductModel> {
     return firstValueFrom(
-      this.http.get<ProductModel[]>(`${this.BASIC_URL}`, options)
+      this.http.get<ProductModel>(`${this.BASIC_URL}/${productId}`)
     );
   }
 

@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { OrderDetailsModel, AddReviewModel, OrderSummaryModel, UpdateOrderStatusModel } from '../../models/order-model';
 import { environment } from '../../../environments/environment.development';
-import { AdminReviewModel } from '../../models/review-model';
+import { AdminReviewModel, ReviewApiModel } from '../../models/review-model';
 
 export interface AdminOrdersResponse {
   orders: OrderSummaryModel[];
-  totalSum: number;
+  total: number;
 }
 
 @Injectable({
@@ -16,6 +17,7 @@ export interface AdminOrdersResponse {
 export class OrderService {
   private BASIC_URL = `${environment.apiUrl}/Orders`;
   private USERS_URL = `${environment.apiUrl}/Users`;
+  private REVIEWS_URL = `${environment.apiUrl}/Reviews`;
 
   constructor(private http: HttpClient) {}
 
@@ -44,15 +46,33 @@ export class OrderService {
   }
 
   getAllReviews(): Observable<AdminReviewModel[]> {
-    return this.http.get<AdminReviewModel[]>(`${this.BASIC_URL}/reviews`);
+    return this.http.get<AdminReviewModel[]>(this.REVIEWS_URL);
   }
 
-  saveReview(orderId: number, review: AddReviewModel): Observable<any> {
-    return this.http.post(`${this.BASIC_URL}/${orderId}/review`, review);
+  getReviewByOrderId(orderId: number): Observable<ReviewApiModel> {
+    return this.http.get<ReviewApiModel>(`${this.REVIEWS_URL}/${orderId}`);
+  }
+
+  saveReview(orderId: number, review: AddReviewModel, file?: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('Score', String(review.score));
+    if (review.note) formData.append('Note', review.note);
+    if (file) formData.append('Image', file);
+    return this.http.post(`${this.REVIEWS_URL}/${orderId}`, formData);
   }
 
   updateReview(orderId: number, review: AddReviewModel): Observable<any> {
-    return this.http.put(`${this.BASIC_URL}/${orderId}/review`, review);
+    return this.getReviewByOrderId(orderId).pipe(
+      switchMap((existing) =>
+        this.http.put(this.REVIEWS_URL, {
+          ReviewId: existing.reviewId,
+          OrderId: review.orderId,
+          Score: review.score,
+          Note: review.note,
+          ReviewImageUrl: review.reviewImageUrl,
+        })
+      )
+    );
   }
 
   updateOrderStatus(payload: UpdateOrderStatusModel): Observable<any> {

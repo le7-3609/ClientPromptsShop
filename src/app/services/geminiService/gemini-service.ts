@@ -38,15 +38,15 @@ export class GeminiService {
   }
 
   updateProductPrompt(promptId: number, userRequest: string): Observable<GeminiPromptModel> {
-    return this.http.put<GeminiPromptModel>(`${this.BASIC_URL}/${promptId}/userProduct`, { userRequest })
+    return this.http.put<GeminiPromptModel>(`${environment.apiUrl}/userProduct/${promptId}`, { userRequest })
   }
 
   updateCategoryPrompt(promptId: number, userRequest: string): Observable<GeminiPromptModel> {
-    return this.http.put<GeminiPromptModel>(`${this.BASIC_URL}/${promptId}/subCategory`, { userRequest })
+    return this.http.put<GeminiPromptModel>(`${environment.apiUrl}/suCategory/${promptId}`, { userRequest })
   }
 
   updateBasicSitePrompt(promptId: number, userRequest: string): Observable<GeminiPromptModel> {
-    return this.http.put<GeminiPromptModel>(`${this.BASIC_URL}/${promptId}/basicSite`, { userRequest })
+    return this.http.put<GeminiPromptModel>(`${environment.apiUrl}/basicSite/${promptId}`, { userRequest })
   }
 
   deletePrompt(promptId: number): Observable<void> {
