@@ -2,7 +2,7 @@
 
 > The Angular frontend for the **AI-Driven Website Builder Prompt Store** — a platform that empowers non-technical users to visually design a website concept and instantly receive a professional, AI-ready prompt they can feed into any AI code generator.
 
-![Homepage Screenshot](public/images/screenshot.png)
+![Homepage Screenshot](public/images/Screenshot.png)
 
 ---
 
