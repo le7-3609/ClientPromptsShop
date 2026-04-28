@@ -6,6 +6,7 @@ import { UserProfileModel } from '../../models/user-model';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { environment } from '../../../environments/environment.development';
 import { Injector, inject } from '@angular/core';
+import { AuthService } from '../authService/auth-service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,40 +14,27 @@ import { Injector, inject } from '@angular/core';
 export class UserService {
   private BASIC_URL = `${environment.apiUrl}/Users`;
   private injector = inject(Injector);
+  private authService = inject(AuthService);
 
-  private currentUserSubject = new BehaviorSubject<UserProfileModel | null>(null);
-  public currentUser = toSignal(this.currentUserSubject.asObservable(), { initialValue: null });
-  constructor(private http: HttpClient) {
-    this.loadUserFromStorage();
-  }
+  // Use AuthService's currentUser$ as the source of truth
+  public currentUser = toSignal(this.authService.currentUser$, { initialValue: null });
 
-  private loadUserFromStorage() {
-    const savedUser = localStorage.getItem('user_data');
-    if (savedUser) {
-      this.currentUserSubject.next(JSON.parse(savedUser));
-    }
-  }
+  constructor(private http: HttpClient) {}
 
   login(credentials: LoginModel): Observable<UserProfileModel> {
-    return this.http.post<UserProfileModel>(`${this.BASIC_URL}/login`, credentials).pipe(
+    return this.authService.login(credentials).pipe(
       tap(user => {
         if (user) {
-          localStorage.setItem('user_data', JSON.stringify(user));
-          localStorage.setItem('last_email', user.email);
-          this.currentUserSubject.next(user);
-          this.syncCartToDB(user.userId); 
+          this.syncCartToDB(user.userId);
         }
       })
     );
   }
 
-  register(registerForm: any): Observable<HttpResponse<UserProfileModel>> {
-    return this.http.post<UserProfileModel>(`${this.BASIC_URL}/register`, registerForm, { observe: 'response' }).pipe(
-      tap(response => {
-        const user = response.body as UserProfileModel | null;
+  register(registerForm: any): Observable<UserProfileModel> {
+    return this.authService.register(registerForm).pipe(
+      tap(user => {
         if (user) {
-          localStorage.setItem('user_data', JSON.stringify(user));
-          this.currentUserSubject.next(user);
           this.syncCartToDB(user.userId);
         }
       })
@@ -54,46 +42,34 @@ export class UserService {
   }
 
   updateUser(id: number, userData: any): Observable<any> {
-    return this.http.put(`${this.BASIC_URL}/${id}`, userData).pipe(
-      tap(updatedData => {
-        const currentUser = this.currentUser();
-        if (currentUser) {
-          const newUser = { ...currentUser, ...userData };
-          localStorage.setItem('user_data', JSON.stringify(newUser));
-          this.currentUserSubject.next(newUser);
-        }
+    return this.http.put(`${this.BASIC_URL}/${id}`, userData, { withCredentials: true }).pipe(
+      tap(() => {
+        // Refresh user data from server after update
+        this.authService.checkAuth();
       })
     );
   }
 
   getCurrentUser(): UserProfileModel | null {
-    return this.currentUserSubject.value;
+    return this.authService.getCurrentUser();
   }
 
   getUsers(): Observable<any[]> {
-    return this.http.get<any[]>(this.BASIC_URL);
+    return this.http.get<any[]>(this.BASIC_URL, { withCredentials: true });
   }
 
   getAdminUsers(): Observable<any[]> {
-    return this.http.get<any[]>(this.BASIC_URL);
-  }
-
-  getSavedEmail(): string {
-    return localStorage.getItem('last_email') || '';
+    return this.http.get<any[]>(this.BASIC_URL, { withCredentials: true });
   }
 
   logout() {
-    localStorage.removeItem('user_data');
-    this.currentUserSubject.next(null);
+    this.authService.logout().subscribe();
   }
 
   socialLogin(dto: { token: string; provider: string }): Observable<UserProfileModel> {
-    return this.http.post<UserProfileModel>(`${this.BASIC_URL}/social-login`, dto).pipe(
+    return this.authService.socialLogin(dto).pipe(
       tap(user => {
         if (user) {
-          localStorage.setItem('user_data', JSON.stringify(user));
-          localStorage.setItem('last_email', user.email);
-          this.currentUserSubject.next(user);
           this.syncCartToDB(user.userId);
         }
       })
@@ -117,7 +93,6 @@ export class UserService {
   }
 
   isAdmin(): boolean {
-    const user = this.currentUser();
-    return user ? user.email.toLocaleLowerCase() === 'clicksite@gmail.com' : false;
+    return this.authService.hasRole('Admin');
   }
 }

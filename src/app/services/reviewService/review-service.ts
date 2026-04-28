@@ -18,7 +18,7 @@ export class ReviewService {
   public error$: Observable<HttpErrorResponse | null> = this.errorSubject.asObservable()
 
   getReviews(): void {
-    this.http.get<AdminReviewModel[]>(this.REVIEWS_URL).subscribe({
+    this.http.get<AdminReviewModel[]>(this.REVIEWS_URL, { withCredentials: true }).subscribe({
       next: (data) => {
         this.reviewSubject.next(data ?? [])
         this.errorSubject.next(null)

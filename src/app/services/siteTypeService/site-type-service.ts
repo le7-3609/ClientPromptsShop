@@ -20,14 +20,14 @@ export class SiteTypeService {
   }
 
   async addSiteType(siteType: any): Promise<any> {
-    return firstValueFrom(this.http.post(this.BASIC_URL, siteType));
+    return firstValueFrom(this.http.post(this.BASIC_URL, siteType, { withCredentials: true }));
   }
 
   async updateSiteType(id: number, siteType: any): Promise<any> {
-    return firstValueFrom(this.http.put(`${this.BASIC_URL}/${id}`, siteType));
+    return firstValueFrom(this.http.put(`${this.BASIC_URL}/${id}`, siteType, { withCredentials: true }));
   }
 
   async deleteSiteType(id: number): Promise<any> {
-    return firstValueFrom(this.http.delete(`${this.BASIC_URL}/${id}`));
+    return firstValueFrom(this.http.delete(`${this.BASIC_URL}/${id}`, { withCredentials: true }));
   }
 }

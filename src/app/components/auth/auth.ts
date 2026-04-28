@@ -51,9 +51,8 @@ export class Auth implements AfterViewInit {
 
   ngOnInit() {
     this.returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/home';
-    const savedEmail = this.userService.getSavedEmail();
     this.loginForm = new FormGroup({
-      email: new FormControl(savedEmail, [Validators.required, Validators.email]),
+      email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required, Validators.minLength(6)])
     });
 
@@ -123,10 +122,8 @@ export class Auth implements AfterViewInit {
         provider: "local"
       };
       this.userService.register(registrationPayload).subscribe({
-        next: (response) => {
-          const status = response?.status;
-          const newUser = response?.body as any;
-          if (status === 201 && newUser) {
+        next: (newUser) => {
+          if (newUser) {
             this.messageService.add({ 
               severity: 'success', 
               summary: 'Registration Successful', 
@@ -135,21 +132,10 @@ export class Auth implements AfterViewInit {
             });
             this.router.navigateByUrl(this.returnUrl);
           } else {
-            let detail = `Registration did not complete. Server returned status ${status}.`;
-            if (registrationPayload.provider === 'local') {
-              if (status === 200) {
-                detail = 'Registration returned OK but was not created. Please check your email or try again.';
-              } else if (status === 204) {
-                detail = 'No content returned after registration. Please try again.';
-              }
-            } else {
-              detail = `Unexpected response (${status}) for ${registrationPayload.provider} registration.`;
-            }
-
             this.messageService.add({
               severity: 'error',
               summary: 'Registration Failed',
-              detail,
+              detail: 'Registration did not complete. Please try again.',
               life: 5000
             });
           }

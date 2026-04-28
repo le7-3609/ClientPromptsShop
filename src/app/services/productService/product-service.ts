@@ -35,14 +35,14 @@ async getProducts(position: number, skip: number, subCategoryIds?: number[]): Pr
   }
 
   addProduct(product: any): Promise<any> {
-    return firstValueFrom(this.http.post(this.BASIC_URL, product));
+    return firstValueFrom(this.http.post(this.BASIC_URL, product, { withCredentials: true }));
   }
 
   updateProduct(id: number, product: any): Promise<any> {
-    return firstValueFrom(this.http.put(`${this.BASIC_URL}/${id}`, product));
+    return firstValueFrom(this.http.put(`${this.BASIC_URL}/${id}`, product, { withCredentials: true }));
   }
 
   deleteProduct(id: number): Promise<any> {
-    return firstValueFrom(this.http.delete(`${this.BASIC_URL}/${id}`));
+    return firstValueFrom(this.http.delete(`${this.BASIC_URL}/${id}`, { withCredentials: true }));
   }
 }

@@ -22,35 +22,35 @@ export class OrderService {
   constructor(private http: HttpClient) {}
 
   getAllOrders(): Observable<AdminOrdersResponse> {
-    return this.http.get<AdminOrdersResponse>(this.BASIC_URL);
+    return this.http.get<AdminOrdersResponse>(this.BASIC_URL, { withCredentials: true });
   }
 
   getUserOrders(userId: number): Observable<OrderSummaryModel[]> {
-    return this.http.get<OrderSummaryModel[]>(`${this.USERS_URL}/${userId}/orders`);
+    return this.http.get<OrderSummaryModel[]>(`${this.USERS_URL}/${userId}/orders`, { withCredentials: true });
   }
 
   getOrders(): Observable<AdminOrdersResponse> {
-    return this.http.get<AdminOrdersResponse>(this.BASIC_URL);
+    return this.http.get<AdminOrdersResponse>(this.BASIC_URL, { withCredentials: true });
   }
 
   getOrderStatuses(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.BASIC_URL}/statuses`);
+    return this.http.get<any[]>(`${this.BASIC_URL}/statuses`, { withCredentials: true });
   }
 
   getOrderDetails(orderId: number): Observable<OrderDetailsModel> {
-    return this.http.get<OrderDetailsModel>(`${this.BASIC_URL}/${orderId}`);
+    return this.http.get<OrderDetailsModel>(`${this.BASIC_URL}/${orderId}`, { withCredentials: true });
   }
 
   getOrderItems(orderId: number): Observable<any> {
-    return this.http.get<any>(`${this.BASIC_URL}/${orderId}/orderItems`);
+    return this.http.get<any>(`${this.BASIC_URL}/${orderId}/orderItems`, { withCredentials: true });
   }
 
   getAllReviews(): Observable<AdminReviewModel[]> {
-    return this.http.get<AdminReviewModel[]>(this.REVIEWS_URL);
+    return this.http.get<AdminReviewModel[]>(this.REVIEWS_URL, { withCredentials: true });
   }
 
   getReviewByOrderId(orderId: number): Observable<ReviewApiModel> {
-    return this.http.get<ReviewApiModel>(`${this.REVIEWS_URL}/${orderId}`);
+    return this.http.get<ReviewApiModel>(`${this.REVIEWS_URL}/${orderId}`, { withCredentials: true });
   }
 
   saveReview(orderId: number, review: AddReviewModel, file?: File): Observable<any> {
@@ -58,7 +58,7 @@ export class OrderService {
     formData.append('Score', String(review.score));
     if (review.note) formData.append('Note', review.note);
     if (file) formData.append('Image', file);
-    return this.http.post(`${this.REVIEWS_URL}/${orderId}`, formData);
+    return this.http.post(`${this.REVIEWS_URL}/${orderId}`, formData, { withCredentials: true });
   }
 
   updateReview(orderId: number, review: AddReviewModel): Observable<any> {
@@ -70,7 +70,7 @@ export class OrderService {
           Score: review.score,
           Note: review.note,
           ReviewImageUrl: review.reviewImageUrl,
-        })
+        }, { withCredentials: true })
       )
     );
   }
@@ -88,14 +88,14 @@ export class OrderService {
       ReviewId: payload.reviewId,
       Score: payload.score,
       ReviewImageUrl: payload.reviewImageUrl,
-    });
+    }, { withCredentials: true });
   }
 
   createOrderFromCart(cartId: number): Observable<any> {
-    return this.http.post(`${this.BASIC_URL}/carts/${cartId}`, {});
+    return this.http.post(`${this.BASIC_URL}/carts/${cartId}`, {}, { withCredentials: true });
   }
 
   getOrderPrompt(orderId: number): Observable<string> {
-    return this.http.get(`${this.BASIC_URL}/${orderId}/prompt`, { responseType: 'text' });
+    return this.http.get(`${this.BASIC_URL}/${orderId}/prompt`, { responseType: 'text', withCredentials: true });
   }
 }

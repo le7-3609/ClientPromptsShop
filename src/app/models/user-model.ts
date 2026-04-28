@@ -1,10 +1,10 @@
-
 export interface UserProfileModel {
     userId: number;
     email: string;
     firstName: string;
     lastName: string;
     phone: string;
+    role?: string;
 }
 
 export interface CartItemModel {

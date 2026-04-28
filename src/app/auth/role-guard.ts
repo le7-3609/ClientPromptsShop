@@ -4,7 +4,7 @@ import { AuthService } from '../services/authService/auth-service';
 import { firstValueFrom } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 
-export const adminGuard: CanActivateFn = async (route, state) => {
+export const roleGuard: CanActivateFn = async (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
@@ -17,7 +17,19 @@ export const adminGuard: CanActivateFn = async (route, state) => {
     );
   }
 
-  if (authService.isLoggedIn() && authService.hasRole('Admin')) {
+  if (!authService.isLoggedIn()) {
+    router.navigate(['/auth'], { queryParams: { returnUrl: state.url } });
+    return false;
+  }
+  const requiredRoles = route.data['roles'] as string[] | undefined;
+
+  if (!requiredRoles || requiredRoles.length === 0) {
+    return true;
+  }
+
+  const hasRequiredRole = requiredRoles.some(role => authService.hasRole(role));
+
+  if (hasRequiredRole) {
     return true;
   }
 
