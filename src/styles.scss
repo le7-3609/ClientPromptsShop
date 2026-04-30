@@ -13,7 +13,7 @@
     --p-primary-700: #6a2ecb  !important;
     --p-background-color: #f9f9f9 !important;
     --p-text-color: #3d3942 !important;
-    --p-text-secondary-color: #666666 !important;       
+    --p-text-secondary-color: #666666 !important;
     --p-focus-ring-color: rgba(129, 57, 235, 0.2) !important;
 }
 
@@ -94,4 +94,78 @@ html {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #a67ee3;
+}
+
+/* ─── Rate-limit toast — dark bg, neon accent, 0px radius ─────────────────── */
+.p-toast-message.rate-limit-toast {
+  background: #0d0d0d !important;
+  border: 1px solid #a67fff !important;
+  border-radius: 0 !important;
+  color: #f0f0f0 !important;
+  box-shadow: 0 0 16px rgba(166, 127, 255, 0.5) !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+
+  // Hide PrimeNG's built-in message content wrapper — we use our own template
+  .p-toast-message-content { display: none !important; }
+}
+
+.rate-limit-toast-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px 28px;
+  position: relative;
+  background: #0d0d0d;
+
+  .rate-limit-icon {
+    font-size: 1.25rem;
+    color: #a67fff;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  .rate-limit-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .rate-limit-summary {
+    font-weight: 700;
+    font-size: 0.875rem;
+    letter-spacing: 0.04em;
+    color: #a67fff;
+    text-transform: uppercase;
+  }
+
+  .rate-limit-detail {
+    font-size: 0.8125rem;
+    color: #e0e0e0;
+    line-height: 1.4;
+  }
+}
+
+/* Progress bar — flush at the bottom, shrinks over the cooldown duration */
+.rate-limit-progress-track {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: rgba(166, 127, 255, 0.15);
+
+  .rate-limit-progress-bar {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, #6125b1, #a67fff);
+    box-shadow: 0 0 8px rgba(166, 127, 255, 0.8);
+    transform-origin: left center;
+    animation: rateLimitShrink var(--cooldown-duration, 60s) linear forwards;
+  }
+}
+
+@keyframes rateLimitShrink {
+  from { transform: scaleX(1); }
+  to   { transform: scaleX(0); }
 }

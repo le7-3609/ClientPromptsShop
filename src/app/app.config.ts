@@ -4,7 +4,9 @@ import { providePrimeNG } from 'primeng/config';
 import Lara from '@primeuix/themes/lara';
 import { definePreset } from '@primeuix/themes';
 import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { MessageService } from 'primeng/api';
+import { rateLimitInterceptor } from './interceptors/rate-limit.interceptor';
 
 const PurplePreset = definePreset(Lara, {
   semantic: {
@@ -26,7 +28,8 @@ const PurplePreset = definePreset(Lara, {
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([rateLimitInterceptor])),
+    MessageService,
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),

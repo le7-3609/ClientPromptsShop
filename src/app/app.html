@@ -12,3 +12,24 @@
   <app-chat-bot></app-chat-bot>
 }
 <app-accessibility-sidebar></app-accessibility-sidebar>
+<p-toast position="top-right">
+  <ng-template #message let-msg>
+    @if (msg.styleClass === 'rate-limit-toast') {
+      <div class="rate-limit-toast-body" [style.--cooldown-duration]="msg.data.cooldown + 's'">
+        <span class="pi pi-exclamation-triangle rate-limit-icon"></span>
+        <div class="rate-limit-text">
+          <span class="rate-limit-summary">{{ msg.summary }}</span>
+          <span class="rate-limit-detail">Too many requests. Retrying in {{ rateLimitService.remainingSeconds() }} seconds...</span>
+        </div>
+        <div class="rate-limit-progress-track">
+          <div class="rate-limit-progress-bar"></div>
+        </div>
+      </div>
+    } @else {
+      <div class="p-toast-message-text">
+        <span class="p-toast-summary">{{ msg.summary }}</span>
+        <div class="p-toast-detail">{{ msg.detail }}</div>
+      </div>
+    }
+  </ng-template>
+</p-toast>

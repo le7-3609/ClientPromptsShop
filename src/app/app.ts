@@ -7,18 +7,20 @@ import { ChatBot } from './components/chat-bot/chat-bot';
 import { AccessibilitySidebar } from './components/accessibility-sidebar/accessibility-sidebar';
 import { AccessibilityService } from './services/accessibilityService/accessibility-service';
 import { AuthService } from './services/authService/auth-service';
+import { RateLimitService } from './services/rateLimitService/rate-limit.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs';
+import { Toast } from 'primeng/toast';
 
 @Component({
   selector: 'app-root',
 
-  imports: [RouterModule, Menu, CartSidebar, BottomNavigation, ChatBot, AccessibilitySidebar],
+  imports: [RouterModule, Menu, CartSidebar, BottomNavigation, ChatBot, AccessibilitySidebar, Toast],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
 export class App implements OnInit {
-  protected readonly title = signal('client');
+  protected readonly rateLimitService = inject(RateLimitService);
   protected readonly authService = inject(AuthService);
   private a11y = inject(AccessibilityService);
   private router = inject(Router);
