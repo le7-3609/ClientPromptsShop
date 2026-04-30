@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { Menu } from "./components/menu/menu";
 import { CartSidebar } from "./components/cart-sidebar/cart-sidebar";
@@ -7,10 +7,11 @@ import { ChatBot } from './components/chat-bot/chat-bot';
 import { AccessibilitySidebar } from './components/accessibility-sidebar/accessibility-sidebar';
 import { AccessibilityService } from './services/accessibilityService/accessibility-service';
 import { AuthService } from './services/authService/auth-service';
-import { RateLimitService } from './services/rateLimitService/rate-limit.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map } from 'rxjs';
 import { Toast } from 'primeng/toast';
+
+import { RateLimitService } from './services/rateLimitService/rate-limit.service';
 
 @Component({
   selector: 'app-root',
@@ -20,8 +21,8 @@ import { Toast } from 'primeng/toast';
   styleUrl: './app.scss'
 })
 export class App implements OnInit {
-  protected readonly rateLimitService = inject(RateLimitService);
   protected readonly authService = inject(AuthService);
+  protected readonly rateLimitService = inject(RateLimitService);
   private a11y = inject(AccessibilityService);
   private router = inject(Router);
 

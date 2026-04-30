@@ -156,7 +156,8 @@ export class SubCategory implements OnInit {
       }
 
       this.cdr.detectChanges();
-    } catch (error) {
+    } catch (error: any) {
+      if (error?.status === 429) return;
       this.messageService.add({ severity: 'error', summary: 'There was an error', detail: 'Failed to load products' });
     } finally {
       this.loading = false;
